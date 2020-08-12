@@ -13,18 +13,18 @@ Berikut adalah employer credentials development untuk CMS Pasar Andir :
 
 General Manager Login
 
-Username : gmandir
-Password : gmandir
+Username : gmandir <br>
+Password : gmandir <br>
 
 Admin Login
 
-Username : adminandir
-Password : adminandir
+Username : adminandir <br>
+Password : adminandir <br>
 
 Collector Login
 
-Username : collectorandir
-Password : collectorandir
+Username : collectorandir <br>
+Password : collectorandir <br>
 
 ## User Login
 
@@ -32,13 +32,13 @@ Berikut adalah user credentials development untuk CMS Pasar Andir :
 
 User1 Login
 
-Username : userandir1
-Password : userandir1
+Username : userandir1 <br>
+Password : userandir1 <br>
 
 User2 Login
 
-Username : userandir2
-Password : userandir2
+Username : userandir2 <br>
+Password : userandir2 <br>
 
 ## About Laravel
 
