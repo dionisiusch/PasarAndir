@@ -21,7 +21,7 @@ class CreateStallsTable extends Migration
             $table->string('name');
             $table->bigInteger('length');
             $table->bigInteger('width');
-            $table->bigInteger('heigth');
+            $table->bigInteger('height');
             $table->string('status');
             $table->timestamps();
         });

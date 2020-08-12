@@ -7,6 +7,39 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
+## Employer Login
+
+Berikut adalah employer credentials development untuk CMS Pasar Andir :
+
+General Manager Login
+
+Username : gmandir
+Password : gmandir
+
+Admin Login
+
+Username : adminandir
+Password : adminandir
+
+Collector Login
+
+Username : collectorandir
+Password : collectorandir
+
+## User Login
+
+Berikut adalah user credentials development untuk CMS Pasar Andir :
+
+User1 Login
+
+Username : userandir1
+Password : userandir1
+
+User2 Login
+
+Username : userandir2
+Password : userandir2
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
