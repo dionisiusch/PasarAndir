@@ -19,4 +19,26 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::group([
+    'prefix' => '/floors' 
+    // 'middleware' => 'auth'
+], function () {
+    Route::get('/', 'FloorController@index');
+    Route::post('/', 'FloorControllerr@store');
+    Route::get('/{id}', 'FloorController@show');
+    Route::put('/{id}', 'FloorController@update');
+    Route::delete('/{id}', 'FloorController@delete');
+});
+
+Route::group([
+    'prefix' => '/categories' 
+    // 'middleware' => 'auth'
+], function () {
+    Route::get('/', 'CategoryController@index');
+    Route::post('/', 'CategoryController@store');
+    Route::get('/{id}', 'CategoryController@show');
+    Route::put('/{id}', 'CategoryController@update');
+    Route::delete('/{id}', 'CategoryController@delete');
+});
+
 Route::get('/home', 'HomeController@index')->name('home');

@@ -14,7 +14,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::all();
+        // return view('categories.index', compact('categories'));
     }
 
     /**
@@ -35,7 +36,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'=>'required'
+        ]);
+
+        $category = new Category([
+            'name' => $request->get('name')
+        ]);
+
+        $category->save();
+
+        // return redirect('/categories')->with('success', 'Category has been added.');
     }
 
     /**
@@ -44,9 +55,10 @@ class CategoryController extends Controller
      * @param  \App\Model\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show($id)
     {
-        //
+        $category = Category::find($id);
+        // return view('categories.show', compact('category')); 
     }
 
     /**
@@ -67,9 +79,17 @@ class CategoryController extends Controller
      * @param  \App\Model\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name'=>'required'
+        ]);
+
+        $category = Category::find($id);
+        $category->name = $request->get('name');
+        $category->save();
+
+        // return redirect('/categories')->with('success', 'Category has been updated.');
     }
 
     /**
@@ -78,8 +98,11 @@ class CategoryController extends Controller
      * @param  \App\Model\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+        $category->delete();
+
+        // return redirect('/categories')->with('success', 'Category has been deleted');
     }
 }

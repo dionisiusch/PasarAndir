@@ -14,7 +14,8 @@ class FloorController extends Controller
      */
     public function index()
     {
-        //
+        $floors = Floor::all();
+        // return view('floors.index', compact('floors')); 
     }
 
     /**
@@ -35,7 +36,19 @@ class FloorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'code'=>'required',
+            'name'=>'required'
+        ]);
+
+        $floor = new Floor([
+            'code' => $request->get('code'),
+            'name' => $request->get('name')
+        ]);
+
+        $floor->save();
+
+        // return redirect('/floors')->with('success', 'Floor has been added.');
     }
 
     /**
@@ -44,9 +57,10 @@ class FloorController extends Controller
      * @param  \App\Model\Floor  $floor
      * @return \Illuminate\Http\Response
      */
-    public function show(Floor $floor)
+    public function show($id)
     {
-        //
+        $floor = Floor::find($id);
+        // return view('floors.show', compact('floor')); 
     }
 
     /**
@@ -67,9 +81,19 @@ class FloorController extends Controller
      * @param  \App\Model\Floor  $floor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Floor $floor)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'code'=>'required',
+            'name'=>'required'
+        ]);
+
+        $floor = Floor::find($id);
+        $floor->code = $request->get('code');
+        $floor->name = $request->get('name');
+        $floor->save();
+
+        // return redirect('/floors')->with('success', 'Floor has been updated.');
     }
 
     /**
@@ -78,8 +102,11 @@ class FloorController extends Controller
      * @param  \App\Model\Floor  $floor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Floor $floor)
+    public function destroy($id)
     {
-        //
+        $floor = Floor::find($id);
+        $floor->delete();
+
+        // return redirect('/floors')->with('success', 'Floor has been deleted');
     }
 }
