@@ -20,6 +20,7 @@ class CreateInvoicesTable extends Migration
             $table->foreignId('stall_water_id');
             $table->bigInteger('discount');
             $table->bigInteger('minimal_payment');
+            $table->bigInteger('fine');
             $table->string('month_bill', 50);
             $table->date('grace_date');	
             $table->string('status', 10);
