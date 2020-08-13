@@ -19,4 +19,23 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::prefix('/employer')->group(function () {
+    // Route::get('/login','Auth\EmployerController@showLoginForm')->name('employerlogin');
+    Route::post('/login', 'Auth\EmployerController@login')->name('employer.login');
+    // Route::get('/register','Auth\EmployerController@showRegisterPage')->name('employerregister');
+    Route::post('/register', 'Auth\EmployerController@register')->name('employer.register');
+});
+
+Route::group(['prefix' => '/generalmanager',  'middleware' => 'generalmanager'], function() {
+
+});
+
+Route::group(['prefix' => '/admin',  'middleware' => ['generalmanager', 'admin']], function() {
+
+});
+
+Route::group(['prefix' => '/collector',  'middleware' => ['generalmanager', 'admin', 'collector']], function() {
+
+});
+
 Route::get('/home', 'HomeController@index')->name('home');
