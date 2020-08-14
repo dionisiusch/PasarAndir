@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Model\Area;
 use Illuminate\Http\Request;
+use App\Http\Services\AreaService;
+use App\Http\Services\FloorService;
+use GuzzleHttp\Client;
 
 class AreaController extends Controller
 {
@@ -112,7 +115,7 @@ class AreaController extends Controller
      * @param  \App\Model\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Area $area)
+    public function destroy($id)
     {
         $response = $this->areaService->deleteAreaById($id);
 

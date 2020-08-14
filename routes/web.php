@@ -53,6 +53,17 @@ Route::group([
         Route::put('/{id}', 'NoController@update');
         Route::delete('/{id}', 'NoController@delete');
     });
+
+    Route::group([
+        'prefix' => '/areanos' 
+        // 'middleware' => 'auth'
+    ], function () {
+        Route::get('/', 'AreaNoController@index');
+        Route::post('/', 'AreaNoController@store');
+        Route::get('/{id}', 'AreaNoController@show');
+        Route::put('/{id}', 'AreaNoController@update');
+        Route::delete('/{id}', 'AreaNoController@delete');
+    });
 });
 
 Route::get('/home', 'HomeController@index')->name('home');

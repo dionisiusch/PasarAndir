@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Model\Floor;
+use App\Model\Area;
 use Illuminate\Http\Request;
 use App\Http\Services\FloorService;
+use App\Http\Services\AreaService;
 use GuzzleHttp\Client;
 
 class FloorController extends Controller
@@ -12,9 +14,13 @@ class FloorController extends Controller
     /** @var FloorService */
     private $floorService;
 
+    /** @var FloorService */
+    private $areaService;
+
     public function __construct()
     {
         $this->floorService = app(FloorService::class);
+        $this->areaService = app(AreaService::class);
     }
 
     /**
@@ -108,6 +114,12 @@ class FloorController extends Controller
     public function destroy($id)
     {
         $response = $this->floorService->deleteFloorById($id);
+
+        $areaIdsWithFloorDeleted = Area::where('floor_id', $id)->pluck('id')->toArray();
+
+        foreach($areaIdsWithFloorDeleted as $areaId) {
+            $r = $this->areaService->deleteAreaById($areaId);
+        }
 
         // return redirect('/floors')->with('success', 'Floor has been deleted');
     }
