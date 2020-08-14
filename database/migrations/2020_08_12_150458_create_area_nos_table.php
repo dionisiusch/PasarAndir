@@ -18,6 +18,7 @@ class CreateAreaNosTable extends Migration
             $table->foreignId('area_id');
             $table->foreignId('no_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

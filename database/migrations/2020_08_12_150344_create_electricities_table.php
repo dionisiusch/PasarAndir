@@ -20,6 +20,7 @@ class CreateElectricitiesTable extends Migration
             $table->integer('value');
             $table->bigInteger('price');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -17,6 +17,7 @@ class CreateInvoiceReceiptsTable extends Migration
             $table->foreignId('invoice_id');
             $table->foreignId('receipt_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -21,6 +21,7 @@ class CreateStallElectricitiesTable extends Migration
             $table->bigInteger('meter_after');
             $table->bigInteger('price');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

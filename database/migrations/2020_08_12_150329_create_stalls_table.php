@@ -24,6 +24,7 @@ class CreateStallsTable extends Migration
             $table->bigInteger('height');
             $table->string('status');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

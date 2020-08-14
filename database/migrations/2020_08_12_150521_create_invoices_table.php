@@ -25,6 +25,7 @@ class CreateInvoicesTable extends Migration
             $table->date('grace_date');	
             $table->string('status', 10);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

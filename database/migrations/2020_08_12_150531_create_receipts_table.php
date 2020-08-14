@@ -18,6 +18,7 @@ class CreateReceiptsTable extends Migration
             $table->foreignId('stall_id');
             $table->bigInteger('payment');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

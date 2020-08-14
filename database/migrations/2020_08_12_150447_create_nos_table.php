@@ -17,6 +17,7 @@ class CreateNosTable extends Migration
             $table->id();
             $table->string('no', 10);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

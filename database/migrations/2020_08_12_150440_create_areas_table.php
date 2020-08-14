@@ -19,6 +19,7 @@ class CreateAreasTable extends Migration
             $table->string('name', 50);
             $table->bigInteger('price');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

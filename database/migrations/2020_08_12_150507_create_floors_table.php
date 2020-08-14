@@ -18,6 +18,7 @@ class CreateFloorsTable extends Migration
             $table->string('code', 50);
             $table->string('name', 50);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

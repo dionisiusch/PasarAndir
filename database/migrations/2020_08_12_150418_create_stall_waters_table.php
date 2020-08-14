@@ -20,6 +20,7 @@ class CreateStallWatersTable extends Migration
             $table->bigInteger('meter_after');
             $table->bigInteger('price');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
