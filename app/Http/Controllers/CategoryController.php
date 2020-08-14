@@ -4,9 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Model\Category;
 use Illuminate\Http\Request;
+use App\Http\Services\CategoryService;
+use GuzzleHttp\Client;
 
 class CategoryController extends Controller
 {
+    /** @var CategoryService */
+    private $categoryService;
+
+    public function __construct()
+    {
+        $this->categoryService = app(CategoryService::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +24,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = $this->categoryService->showAllCategories();
         // return view('categories.index', compact('categories'));
     }
 
@@ -40,11 +50,7 @@ class CategoryController extends Controller
             'name'=>'required'
         ]);
 
-        $category = new Category([
-            'name' => $request->get('name')
-        ]);
-
-        $category->save();
+        $response = $this->categoryService->createCategory($request);
 
         // return redirect('/categories')->with('success', 'Category has been added.');
     }
@@ -57,7 +63,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category = Category::find($id);
+        $category = $this->categoryService->getCategoryById($id);
         // return view('categories.show', compact('category')); 
     }
 
@@ -85,9 +91,7 @@ class CategoryController extends Controller
             'name'=>'required'
         ]);
 
-        $category = Category::find($id);
-        $category->name = $request->get('name');
-        $category->save();
+        $response = $this->categoryService->updateCategoryById($request, $id);
 
         // return redirect('/categories')->with('success', 'Category has been updated.');
     }
@@ -100,8 +104,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::find($id);
-        $category->delete();
+        $response = $this->categoryService->deleteCategoryById($id);
 
         // return redirect('/categories')->with('success', 'Category has been deleted');
     }

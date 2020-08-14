@@ -4,9 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Model\Floor;
 use Illuminate\Http\Request;
+use App\Http\Services\FloorService;
+use GuzzleHttp\Client;
 
 class FloorController extends Controller
 {
+    /** @var FloorService */
+    private $floorService;
+
+    public function __construct()
+    {
+        $this->floorService = app(FloorService::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +24,7 @@ class FloorController extends Controller
      */
     public function index()
     {
-        $floors = Floor::all();
+        $floors = $this->floorService->showAllFloors();
         // return view('floors.index', compact('floors')); 
     }
 
@@ -41,12 +51,7 @@ class FloorController extends Controller
             'name'=>'required'
         ]);
 
-        $floor = new Floor([
-            'code' => $request->get('code'),
-            'name' => $request->get('name')
-        ]);
-
-        $floor->save();
+        $response = $this->floorService->createFloor($request);
 
         // return redirect('/floors')->with('success', 'Floor has been added.');
     }
@@ -59,7 +64,8 @@ class FloorController extends Controller
      */
     public function show($id)
     {
-        $floor = Floor::find($id);
+        $floor = $this->floorService->getFloorById($id);
+
         // return view('floors.show', compact('floor')); 
     }
 
@@ -88,10 +94,7 @@ class FloorController extends Controller
             'name'=>'required'
         ]);
 
-        $floor = Floor::find($id);
-        $floor->code = $request->get('code');
-        $floor->name = $request->get('name');
-        $floor->save();
+        $response = $this->floorService->updateFloorById($request, $id);
 
         // return redirect('/floors')->with('success', 'Floor has been updated.');
     }
@@ -104,8 +107,7 @@ class FloorController extends Controller
      */
     public function destroy($id)
     {
-        $floor = Floor::find($id);
-        $floor->delete();
+        $response = $this->floorService->deleteFloorById($id);
 
         // return redirect('/floors')->with('success', 'Floor has been deleted');
     }

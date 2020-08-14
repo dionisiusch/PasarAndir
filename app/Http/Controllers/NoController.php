@@ -4,9 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Model\No;
 use Illuminate\Http\Request;
+use App\Http\Services\NoService;
+use GuzzleHttp\Client;
 
 class NoController extends Controller
 {
+    /** @var NoService */
+    private $noService;
+
+    public function __construct()
+    {
+        $this->noService = app(NoService::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +24,8 @@ class NoController extends Controller
      */
     public function index()
     {
-        //
+        $nos = $this->noService->showAllNos();
+        // return view('nos.index', compact('nos')); 
     }
 
     /**
@@ -35,7 +46,13 @@ class NoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'no'=>'required'
+        ]);
+
+        $response = $this->noService->createNo($request);
+
+        // return redirect('/nos')->with('success', 'No has been added.');
     }
 
     /**
@@ -44,9 +61,10 @@ class NoController extends Controller
      * @param  \App\Model\No  $no
      * @return \Illuminate\Http\Response
      */
-    public function show(No $no)
+    public function show($id)
     {
-        //
+        $no = $this->noService->getNoById($id);
+        // return view('nos.show', compact('no')); 
     }
 
     /**
@@ -67,9 +85,15 @@ class NoController extends Controller
      * @param  \App\Model\No  $no
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, No $no)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'no'=>'required'
+        ]);
+
+        $response = $this->noService->updateNoById($request, $id);
+
+        // return redirect('/nos')->with('success', 'No has been updated.');
     }
 
     /**
@@ -78,8 +102,10 @@ class NoController extends Controller
      * @param  \App\Model\No  $no
      * @return \Illuminate\Http\Response
      */
-    public function destroy(No $no)
+    public function destroy($id)
     {
-        //
+        $response = $this->noService->deleteNoById($id);
+
+        // return redirect('/nos')->with('success', 'No has been deleted');
     }
 }
