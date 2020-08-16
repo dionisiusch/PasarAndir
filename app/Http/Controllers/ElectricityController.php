@@ -56,7 +56,7 @@ class ElectricityController extends Controller
 
         $response = $this->electricityService->createElectricity($request);
 
-        // return redirect('/electricities')->with('success', 'Electricities has been added.');
+        // return redirect('/electricities')->with('success', 'Electricity has been added.');
     }
 
     /**

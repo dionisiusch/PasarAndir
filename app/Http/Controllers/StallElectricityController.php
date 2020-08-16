@@ -2,11 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Stall;
+use App\Model\Electricity;
 use App\Model\StallElectricity;
 use Illuminate\Http\Request;
+use App\Http\Services\ElectricityService;
+use App\Http\Services\StallService;
+use App\Http\Services\StallElectricityService;
+use GuzzleHttp\Client;
 
 class StallElectricityController extends Controller
 {
+    /** @var StallElectricityService */
+    private $stallElectricityService;
+
+    /** @var ElectricityService */
+    private $electricityService;
+
+    /** @var StallService */
+    private $stallService;
+
+    public function __construct()
+    {
+        $this->stallElectricityService = app(StallElectricityService::class);
+        $this->electricityService = app(ElectricityService::class);
+        $this->stallService = app(StallService::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +36,9 @@ class StallElectricityController extends Controller
      */
     public function index()
     {
-        //
+        $stallElectricities = $this->stallElectricityService->showAllStallElectricities();
+
+        // return view('stallelectricities.index', compact('stallElectricities')); 
     }
 
     /**
@@ -33,9 +57,18 @@ class StallElectricityController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($id)
     {
-        //
+        $request->validate([
+            'stall_id'=>'required',
+            'electricity_id'=>'required',
+            'meter_before'=>'required',
+            'meter_after'=>'required',
+        ]);
+
+        $response = $this->stallElectricityService->createStallElectricity($request);
+
+        // return redirect('/stallelectricities')->with('success', 'Stall Electricity has been added.');
     }
 
     /**
@@ -44,9 +77,11 @@ class StallElectricityController extends Controller
      * @param  \App\Model\StallElectricity  $stallElectricity
      * @return \Illuminate\Http\Response
      */
-    public function show(StallElectricity $stallElectricity)
+    public function show($id)
     {
-        //
+        $stallElectricity = $this->stallElectricityService->getStallElectricityById($id);
+
+        // return view('stallelectricities.show', compact('stallElectricity'));
     }
 
     /**
@@ -67,9 +102,18 @@ class StallElectricityController extends Controller
      * @param  \App\Model\StallElectricity  $stallElectricity
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StallElectricity $stallElectricity)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'stall_id'=>'required',
+            'electricity_id'=>'required',
+            'meter_before'=>'required',
+            'meter_after'=>'required',
+        ]);
+
+        $response = $this->stallElectricityService->updateStallElectricityById($request, $id);
+
+        // return redirect('/stallelectricities')->with('success', 'Stall Electricity has been updated.');
     }
 
     /**
@@ -78,8 +122,10 @@ class StallElectricityController extends Controller
      * @param  \App\Model\StallElectricity  $stallElectricity
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StallElectricity $stallElectricity)
+    public function destroy($id)
     {
-        //
+        $response = $this->stallElectricityService->deleteStallElectricityById($id);
+
+        // return redirect('/stallelectricities')->with('success', 'Stall Electricity has been deleted');
     }
 }
