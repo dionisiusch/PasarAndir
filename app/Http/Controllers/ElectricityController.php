@@ -4,9 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Model\Electricity;
 use Illuminate\Http\Request;
+use App\Http\Services\ElectricityService;
+use GuzzleHttp\Client;
 
 class ElectricityController extends Controller
 {
+    /** @var ElectricityService */
+    private $electricityService;
+
+    public function __construct()
+    {
+        $this->electricityService = app(ElectricityService::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +24,9 @@ class ElectricityController extends Controller
      */
     public function index()
     {
-        //
+        $electricities = $this->electricityService->showAllElectricities();
+
+        // return view('electricities.index', compact('electricities')); 
     }
 
     /**
@@ -35,7 +47,16 @@ class ElectricityController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'=>'required',
+            'type'=>'required',
+            'value'=>'required',
+            'price'=>'required',
+        ]);
+
+        $response = $this->electricityService->createElectricity($request);
+
+        // return redirect('/electricities')->with('success', 'Electricities has been added.');
     }
 
     /**
@@ -44,9 +65,11 @@ class ElectricityController extends Controller
      * @param  \App\Model\Electricity  $electricity
      * @return \Illuminate\Http\Response
      */
-    public function show(Electricity $electricity)
+    public function show($id)
     {
-        //
+        $electricity = $this->electricityService->getElectricityById($id);
+
+        // return view('electricities.show', compact('electricity'));
     }
 
     /**
@@ -67,9 +90,18 @@ class ElectricityController extends Controller
      * @param  \App\Model\Electricity  $electricity
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Electricity $electricity)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name'=>'required',
+            'type'=>'required',
+            'value'=>'required',
+            'price'=>'required',
+        ]);
+
+        $response = $this->electricityService->updateElectricityById($request, $id);
+
+        // return redirect('/electricities')->with('success', 'Electricity has been updated.');
     }
 
     /**
@@ -78,8 +110,10 @@ class ElectricityController extends Controller
      * @param  \App\Model\Electricity  $electricity
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Electricity $electricity)
+    public function destroy($id)
     {
-        //
+        $response = $this->electricityService->deleteElectricityById($id);
+
+        // return redirect('/electricities')->with('success', 'Electricity has been deleted');
     }
 }

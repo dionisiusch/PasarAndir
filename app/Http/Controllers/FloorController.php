@@ -115,11 +115,12 @@ class FloorController extends Controller
     {
         $response = $this->floorService->deleteFloorById($id);
 
-        $areaIdsWithFloorDeleted = Area::where('floor_id', $id)->pluck('id')->toArray();
+        // DO NOT DELETE IT
+        // $areaIdsWithFloorDeleted = Area::where('floor_id', $id)->pluck('id')->toArray();
 
-        foreach($areaIdsWithFloorDeleted as $areaId) {
-            $r = $this->areaService->deleteAreaById($areaId);
-        }
+        // foreach($areaIdsWithFloorDeleted as $areaId) {
+        //     $r = $this->areaService->deleteAreaById($areaId);
+        // }
 
         // return redirect('/floors')->with('success', 'Floor has been deleted');
     }

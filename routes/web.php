@@ -64,6 +64,28 @@ Route::group([
         Route::put('/{id}', 'AreaNoController@update');
         Route::delete('/{id}', 'AreaNoController@delete');
     });
+
+    Route::group([
+        'prefix' => '/stalls' 
+        // 'middleware' => 'auth'
+    ], function () {
+        Route::get('/', 'StallController@index');
+        Route::post('/', 'StallController@store');
+        Route::get('/{id}', 'StallController@show');
+        Route::put('/{id}', 'StallController@update');
+        Route::delete('/{id}', 'StallController@delete');
+    });
+
+    Route::group([
+        'prefix' => '/electricities' 
+        // 'middleware' => 'auth'
+    ], function () {
+        Route::get('/', 'ElectricityController@index');
+        Route::post('/', 'ElectricityController@store');
+        Route::get('/{id}', 'ElectricityController@show');
+        Route::put('/{id}', 'ElectricityController@update');
+        Route::delete('/{id}', 'ElectricityController@delete');
+    });
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
