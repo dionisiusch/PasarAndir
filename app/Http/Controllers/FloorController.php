@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use DB;
 use App\Model\Floor;
 use Illuminate\Http\Request;
-use DB;
+
 
 class FloorController extends Controller
 {
@@ -15,6 +15,9 @@ class FloorController extends Controller
      */
     public function index()
     {
+        
+
+
         return view('master.floor.floorShow'); 
     }
 
@@ -59,6 +62,10 @@ class FloorController extends Controller
      */
     public function show(Request $request)
     {
+       
+
+
+
         if($request->ajax())
         {
         $id = $request->get('id');
@@ -116,6 +123,13 @@ class FloorController extends Controller
      */
     public function delete($id)
     {
+       
+
+
+
+
+
+
         $msg = 'Data Lantai Gagal Dihapus.';
         $floor = Floor::findOrFail($id);
         $floor->delete();
