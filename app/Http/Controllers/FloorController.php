@@ -8,120 +8,215 @@ use Illuminate\Http\Request;
 use App\Http\Services\FloorService;
 use App\Http\Services\AreaService;
 use GuzzleHttp\Client;
+use DB;
 
 class FloorController extends Controller
 {
-    /** @var FloorService */
-    private $floorService;
+  /** @var FloorService */
+  private $floorService;
 
-    /** @var FloorService */
-    private $areaService;
+  /** @var FloorService */
+  private $areaService;
 
-    public function __construct()
+  public function __construct()
+  {
+    $this->floorService = app(FloorService::class);
+    $this->areaService = app(AreaService::class);
+  }
+
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function index()
+  {
+    $floors = $this->floorService->showAllFloors();
+    return view('master.floor.floorShow'); 
+    // return view('floors.index', compact('floors')); 
+  }
+
+  /**
+   * Show the form for creating a new resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function create()
+  {
+    //
+  }
+
+  /**
+   * Store a newly created resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function store(Request $request)
+  {
+    $request->validate([
+      'code'=>'required',
+      'name'=>'required'
+    ]);
+
+    $response = $this->floorService->createFloor($request);
+    return redirect('/master/floor')->with('success', 'Data Lantai Berhasil Ditambahkan.');
+
+    // return redirect('/floors')->with('success', 'Floor has been added.');
+  }
+
+  /**
+   * Display the specified resource.
+   *
+   * @param  \App\Model\Floor  $floor
+   * @return \Illuminate\Http\Response
+   */
+  public function show(Request $request)
+  {
+    if($request->ajax())
     {
-        $this->floorService = app(FloorService::class);
-        $this->areaService = app(AreaService::class);
-    }
+    $id = $request->get('id');
+   	$floor = $this->floorService->getFloorById($id);
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    $data = array(
+     'code'  => $floor->code,
+     'name'  => $floor->name,
+     'id'  => $id
+    );
+    return json_encode($data);
+     }
+    // return view('floors.show', compact('floor')); 
+  }
+
+  /**
+   * Show the form for editing the specified resource.
+   *
+   * @param  \App\Model\Floor  $floor
+   * @return \Illuminate\Http\Response
+   */
+  public function edit(Floor $floor)
+  {
+    //
+  }
+
+  /**
+   * Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @param  \App\Model\Floor  $floor
+   * @return \Illuminate\Http\Response
+   */
+  public function update(Request $request, $id)
+  {
+    $request->validate([
+      'code'=>'required',
+      'name'=>'required'
+    ]);
+
+    $response = $this->floorService->updateFloorById($request, $id);
+
+    return redirect('/master/floor')->with('success', 'Data Lantai Berhasil Di Update.');
+
+    // return redirect('/floors')->with('success', 'Floor has been updated.');
+  }
+
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  \App\Model\Floor  $floor
+   * @return \Illuminate\Http\Response
+   */
+  public function destroy($id)
+  {
+     
+
+    $msg = 'Data Lantai Gagal Dihapus.';
+    $response = $this->floorService->deleteFloorById($id);
+    //$response = $this->floorService->deleteFloorById($id);
+
+    // DO NOT DELETE IT
+    // $areaIdsWithFloorDeleted = Area::where('floor_id', $id)->pluck('id')->toArray();
+
+    // foreach($areaIdsWithFloorDeleted as $areaId) {
+    //     $r = $this->areaService->deleteAreaById($areaId);
+    // }
+
+    if($response){
+      $msg = 'Data Lantai Berhasil Dihapus.';
+    
+    return $msg;
+
+    // DO NOT DELETE IT
+    // $areaIdsWithFloorDeleted = Area::where('floor_id', $id)->pluck('id')->toArray();
+
+    // foreach($areaIdsWithFloorDeleted as $areaId) {
+    //     $r = $this->areaService->deleteAreaById($areaId);
+    // }
+
+    // return redirect('/floors')->with('success', 'Floor has been deleted');
+   }
+  }   
+
+  public function search(Request $request)
+  {
+    if($request->ajax())
     {
-        $floors = $this->floorService->showAllFloors();
-        // return view('floors.index', compact('floors')); 
+      $output = '';
+      $query = $request->get('query');
+      if($query != '')
+      {
+       $data = DB::table('floors')
+       ->where('name', 'like', '%'.$query.'%')
+       ->orWhere('code', 'like', '%'.$query.'%')
+       ->get();
+       
+     }
+     else
+     {
+       $data = DB::table('floors')
+       ->get();
+     }
+     $total_row = $data->count();
+     if($total_row > 0)
+     {
+       foreach($data as $row)
+       {
+        $output .= '
+        <tr class="tr-shadow">
+        <td>'.$row->code.'</td>
+        <td>
+        '.$row->name.'
+        </td>
+        <td>
+        <div class="table-data-feature">
+        <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+        <i class="zmdi zmdi-edit"></i>
+        </button>
+        <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+        <i class="zmdi zmdi-delete"></i>
+        </button>
+        </div>
+        </td>
+        </tr>
+        <tr class="spacer"></tr> 
+        ';
+      }
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    else
     {
-        //
-    }
+     $output = '
+     <tr class="tr-shadow">
+     <td align="center" colspan="3">Data not found.</td>
+     </tr>
+     ';
+   }
+   $data = array(
+     'table_data'  => $output,
+     'total_data'  => $total_row
+   );
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'code'=>'required',
-            'name'=>'required'
-        ]);
-
-        $response = $this->floorService->createFloor($request);
-
-        // return redirect('/floors')->with('success', 'Floor has been added.');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\Floor  $floor
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $floor = $this->floorService->getFloorById($id);
-
-        // return view('floors.show', compact('floor')); 
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Floor  $floor
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Floor $floor)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Floor  $floor
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'code'=>'required',
-            'name'=>'required'
-        ]);
-
-        $response = $this->floorService->updateFloorById($request, $id);
-
-        // return redirect('/floors')->with('success', 'Floor has been updated.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Model\Floor  $floor
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $response = $this->floorService->deleteFloorById($id);
-
-        // DO NOT DELETE IT
-        // $areaIdsWithFloorDeleted = Area::where('floor_id', $id)->pluck('id')->toArray();
-
-        // foreach($areaIdsWithFloorDeleted as $areaId) {
-        //     $r = $this->areaService->deleteAreaById($areaId);
-        // }
-
-        // return redirect('/floors')->with('success', 'Floor has been deleted');
-    }
+   return json_encode($data);
+   
+ }
+}
 }
