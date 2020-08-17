@@ -1,14 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
+
 use App\Model\Floor;
 use App\Model\Area;
 use Illuminate\Http\Request;
 use App\Http\Services\FloorService;
 use App\Http\Services\AreaService;
 use GuzzleHttp\Client;
-
 
 class FloorController extends Controller
 {
@@ -32,7 +31,6 @@ class FloorController extends Controller
     public function index()
     {
         $floors = $this->floorService->showAllFloors();
-        return view('master.floor.floorShow'); 
         // return view('floors.index', compact('floors')); 
     }
 
@@ -61,7 +59,7 @@ class FloorController extends Controller
 
         $response = $this->floorService->createFloor($request);
 
-        return redirect('/master/floor')->with('success', 'Data Lantai Berhasil Ditambahkan.');
+        // return redirect('/floors')->with('success', 'Floor has been added.');
     }
 
     /**
@@ -70,26 +68,11 @@ class FloorController extends Controller
      * @param  \App\Model\Floor  $floor
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show($id)
     {
-        if($request->ajax())
-        {
-        $id = $request->get('id');
-        $floor = Floor::find($id);
+        $floor = $this->floorService->getFloorById($id);
 
-        $data = array(
-         'code'  => $floor->code,
-         'name'  => $floor->name,
-         'id'  => $id
-        );
-        return json_encode($data);
-        else
-        {
-            $floor = $this->floorService->getFloorById($id);
-        
-        }
         // return view('floors.show', compact('floor')); 
-        }
     }
 
     /**
@@ -119,7 +102,7 @@ class FloorController extends Controller
 
         $response = $this->floorService->updateFloorById($request, $id);
 
-        return redirect('/master/floor')->with('success', 'Data Lantai Berhasil Di Update.');
+        // return redirect('/floors')->with('success', 'Floor has been updated.');
     }
 
     /**
@@ -128,12 +111,9 @@ class FloorController extends Controller
      * @param  \App\Model\Floor  $floor
      * @return \Illuminate\Http\Response
      */
-    public function delete($id)
+    public function destroy($id)
     {
-        $msg = 'Data Lantai Gagal Dihapus.';
-        $floor = Floor::findOrFail($id);
-        $floor->delete();
-        //$response = $this->floorService->deleteFloorById($id);
+        $response = $this->floorService->deleteFloorById($id);
 
         // DO NOT DELETE IT
         // $areaIdsWithFloorDeleted = Area::where('floor_id', $id)->pluck('id')->toArray();
@@ -142,73 +122,6 @@ class FloorController extends Controller
         //     $r = $this->areaService->deleteAreaById($areaId);
         // }
 
-        if($floor){
-            $msg = 'Data Lantai Berhasil Dihapus.';
-        }
-        return $msg;
-
+        // return redirect('/floors')->with('success', 'Floor has been deleted');
     }
-
-    public function search(Request $request)
-    {
-        if($request->ajax())
-        {
-          $output = '';
-          $query = $request->get('query');
-          if($query != '')
-          {
-             $data = DB::table('floors')
-             ->where('name', 'like', '%'.$query.'%')
-             ->orWhere('code', 'like', '%'.$query.'%')
-             ->get();
-             
-         }
-         else
-         {
-             $data = DB::table('floors')
-             ->get();
-         }
-         $total_row = $data->count();
-         if($total_row > 0)
-         {
-             foreach($data as $row)
-             {
-                $output .= '
-                <tr class="tr-shadow">
-                <td>'.$row->code.'</td>
-                <td>
-                '.$row->name.'
-                </td>
-                <td>
-                <div class="table-data-feature">
-                <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
-                <i class="zmdi zmdi-edit"></i>
-                </button>
-                <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
-                <i class="zmdi zmdi-delete"></i>
-                </button>
-                </div>
-                </td>
-                </tr>
-                <tr class="spacer"></tr> 
-                ';
-            }
-        }
-        else
-        {
-         $output = '
-         <tr class="tr-shadow">
-         <td align="center" colspan="3">Data not found.</td>
-         </tr>
-         ';
-     }
-     $data = array(
-         'table_data'  => $output,
-         'total_data'  => $total_row
-     );
-
-     return json_encode($data);
-     
- }
-}
 }
