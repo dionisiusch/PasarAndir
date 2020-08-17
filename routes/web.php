@@ -18,25 +18,30 @@ Route::get('/', 'HomeController@index')->name('home');
 Auth::routes();
 
 Route::group([
-    'prefix' => '/floors' 
-    // 'middleware' => 'auth'
+  'prefix' => 'master/floor' 
+  // 'middleware' => 'auth'
 ], function () {
-    Route::get('/', 'FloorController@index');
-    Route::post('/', 'FloorControllerr@store');
-    Route::get('/{id}', 'FloorController@show');
-    Route::put('/{id}', 'FloorController@update');
-    Route::delete('/{id}', 'FloorController@delete');
+  Route::get('/', 'FloorController@index')->name('master.floor.show');
+  Route::post('/', 'FloorController@store')->name('master.floor.store');
+  Route::get('/{id}', 'FloorController@show')->name('master.floor.find');
+  Route::put('/{id}', 'FloorController@update')->name('master.floor.update');;
+  Route::delete('/{id}', 'FloorController@delete')->name('master.floor.delete');
 });
 
 Route::group([
-    'prefix' => '/categories' 
-    // 'middleware' => 'auth'
+  'prefix' => '/categories' 
+  // 'middleware' => 'auth'
 ], function () {
-    Route::get('/', 'CategoryController@index');
-    Route::post('/', 'CategoryController@store');
-    Route::get('/{id}', 'CategoryController@show');
-    Route::put('/{id}', 'CategoryController@update');
-    Route::delete('/{id}', 'CategoryController@delete');
+  Route::get('/', 'CategoryController@index');
+  Route::post('/', 'CategoryController@store');
+  Route::get('/{id}', 'CategoryController@show');
+  Route::put('/{id}', 'CategoryController@update');
+  Route::delete('/{id}', 'CategoryController@delete');
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/master', 'MasterController@index')->name('master');
+
+//route ajax livesearch
+Route::get('search', 'FloorController@search')->name('master.floor.search');
