@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Model\Floor;
+use DB;
 
 class FloorService
 {
@@ -45,5 +46,13 @@ class FloorService
         $floor->delete();
 
         return $floor;
+    }
+
+    public function searchCategory($query)
+    {
+        return DB::table('floors')
+            ->where('name', 'like', '%'.$query.'%')
+            ->orWhere('code', 'like', '%'.$query.'%')
+            ->get();
     }
 }

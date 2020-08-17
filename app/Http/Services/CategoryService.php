@@ -39,9 +39,21 @@ class CategoryService
 
     public function deleteCategoryById($id)
     {
-        $category = Category::find($id);
-        $category->delete();
+        try {
+            $category = Category::find($id);
+            $category->delete();
 
-        return $category;
+            return $category;
+        } catch (Exception $e) {
+            console.log($e);
+            return null;
+        }
+    }
+
+    public function searchCategory($query)
+    {
+        return DB::table('categories')
+            ->where('name', 'like', '%'.$query.'%')
+            ->get();
     }
 }

@@ -61,8 +61,6 @@ class FloorController extends Controller
 
     $response = $this->floorService->createFloor($request);
     return redirect('/master/floor')->with('success', 'Data Lantai Berhasil Ditambahkan.');
-
-    // return redirect('/floors')->with('success', 'Floor has been added.');
   }
 
   /**
@@ -73,18 +71,18 @@ class FloorController extends Controller
    */
   public function show(Request $request)
   {
-    if($request->ajax())
-    {
-    $id = $request->get('id');
-   	$floor = $this->floorService->getFloorById($id);
+    if($request->ajax()) {
+      $id = $request->get('id');
+      $floor = $this->floorService->getFloorById($id);
 
-    $data = array(
-     'code'  => $floor->code,
-     'name'  => $floor->name,
-     'id'  => $id
-    );
-    return json_encode($data);
-     }
+      $data = array(
+      'code'  => $floor->code,
+      'name'  => $floor->name,
+      'id'  => $id
+      );
+      
+      return json_encode($data);
+    }
     // return view('floors.show', compact('floor')); 
   }
 
@@ -128,8 +126,6 @@ class FloorController extends Controller
    */
   public function destroy($id)
   {
-     
-
     $msg = 'Data Lantai Gagal Dihapus.';
     $response = $this->floorService->deleteFloorById($id);
     //$response = $this->floorService->deleteFloorById($id);
@@ -159,64 +155,53 @@ class FloorController extends Controller
 
   public function search(Request $request)
   {
-    if($request->ajax())
-    {
+    if($request->ajax()) {
       $output = '';
       $query = $request->get('query');
-      if($query != '')
-      {
-       $data = DB::table('floors')
-       ->where('name', 'like', '%'.$query.'%')
-       ->orWhere('code', 'like', '%'.$query.'%')
-       ->get();
-       
-     }
-     else
-     {
-       $data = DB::table('floors')
-       ->get();
-     }
-     $total_row = $data->count();
-     if($total_row > 0)
-     {
-       foreach($data as $row)
-       {
+      if($query != '') {
+				$data = $this->floorService->searchCategory($id);
+     	} else {
+      	$data = DB::table('floors')
+      	->get();
+			}
+			 
+			$total_row = $data->count();
+			if($total_row > 0) {
+				foreach($data as $row) {
         $output .= '
-        <tr class="tr-shadow">
-        <td>'.$row->code.'</td>
-        <td>
-        '.$row->name.'
-        </td>
-        <td>
-        <div class="table-data-feature">
-        <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
-        <i class="zmdi zmdi-edit"></i>
-        </button>
-        <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
-        <i class="zmdi zmdi-delete"></i>
-        </button>
-        </div>
-        </td>
-        </tr>
-        <tr class="spacer"></tr> 
-        ';
-      }
-    }
-    else
-    {
-     $output = '
-     <tr class="tr-shadow">
-     <td align="center" colspan="3">Data not found.</td>
-     </tr>
-     ';
-   }
-   $data = array(
-     'table_data'  => $output,
-     'total_data'  => $total_row
-   );
+					<tr class="tr-shadow">
+						<td>'.$row->code.'</td>
+						<td>
+						'.$row->name.'
+						</td>
+						<td>
+							<div class="table-data-feature">
+							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+								<i class="zmdi zmdi-edit"></i>
+							</button>
+							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+								<i class="zmdi zmdi-delete"></i>
+							</button>
+							</div>
+						</td>
+					</tr>
+					<tr class="spacer"></tr> 
+        	';
+      	}
+    	} else {
+				$output = '
+				<tr class="tr-shadow">
+					<td align="center" colspan="3">Data not found.</td>
+				</tr>
+				';
+			}
+			
+			$data = array(
+				'table_data'  => $output,
+				'total_data'  => $total_row
+			);
 
-   return json_encode($data);
-   
- }
-}
+   		return json_encode($data);
+ 		}
+	}
 }

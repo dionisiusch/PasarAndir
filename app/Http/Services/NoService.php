@@ -44,4 +44,11 @@ class NoService
 
         return $no;
     }
+
+    public function searchNo($query)
+    {
+        return DB::table('nos')
+            ->where('no', 'like', '%'.$query.'%')
+            ->get();
+    }
 }

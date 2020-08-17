@@ -25,7 +25,7 @@ class NoController extends Controller
     public function index()
     {
         $nos = $this->noService->showAllNos();
-        // return view('nos.index', compact('nos')); 
+        // return view('master.no.noShow');
     }
 
     /**
@@ -52,7 +52,7 @@ class NoController extends Controller
 
         $response = $this->noService->createNo($request);
 
-        // return redirect('/nos')->with('success', 'No has been added.');
+        // return redirect('/master/no')->with('success', 'Data Nomor Berhasil Ditambahkan.');
     }
 
     /**
@@ -61,10 +61,19 @@ class NoController extends Controller
      * @param  \App\Model\No  $no
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        $no = $this->noService->getNoById($id);
-        // return view('nos.show', compact('no')); 
+        if($request->ajax()) {
+            $id = $request->get('id');
+            $no = $this->noService->getNoById($id);
+      
+            $data = array(
+            'no'  => $no->no,
+            'id'  => $id
+            );
+            
+            return json_encode($data);
+        }
     }
 
     /**
@@ -93,7 +102,7 @@ class NoController extends Controller
 
         $response = $this->noService->updateNoById($request, $id);
 
-        // return redirect('/nos')->with('success', 'No has been updated.');
+        // return redirect('/master/no')->with('success', 'Data Nomor Berhasil Di Update.');
     }
 
     /**
@@ -104,8 +113,65 @@ class NoController extends Controller
      */
     public function destroy($id)
     {
+        $msg = 'Data Nomor Gagal Dihapus.';
         $response = $this->noService->deleteNoById($id);
 
-        // return redirect('/nos')->with('success', 'No has been deleted');
+        if($response){
+            $msg = 'Data Nomor Berhasil Dihapus.';
+        }
+
+        return $msg;
     }
+
+    public function search(Request $request)
+    {
+        if($request->ajax()) {
+            $output = '';
+            $query = $request->get('query');
+            if($query != '') {
+                $data = $this->noService->searchNo($query);
+            } else {
+                $data = DB::table('categories')
+                ->get();
+            }
+         
+            $total_row = $data->count();
+			if($total_row > 0) {
+				foreach($data as $row) {
+                    $output .= '
+					<tr class="tr-shadow">
+						<td>'.$row->code.'</td>
+						<td>
+						'.$row->name.'
+						</td>
+						<td>
+							<div class="table-data-feature">
+							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+								<i class="zmdi zmdi-edit"></i>
+							</button>
+							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+								<i class="zmdi zmdi-delete"></i>
+							</button>
+							</div>
+						</td>
+					</tr>
+					<tr class="spacer"></tr> 
+        	        ';
+      	        }
+            } else {
+				$output = '
+				<tr class="tr-shadow">
+				    <td align="center" colspan="3">Data not found.</td>
+				</tr>
+				';
+			}
+			
+			$data = array(
+				'table_data'  => $output,
+				'total_data'  => $total_row
+			);
+			
+   		    return json_encode($data);
+ 		}
+	}
 }

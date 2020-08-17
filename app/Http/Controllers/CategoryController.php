@@ -25,7 +25,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = $this->categoryService->showAllCategories();
-        // return view('categories.index', compact('categories'));
+        // return view('master.category.categoryShow');
     }
 
     /**
@@ -52,7 +52,7 @@ class CategoryController extends Controller
 
         $response = $this->categoryService->createCategory($request);
 
-        // return redirect('/categories')->with('success', 'Category has been added.');
+        // return redirect('/master/category')->with('success', 'Data Kategori Kios Berhasil Ditambahkan.');
     }
 
     /**
@@ -61,10 +61,19 @@ class CategoryController extends Controller
      * @param  \App\Model\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        $category = $this->categoryService->getCategoryById($id);
-        // return view('categories.show', compact('category')); 
+        if($request->ajax()) {
+            $id = $request->get('id');
+            $category = $this->categoryService->getCategoryById($id);
+      
+            $data = array(
+            'name'  => $category->name,
+            'id'  => $id
+            );
+            
+            return json_encode($data);
+        }
     }
 
     /**
@@ -93,7 +102,7 @@ class CategoryController extends Controller
 
         $response = $this->categoryService->updateCategoryById($request, $id);
 
-        // return redirect('/categories')->with('success', 'Category has been updated.');
+        // return redirect('/master/category')->with('success', 'Data Kategori Kios Berhasil Di Update.');
     }
 
     /**
@@ -104,8 +113,65 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
+        $msg = 'Data Kategori Kios Gagal Dihapus.';
         $response = $this->categoryService->deleteCategoryById($id);
 
-        // return redirect('/categories')->with('success', 'Category has been deleted');
+        if($response){
+            $msg = 'Data Kategori Kios Berhasil Dihapus.';
+        }
+
+        return $msg;
     }
+
+    public function search(Request $request)
+    {
+        if($request->ajax()) {
+            $output = '';
+            $query = $request->get('query');
+            if($query != '') {
+                $data = $this->categoryService->searchCategory($query);
+            } else {
+                $data = DB::table('categories')
+                ->get();
+            }
+         
+            $total_row = $data->count();
+			if($total_row > 0) {
+				foreach($data as $row) {
+                    $output .= '
+					<tr class="tr-shadow">
+						<td>'.$row->code.'</td>
+						<td>
+						'.$row->name.'
+						</td>
+						<td>
+							<div class="table-data-feature">
+							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+								<i class="zmdi zmdi-edit"></i>
+							</button>
+							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+								<i class="zmdi zmdi-delete"></i>
+							</button>
+							</div>
+						</td>
+					</tr>
+					<tr class="spacer"></tr> 
+        	        ';
+      	        }
+            } else {
+				$output = '
+				<tr class="tr-shadow">
+				    <td align="center" colspan="3">Data not found.</td>
+				</tr>
+				';
+			}
+			
+			$data = array(
+				'table_data'  => $output,
+				'total_data'  => $total_row
+			);
+			
+   		    return json_encode($data);
+ 		}
+	}
 }
