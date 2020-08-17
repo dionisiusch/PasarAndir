@@ -21,15 +21,16 @@ Route::group([
     'prefix' => '/master' 
     // 'middleware' => 'auth'
 ], function () {
+    Route::get('/', 'MasterController@index')->name('master');
     Route::group([
-        'prefix' => '/floors' 
+        'prefix' => '/floor' 
         // 'middleware' => 'auth'
     ], function () {
-        Route::get('/', 'FloorController@index');
-        Route::post('/', 'FloorControllerr@store');
-        Route::get('/{id}', 'FloorController@show');
-        Route::put('/{id}', 'FloorController@update');
-        Route::delete('/{id}', 'FloorController@destroy');
+        Route::get('/', 'FloorController@index')->name('master.floor.show');
+        Route::post('/', 'FloorController@store')->name('master.floor.store');
+        Route::get('/{id}', 'FloorController@show')->name('master.floor.find');
+        Route::put('/{id}', 'FloorController@update')->name('master.floor.update');;
+        Route::delete('/{id}', 'FloorController@destroy')->name('master.floor.delete');
     });
     
     Route::group([
@@ -89,3 +90,6 @@ Route::group([
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+//route ajax livesearch
+Route::get('/search', 'FloorController@search')->name('master.floor.search');
