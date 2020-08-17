@@ -137,7 +137,10 @@ $.ajaxSetup({
    success:function(response)
    {
    $('tbody').html(response.table_data);
-   }
+   }, error: function(request,msg,error) {
+       console.log(msg);
+       console.log(error);
+    }
   })
  }
 
