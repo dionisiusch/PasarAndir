@@ -3,11 +3,27 @@
 namespace App\Http\Controllers;
 use DB;
 use App\Model\Floor;
+use App\Model\Area;
 use Illuminate\Http\Request;
+use App\Http\Services\FloorService;
+use App\Http\Services\AreaService;
+use GuzzleHttp\Client;
 
 
 class FloorController extends Controller
 {
+    /** @var FloorService */
+    private $floorService;
+
+    /** @var FloorService */
+    private $areaService;
+
+    public function __construct()
+    {
+        $this->floorService = app(FloorService::class);
+        $this->areaService = app(AreaService::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,10 +31,9 @@ class FloorController extends Controller
      */
     public function index()
     {
-        
-
-
+        $floors = $this->floorService->showAllFloors();
         return view('master.floor.floorShow'); 
+        // return view('floors.index', compact('floors')); 
     }
 
     /**
@@ -44,12 +59,7 @@ class FloorController extends Controller
             'name'=>'required'
         ]);
 
-        $floor = new Floor([
-            'code' => $request->get('code'),
-            'name' => $request->get('name')
-        ]);
-
-        $floor->save();
+        $response = $this->floorService->createFloor($request);
 
         return redirect('/master/floor')->with('success', 'Data Lantai Berhasil Ditambahkan.');
     }
@@ -62,10 +72,6 @@ class FloorController extends Controller
      */
     public function show(Request $request)
     {
-       
-
-
-
         if($request->ajax())
         {
         $id = $request->get('id');
@@ -76,8 +82,12 @@ class FloorController extends Controller
          'name'  => $floor->name,
          'id'  => $id
         );
-
         return json_encode($data);
+        else
+        {
+            $floor = $this->floorService->getFloorById($id);
+        
+        }
         // return view('floors.show', compact('floor')); 
         }
     }
@@ -107,10 +117,7 @@ class FloorController extends Controller
             'name'=>'required'
         ]);
 
-        $floor = Floor::find($id);
-        $floor->code = $request->get('code');
-        $floor->name = $request->get('name');
-        $floor->save();
+        $response = $this->floorService->updateFloorById($request, $id);
 
         return redirect('/master/floor')->with('success', 'Data Lantai Berhasil Di Update.');
     }
@@ -123,16 +130,17 @@ class FloorController extends Controller
      */
     public function delete($id)
     {
-       
-
-
-
-
-
-
         $msg = 'Data Lantai Gagal Dihapus.';
         $floor = Floor::findOrFail($id);
         $floor->delete();
+        //$response = $this->floorService->deleteFloorById($id);
+
+        // DO NOT DELETE IT
+        // $areaIdsWithFloorDeleted = Area::where('floor_id', $id)->pluck('id')->toArray();
+
+        // foreach($areaIdsWithFloorDeleted as $areaId) {
+        //     $r = $this->areaService->deleteAreaById($areaId);
+        // }
 
         if($floor){
             $msg = 'Data Lantai Berhasil Dihapus.';
@@ -204,4 +212,3 @@ class FloorController extends Controller
  }
 }
 }
-
