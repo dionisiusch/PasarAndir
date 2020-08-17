@@ -60,4 +60,11 @@ class StallService
 
         return $stall;
     }
+
+    public function searchStall($query)
+    {
+        return DB::table('stalls')
+            ->where('name', 'like', '%'.$query.'%')
+            ->get();
+    }
 }

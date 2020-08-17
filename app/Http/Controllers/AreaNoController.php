@@ -40,7 +40,7 @@ class AreaNoController extends Controller
         $areas = $this->areaService->showAllAreas();
         $nos = $this->noService->showAllNos();
 
-        // return view('areaNos.index', compact('areaNos', 'areas', 'nos')); 
+        // return view('master.areaNo.areaNoShow');
     }
 
     /**
@@ -68,7 +68,7 @@ class AreaNoController extends Controller
 
         $response = $this->areaNoService->createAreaNo($request);
 
-        // return redirect('/areanos')->with('success', 'AreaNo has been added.');
+        // return redirect('/master/areano')->with('success', 'Data Area Nomor Berhasil Ditambahkan.');
     }
 
     /**
@@ -77,13 +77,22 @@ class AreaNoController extends Controller
      * @param  \App\Model\AreaNo  $areaNo
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        $areaNo = $this->areaNoService->getAreaNoById($id);
-        $area = $this->areaService->getAreaById($id);
-        $no = $this->noService->getNoById($id);
-
-        // return view('areaNos.show', compact('areaNo', 'area', 'no')); 
+        if($request->ajax()) {
+            $id = $request->get('id');
+            $areaNo = $this->areaNoService->getAreaNoById($id);
+            $area = $this->areaService->getAreaById($areaNo->area_id);
+            $no = $this->noService->getNoById($areaNo->no_id);
+      
+            $data = array(
+                'no' => $no->no,
+                'area_name' => $area->name,
+                'id'  => $id
+            );
+            
+            return json_encode($data);
+        }
     }
 
     /**
@@ -113,7 +122,7 @@ class AreaNoController extends Controller
 
         $response = $this->areaNoService->updateAreaNoById($request, $id);
 
-        // return redirect('/areanos')->with('success', 'AreaNo has been updated.');
+        // return redirect('/master/areano')->with('success', 'Data Area Nomor Berhasil Di Update.');
     }
 
     /**
@@ -124,8 +133,15 @@ class AreaNoController extends Controller
      */
     public function destroy($id)
     {
+        $msg = 'Data Area Nomor Gagal Dihapus.';
         $response = $this->areaNoService->deleteAreaNoById($id);
 
-        // return redirect('/areanos')->with('success', 'AreaNo has been deleted');
+        if($response){
+            $msg = 'Data Area Nomor Kios Berhasil Dihapus.';
+        }
+
+        return $msg;
     }
+
+    # NO AJAX ON THIS CONTROLLER, USE AREA AND NO AJAX INSTEAD
 }

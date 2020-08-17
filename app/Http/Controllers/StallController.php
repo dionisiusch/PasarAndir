@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Http\Services\StallService;
 use App\Http\Services\AreaNoService;
 use App\Http\Services\CategoryService;
+use App\Http\Services\UserService;
+use App\Http\Services\FloorService;
 use GuzzleHttp\Client;
 
 class StallController extends Controller
@@ -22,11 +24,19 @@ class StallController extends Controller
     /** @var CategoryService */
     private $categoryService;
 
+    /** @var userService */
+    private $userService;
+
+    /** @var floorService */
+    private $floorService;
+
     public function __construct()
     {
         $this->stallService = app(StallService::class);
         $this->areaNoService = app(AreaNoService::class);
         $this->categoryService = app(CategoryService::class);
+        $this->userService = app(UserService::class);
+        $this->floorService = app(FloorService::class);
     }
 
     /**
@@ -40,7 +50,7 @@ class StallController extends Controller
         $areaNos = $this->areaNoService->showAllAreaNos();
         $categories = $this->categoryService->showAllCategories();
 
-        // return view('stalls.index', compact('stalls', 'areaNos', 'categories')); 
+        // return view('master.stall.stallShow');
     }
 
     /**
@@ -74,7 +84,7 @@ class StallController extends Controller
 
         $response = $this->stallService->createStall($request);
 
-        // return redirect('/stalls')->with('success', 'Stall has been added.');
+        // return redirect('/master/stall')->with('success', 'Data Kios Berhasil Ditambahkan.');
     }
 
     /**
@@ -83,10 +93,33 @@ class StallController extends Controller
      * @param  \App\Model\Stall  $stall
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        $stall = $this->stallService->getStallById($id);
-
+        if($request->ajax()) {
+            $id = $request->get('id');
+            $stall = $this->stallService->getStallById($id);
+            $category = $this->categoryService->getCategoryById($stall->category_id);
+            $user = $this->userService->getUserById($stall->user_id);
+            $area_no = $this->areaNoService->getAreaNoById($stall->area_no_id);
+            $area = $this->areaNoService->getAreaById($area_no->area_id);
+            $no = $this->areaNoService->getNoById($area_no->no_id);
+            $floor = $this->floorService->getFloorById($area->floor_id);
+      
+            $data = array(
+                'floor_name'  => $floor->name,
+                'no'  => $no->no,
+                'area_name'  => $area->name,
+                'pic_name'  => $user->pic_name,
+                'category_name'  => $category->name,
+                'height'  => $stall->height,
+                'width'  => $stall->width,
+                'length'  => $stall->length,
+                'name'  => $stall->name,
+                'id'  => $id
+            );
+            
+            return json_encode($data);
+        }
         // return view('stalls.show', compact('stall')); 
     }
 
@@ -123,7 +156,7 @@ class StallController extends Controller
 
         $response = $this->stallService->updateStallById($request, $id);
 
-        // return redirect('/stalls')->with('success', 'Stall has been updated.');
+        // return redirect('/master/stall')->with('success', 'Data Kios Berhasil Di Update.');
     }
 
     /**
@@ -134,8 +167,65 @@ class StallController extends Controller
      */
     public function destroy($id)
     {
+        $msg = 'Data Kios Gagal Dihapus.';
         $response = $this->stallService->deleteStallById($id);
 
-        // return redirect('/stalls')->with('success', 'Stall has been deleted');
+        if($response){
+            $msg = 'Data Kios Berhasil Dihapus.';
+        }
+
+        return $msg;
     }
+
+    public function search(Request $request)
+    {
+        if($request->ajax()) {
+            $output = '';
+            $query = $request->get('query');
+            if($query != '') {
+                $data = $this->stallService->searchStall($query);
+            } else {
+                $data = DB::table('stalls')
+                ->get();
+            }
+         
+            $total_row = $data->count();
+			if($total_row > 0) {
+				foreach($data as $row) {
+                    $output .= '
+					<tr class="tr-shadow">
+						<td>'.$row->code.'</td>
+						<td>
+						'.$row->name.'
+						</td>
+						<td>
+							<div class="table-data-feature">
+							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+								<i class="zmdi zmdi-edit"></i>
+							</button>
+							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+								<i class="zmdi zmdi-delete"></i>
+							</button>
+							</div>
+						</td>
+					</tr>
+					<tr class="spacer"></tr> 
+        	        ';
+      	        }
+            } else {
+				$output = '
+				<tr class="tr-shadow">
+				    <td align="center" colspan="3">Data not found.</td>
+				</tr>
+				';
+			}
+			
+			$data = array(
+				'table_data'  => $output,
+				'total_data'  => $total_row
+			);
+			
+   		    return json_encode($data);
+ 		}
+	}
 }
