@@ -44,9 +44,21 @@ class AreaService
 
     public function deleteAreaById($id)
     {
-        $area = Area::find($id);
-        $area->delete();
+        try {
+            $area = Area::find($id);
+            $area->delete();
+    
+            return $area;
+        } catch (Exception $e) {
+            console.log($e);
+            return null;
+        }
+    }
 
-        return $area;
+    public function searchArea($query)
+    {
+        return DB::table('areas')
+            ->where('name', 'like', '%'.$query.'%')
+            ->get();
     }
 }

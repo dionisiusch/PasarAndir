@@ -131,7 +131,7 @@ class NoController extends Controller
             if($query != '') {
                 $data = $this->noService->searchNo($query);
             } else {
-                $data = DB::table('categories')
+                $data = DB::table('nos')
                 ->get();
             }
          

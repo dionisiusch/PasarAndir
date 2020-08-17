@@ -26,7 +26,7 @@ class ElectricityController extends Controller
     {
         $electricities = $this->electricityService->showAllElectricities();
 
-        // return view('electricities.index', compact('electricities')); 
+        // return view('master.electricity.electricityShow');
     }
 
     /**
@@ -56,7 +56,7 @@ class ElectricityController extends Controller
 
         $response = $this->electricityService->createElectricity($request);
 
-        // return redirect('/electricities')->with('success', 'Electricity has been added.');
+        // return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Ditambahkan.');
     }
 
     /**
@@ -65,11 +65,22 @@ class ElectricityController extends Controller
      * @param  \App\Model\Electricity  $electricity
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        $electricity = $this->electricityService->getElectricityById($id);
-
-        // return view('electricities.show', compact('electricity'));
+        if($request->ajax()) {
+            $id = $request->get('id');
+            $electricity = $this->electricityService->getElectricityById($id);
+      
+            $data = array(
+            'price'  => $electricity->price,
+            'value'  => $electricity->value,
+            'type'  => $electricity->type,
+            'name'  => $electricity->name,
+            'id'  => $id
+            );
+            
+            return json_encode($data);
+        }
     }
 
     /**
@@ -101,7 +112,7 @@ class ElectricityController extends Controller
 
         $response = $this->electricityService->updateElectricityById($request, $id);
 
-        // return redirect('/electricities')->with('success', 'Electricity has been updated.');
+        // return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Di Update.');
     }
 
     /**
@@ -112,8 +123,65 @@ class ElectricityController extends Controller
      */
     public function destroy($id)
     {
+        $msg = 'Data Listrik PLN Gagal Dihapus.';
         $response = $this->electricityService->deleteElectricityById($id);
 
-        // return redirect('/electricities')->with('success', 'Electricity has been deleted');
+        if($response){
+            $msg = 'Data Listrik PLN Berhasil Dihapus.';
+        }
+
+        return $msg;
     }
+
+    public function search(Request $request)
+    {
+        if($request->ajax()) {
+            $output = '';
+            $query = $request->get('query');
+            if($query != '') {
+                $data = $this->electricityService->searchElectricity($query);
+            } else {
+                $data = DB::table('electricities')
+                ->get();
+            }
+         
+            $total_row = $data->count();
+			if($total_row > 0) {
+				foreach($data as $row) {
+                    $output .= '
+					<tr class="tr-shadow">
+						<td>'.$row->code.'</td>
+						<td>
+						'.$row->name.'
+						</td>
+						<td>
+							<div class="table-data-feature">
+							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+								<i class="zmdi zmdi-edit"></i>
+							</button>
+							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+								<i class="zmdi zmdi-delete"></i>
+							</button>
+							</div>
+						</td>
+					</tr>
+					<tr class="spacer"></tr> 
+        	        ';
+      	        }
+            } else {
+				$output = '
+				<tr class="tr-shadow">
+				    <td align="center" colspan="3">Data not found.</td>
+				</tr>
+				';
+			}
+			
+			$data = array(
+				'table_data'  => $output,
+				'total_data'  => $total_row
+			);
+			
+   		    return json_encode($data);
+ 		}
+	}
 }

@@ -32,7 +32,7 @@ class AreaController extends Controller
         $areas = $this->areaService->showAllAreas();
         $floors = $this->floorService->showAllFloors();
 
-        // return view('areas.index', compact('areas', 'floors')); 
+        // return view('master.area.areaShow');
     }
 
     /**
@@ -61,7 +61,7 @@ class AreaController extends Controller
 
         $response = $this->areaService->createArea($request);
 
-        // return redirect('/areas')->with('success', 'Area has been added.');
+        // return redirect('/master/areas')->with('success', 'Data Area Berhasil Ditambahkan.');
     }
 
     /**
@@ -70,12 +70,23 @@ class AreaController extends Controller
      * @param  \App\Model\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        $area = $this->areaService->getAreaById($id);
-        $floor = $this->floorService->getFloorById($id);
-
-        // return view('areas.show', compact('area', 'floor')); 
+        if($request->ajax()) {
+            $id = $request->get('id');
+            $area = $this->areaService->getAreaById($id);
+            $floor = $this->floorService->getFloorById($area->floor_id);
+      
+            $data = array(
+                'floor_code' => $floor->code,
+                'floor_name' => $floor->name,
+                'price' => $area->price,
+                'name'  => $area->name,
+                'id'  => $id
+            );
+            
+            return json_encode($data);
+        }
     }
 
     /**
@@ -106,7 +117,7 @@ class AreaController extends Controller
 
         $response = $this->areaService->updateAreaById($request, $id);
 
-        // return redirect('/areas')->with('success', 'Area has been updated.');
+        // return redirect('/master/areas')->with('success', 'Data Area Berhasil Di Update.');
     }
 
     /**
@@ -117,8 +128,65 @@ class AreaController extends Controller
      */
     public function destroy($id)
     {
+        $msg = 'Data Area Gagal Dihapus.';
         $response = $this->areaService->deleteAreaById($id);
 
-        // return redirect('/areas')->with('success', 'Area has been deleted');
+        if($response){
+            $msg = 'Data Area Berhasil Dihapus.';
+        }
+
+        return $msg;
     }
+
+    public function search(Request $request)
+    {
+        if($request->ajax()) {
+            $output = '';
+            $query = $request->get('query');
+            if($query != '') {
+                $data = $this->areaService->searchArea($query);
+            } else {
+                $data = DB::table('areas')
+                ->get();
+            }
+         
+            $total_row = $data->count();
+			if($total_row > 0) {
+				foreach($data as $row) {
+                    $output .= '
+					<tr class="tr-shadow">
+						<td>'.$row->code.'</td>
+						<td>
+						'.$row->name.'
+						</td>
+						<td>
+							<div class="table-data-feature">
+							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+								<i class="zmdi zmdi-edit"></i>
+							</button>
+							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+								<i class="zmdi zmdi-delete"></i>
+							</button>
+							</div>
+						</td>
+					</tr>
+					<tr class="spacer"></tr> 
+        	        ';
+      	        }
+            } else {
+				$output = '
+				<tr class="tr-shadow">
+				    <td align="center" colspan="3">Data not found.</td>
+				</tr>
+				';
+			}
+			
+			$data = array(
+				'table_data'  => $output,
+				'total_data'  => $total_row
+			);
+			
+   		    return json_encode($data);
+ 		}
+	}
 }

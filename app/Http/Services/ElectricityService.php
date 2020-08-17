@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Model\Electricity;
+use DB;
 
 class ElectricityService
 {
@@ -47,9 +48,23 @@ class ElectricityService
 
     public function deleteElectricityById($id)
     {
-        $electricity = Electricity::find($id);
-        $electricity->delete();
+        try {
+            $electricity = Electricity::find($id);
+            $electricity->delete();
 
-        return $electricity;
+            return $electricity;
+        } catch (Exception $e) {
+            console.log($e);
+            return null;
+        }
+    }
+
+    public function searchElectricity($query)
+    {
+        return DB::table('electricities')
+            ->where('name', 'like', '%'.$query.'%')
+            ->orWhere('type', 'like', '%'.$query.'%')
+            ->orWhere('value', 'like', '%'.$query.'%')
+            ->get();
     }
 }
