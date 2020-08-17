@@ -29,7 +29,7 @@ Route::group([
         Route::post('/', 'FloorControllerr@store');
         Route::get('/{id}', 'FloorController@show');
         Route::put('/{id}', 'FloorController@update');
-        Route::delete('/{id}', 'FloorController@delete');
+        Route::delete('/{id}', 'FloorController@destroy');
     });
     
     Route::group([
@@ -40,7 +40,7 @@ Route::group([
         Route::post('/', 'CategoryController@store');
         Route::get('/{id}', 'CategoryController@show');
         Route::put('/{id}', 'CategoryController@update');
-        Route::delete('/{id}', 'CategoryController@delete');
+        Route::delete('/{id}', 'CategoryController@destroy');
     });
     
     Route::group([
@@ -51,7 +51,7 @@ Route::group([
         Route::post('/', 'NoController@store');
         Route::get('/{id}', 'NoController@show');
         Route::put('/{id}', 'NoController@update');
-        Route::delete('/{id}', 'NoController@delete');
+        Route::delete('/{id}', 'NoController@destroy');
     });
 
     Route::group([
@@ -62,7 +62,7 @@ Route::group([
         Route::post('/', 'AreaNoController@store');
         Route::get('/{id}', 'AreaNoController@show');
         Route::put('/{id}', 'AreaNoController@update');
-        Route::delete('/{id}', 'AreaNoController@delete');
+        Route::delete('/{id}', 'AreaNoController@destroy');
     });
 
     Route::group([
@@ -73,7 +73,7 @@ Route::group([
         Route::post('/', 'StallController@store');
         Route::get('/{id}', 'StallController@show');
         Route::put('/{id}', 'StallController@update');
-        Route::delete('/{id}', 'StallController@delete');
+        Route::delete('/{id}', 'StallController@destroy');
     });
 
     Route::group([
@@ -84,7 +84,7 @@ Route::group([
         Route::post('/', 'ElectricityController@store');
         Route::get('/{id}', 'ElectricityController@show');
         Route::put('/{id}', 'ElectricityController@update');
-        Route::delete('/{id}', 'ElectricityController@delete');
+        Route::delete('/{id}', 'ElectricityController@destroy');
     });
 });
 
