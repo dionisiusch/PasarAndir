@@ -17,7 +17,8 @@ class AreaSeeder extends Seeder
     {
         DB::table('areas')->insert([
             'floor_id' => 1,
-            'name' => 'B1',
+            'name' => 'B',
+            'no' => '1A',
             'price' => 50000,
             'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
             'updated_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
@@ -25,7 +26,8 @@ class AreaSeeder extends Seeder
 
         DB::table('areas')->insert([
             'floor_id' => 2,
-            'name' => 'L1',
+            'name' => 'L',
+            'no' => '1A',
             'price' => 50000,
             'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
             'updated_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),

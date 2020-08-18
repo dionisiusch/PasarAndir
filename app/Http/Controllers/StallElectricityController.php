@@ -38,7 +38,7 @@ class StallElectricityController extends Controller
     {
         $stallElectricities = $this->stallElectricityService->showAllStallElectricities();
 
-        // return view('stallelectricities.index', compact('stallElectricities')); 
+        // return view('master.stallElectricity.stallElectricityShow'); 
     }
 
     /**
@@ -59,16 +59,20 @@ class StallElectricityController extends Controller
      */
     public function store($id)
     {
-        $request->validate([
-            'stall_id'=>'required',
-            'electricity_id'=>'required',
-            'meter_before'=>'required',
-            'meter_after'=>'required',
-        ]);
-
-        $response = $this->stallElectricityService->createStallElectricity($request);
-
-        // return redirect('/stallelectricities')->with('success', 'Stall Electricity has been added.');
+        try {
+            $request->validate([
+                'stall_id'=>'required',
+                'electricity_id'=>'required',
+                'meter_before'=>'required',
+                'meter_after'=>'required',
+            ]);
+    
+            $response = $this->stallElectricityService->createStallElectricity($request);
+    
+            // return redirect('/master/stallElectricity')->with('success', 'Data Biaya Listrik Kios Berhasil Ditambahkan.');       
+        } catch (Exception $e) {
+            // return redirect('/master/stallElectricity')->with('error', 'Data Biaya Listrik Kios Gagal Ditambahkan.');       
+        }
     }
 
     /**
@@ -77,11 +81,24 @@ class StallElectricityController extends Controller
      * @param  \App\Model\StallElectricity  $stallElectricity
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        $stallElectricity = $this->stallElectricityService->getStallElectricityById($id);
+        if($request->ajax()) {
+            $id = $request->get('id');
+            $stallElectricity = $this->stallElectricityService->getStallElectricityById($id);
+            $stall = $this->stallService->getStallById($stallElectricity->stall_id);
+            $electricity = $this->electricityService->getElectricityById($stallElectricity->electricity_id);
 
-        // return view('stallelectricities.show', compact('stallElectricity'));
+            $data = array(
+                'meter_after' => $stallElectricity->meter_after,
+                'meter_before' => $stallElectricity->meter_before,
+                'electricity' => $electricity,
+                'stall'  => $stall,
+                'id'  => $id
+            );
+            
+            return json_encode($data);
+        }
     }
 
     /**
@@ -104,16 +121,20 @@ class StallElectricityController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'stall_id'=>'required',
-            'electricity_id'=>'required',
-            'meter_before'=>'required',
-            'meter_after'=>'required',
-        ]);
-
-        $response = $this->stallElectricityService->updateStallElectricityById($request, $id);
-
-        // return redirect('/stallelectricities')->with('success', 'Stall Electricity has been updated.');
+        try {
+            $request->validate([
+                'stall_id'=>'required',
+                'electricity_id'=>'required',
+                'meter_before'=>'required',
+                'meter_after'=>'required',
+            ]);
+    
+            $response = $this->stallElectricityService->updateStallElectricityById($request, $id);
+    
+            // return redirect('/master/stallElectricity')->with('success', 'Data Biaya Listrik Kios Berhasil Di Update.');
+        } catch (Exception $e) {
+            // return redirect('/master/stallElectricity')->with('error', 'Data Biaya Listrik Kios Gagal Di Update.');
+        }
     }
 
     /**
@@ -124,8 +145,15 @@ class StallElectricityController extends Controller
      */
     public function destroy($id)
     {
+        $msg = 'Data Biaya Listrik Kios Gagal Dihapus.';
         $response = $this->stallElectricityService->deleteStallElectricityById($id);
 
-        // return redirect('/stallelectricities')->with('success', 'Stall Electricity has been deleted');
+        if($response){
+            $msg = 'Data Biaya Listrik Kios Berhasil Dihapus.';
+        }
+
+        return $msg;
     }
+
+    # NO AJAX IN INVOICE-RELATED CONTROLLER
 }

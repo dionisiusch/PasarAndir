@@ -13,5 +13,5 @@ class Area extends Model
 
     protected $table = 'areas';
 
-    protected $fillable = ['floor_id', 'name', 'price'];
+    protected $fillable = ['floor_id', 'name', 'no', 'price'];
 }

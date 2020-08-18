@@ -56,6 +56,7 @@ class AreaController extends Controller
         $request->validate([
             'floor_id'=>'required',
             'name'=>'required',
+            'no'=>'required',
             'price'=>'required'
         ]);
 
@@ -78,9 +79,9 @@ class AreaController extends Controller
             $floor = $this->floorService->getFloorById($area->floor_id);
       
             $data = array(
-                'floor_code' => $floor->code,
-                'floor_name' => $floor->name,
+                'floor' => $floor,
                 'price' => $area->price,
+                'no'  => $area->name,
                 'name'  => $area->name,
                 'id'  => $id
             );
@@ -112,6 +113,7 @@ class AreaController extends Controller
         $request->validate([
             'floor_id'=>'required',
             'name'=>'required',
+            'no'=>'required',
             'price'=>'required'
         ]);
 

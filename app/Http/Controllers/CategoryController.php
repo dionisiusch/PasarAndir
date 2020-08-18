@@ -46,13 +46,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name'=>'required'
-        ]);
-
-        $response = $this->categoryService->createCategory($request);
-
-        // return redirect('/master/category')->with('success', 'Data Kategori Kios Berhasil Ditambahkan.');
+        try {
+            $request->validate([
+                'name'=>'required'
+            ]);
+    
+            $response = $this->categoryService->createCategory($request);
+    
+            // return redirect('/master/category')->with('success', 'Data Kategori Kios Berhasil Ditambahkan.');       
+        } catch (Exception $e) {
+            // return redirect('/master/category')->with('success', 'Data Kategori Kios Gagal Ditambahkan.'); 
+        }
     }
 
     /**
@@ -96,13 +100,17 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name'=>'required'
-        ]);
-
-        $response = $this->categoryService->updateCategoryById($request, $id);
-
-        // return redirect('/master/category')->with('success', 'Data Kategori Kios Berhasil Di Update.');
+        try {
+            $request->validate([
+                'name'=>'required'
+            ]);
+    
+            $response = $this->categoryService->updateCategoryById($request, $id);
+    
+            // return redirect('/master/category')->with('success', 'Data Kategori Kios Berhasil Di Update.');       
+        } catch (Exception $e) {
+            // return redirect('/master/category')->with('success', 'Data Kategori Kios Gagal Di Update.');       
+        }
     }
 
     /**

@@ -32,7 +32,7 @@ class StallWaterController extends Controller
     {
         $stallWaters = $this->stallWaterService->showAllStallWaters();
 
-        // return view('stallwaters.index', compact('stallWaters')); 
+        // return view('master.stallwater.stallwaterShow');
     }
 
     /**
@@ -53,15 +53,19 @@ class StallWaterController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'stall_id'=>'required',
-            'meter_before'=>'required',
-            'meter_after'=>'required',
-        ]);
-
-        $response = $this->stallWaterService->createStallWater($request);
-
-        // return redirect('/stallwaters')->with('success', 'Stall Water has been added.');
+        try {
+            $request->validate([
+                'stall_id'=>'required',
+                'meter_before'=>'required',
+                'meter_after'=>'required',
+            ]);
+    
+            $response = $this->stallWaterService->createStallWater($request);
+    
+            // return redirect('/master/stallWater')->with('success', 'Data Biaya Air Kios Berhasil Ditambahkan');
+        } catch (Exception $e) {
+            // return redirect('/master/stallWater')->with('error', 'Data Biaya Air Kios Gagal Ditambahkan');
+        }
     }
 
     /**
@@ -70,11 +74,22 @@ class StallWaterController extends Controller
      * @param  \App\Model\StallWater  $stallWater
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        $stallWater = $this->stallWaterService->getStallWaterById($id);
-
-        // return view('stallwaters.show', compact('stallWater'));
+        if($request->ajax()) {
+            $id = $request->get('id');
+            $stallWater = $this->stallWaterService->getStallWaterById($id);
+            $stall = $this->stallService->getStallById($stallWater->stall_id);
+      
+            $data = array(
+                'meter_after' => $stallElectricity->meter_after,
+                'meter_before' => $stallElectricity->meter_before,
+                'stall'  => $stall,
+                'id'  => $id
+            );
+            
+            return json_encode($data);
+        }
     }
 
     /**
@@ -97,15 +112,21 @@ class StallWaterController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'stall_id'=>'required',
-            'meter_before'=>'required',
-            'meter_after'=>'required',
-        ]);
+        try {
+            $request->validate([
+                'stall_id'=>'required',
+                'meter_before'=>'required',
+                'meter_after'=>'required',
+            ]);
+    
+            $response = $this->stallWaterService->updateStallWaterById($request, $id);
+    
+            // return redirect('/master/stallWater')->with('success', 'Data Biaya Air Kios Berhasil Di Ubah');
+        } catch (Exception $e) {
+            // return redirect('/master/stallWater')->with('error', 'Data Biaya Air Kios Gagal Di Ubah');
 
-        $response = $this->stallWaterService->updateStallWaterById($request, $id);
-
-        // return redirect('/stallwaters')->with('success', 'Stall Water has been updated.');
+        }
+        
     }
 
     /**
@@ -116,8 +137,15 @@ class StallWaterController extends Controller
      */
     public function destroy($id)
     {
+        $msg = 'Data Biaya Air Kios Gagal Dihapus.';
         $response = $this->stallWaterService->deleteStallWaterById($id);
 
-        // return redirect('/stallwaters')->with('success', 'Stall Water has been deleted');
+        if($response){
+            $msg = 'Data Biaya Air Kios Berhasil Dihapus.';
+        }
+
+        return $msg;
     }
+
+    # NO AJAX IN INVOICE-RELATED CONTROLLER
 }

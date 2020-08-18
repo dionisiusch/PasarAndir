@@ -71,20 +71,24 @@ class StallController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id'=>'required',
-            'area_no_id'=>'required',
-            'category_id'=>'required',
-            'name'=>'required',
-            'length'=>'required',
-            'width'=>'required',
-            'height'=>'required',
-            'status'=>'required'
-        ]);
-
-        $response = $this->stallService->createStall($request);
-
-        // return redirect('/master/stall')->with('success', 'Data Kios Berhasil Ditambahkan.');
+        try {
+            $request->validate([
+                'user_id'=>'required',
+                'area_no_id'=>'required',
+                'category_id'=>'required',
+                'name'=>'required',
+                'length'=>'required',
+                'width'=>'required',
+                'height'=>'required',
+                'status'=>'required'
+            ]);
+    
+            $response = $this->stallService->createStall($request);
+    
+            // return redirect('/master/stall')->with('success', 'Data Kios Berhasil Ditambahkan.');       
+        } catch (Exception $e) {
+            // return redirect('/master/stall')->with('success', 'Data Kios Gagal Ditambahkan.');       
+        }
     }
 
     /**
@@ -143,20 +147,24 @@ class StallController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'user_id'=>'required',
-            'area_no_id'=>'required',
-            'category_id'=>'required',
-            'name'=>'required',
-            'length'=>'required',
-            'width'=>'required',
-            'height'=>'required',
-            'status'=>'required'
-        ]);
-
-        $response = $this->stallService->updateStallById($request, $id);
-
-        // return redirect('/master/stall')->with('success', 'Data Kios Berhasil Di Update.');
+        try {
+            $request->validate([
+                'user_id'=>'required',
+                'area_no_id'=>'required',
+                'category_id'=>'required',
+                'name'=>'required',
+                'length'=>'required',
+                'width'=>'required',
+                'height'=>'required',
+                'status'=>'required'
+            ]);
+    
+            $response = $this->stallService->updateStallById($request, $id);
+    
+            // return redirect('/master/stall')->with('success', 'Data Kios Berhasil Di Update.');
+        } catch (Exception $e) {
+            // return redirect('/master/stall')->with('success', 'Data Kios Gagal Di Update.');
+        }
     }
 
     /**

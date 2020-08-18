@@ -54,13 +54,17 @@ class FloorController extends Controller
    */
   public function store(Request $request)
   {
-    $request->validate([
-      'code'=>'required',
-      'name'=>'required'
-    ]);
-
-    $response = $this->floorService->createFloor($request);
-    return redirect('/master/floor')->with('success', 'Data Lantai Berhasil Ditambahkan.');
+    try {
+      $request->validate([
+        'code'=>'required',
+        'name'=>'required'
+      ]);
+  
+      $response = $this->floorService->createFloor($request);
+      return redirect('/master/floor')->with('success', 'Data Lantai Berhasil Ditambahkan.');           
+    } catch (Exception $e) {
+      return redirect('/master/floor')->with('error', 'Data Lantai Gagal Ditambahkan.');           
+    }
   }
 
   /**
@@ -106,16 +110,18 @@ class FloorController extends Controller
    */
   public function update(Request $request, $id)
   {
-    $request->validate([
-      'code'=>'required',
-      'name'=>'required'
-    ]);
-
-    $response = $this->floorService->updateFloorById($request, $id);
-
-    return redirect('/master/floor')->with('success', 'Data Lantai Berhasil Di Update.');
-
-    // return redirect('/floors')->with('success', 'Floor has been updated.');
+    try {
+      $request->validate([
+        'code'=>'required',
+        'name'=>'required'
+      ]);
+  
+      $response = $this->floorService->updateFloorById($request, $id);
+  
+      return redirect('/master/floor')->with('success', 'Data Lantai Berhasil Di Update.');            
+    } catch (Exception $e) {
+      return redirect('/master/floor')->with('success', 'Data Lantai Gagal Di Update.');            
+    }
   }
 
   /**

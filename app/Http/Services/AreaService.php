@@ -18,6 +18,7 @@ class AreaService
         $area = new Area([
             'floor_id' => $data->get('floor_id'),
             'name' => $data->get('name'),
+            'no' => $data->get('no'),
             'price' => $data->get('price')
         ]);
         $area->save();
@@ -36,6 +37,7 @@ class AreaService
         $area = Area::find($id);
         $area->floor_id = $data->get('floor_id');
         $area->name = $data->get('name');
+        $area->no = $data->get('no');
         $area->price = $data->get('price');
         $area->save();
 
@@ -59,6 +61,7 @@ class AreaService
     {
         return DB::table('areas')
             ->where('name', 'like', '%'.$query.'%')
+            ->orWhere('no', 'like', '%'.$query.'%')
             ->get();
     }
 }

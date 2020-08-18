@@ -47,16 +47,20 @@ class ElectricityController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name'=>'required',
-            'type'=>'required',
-            'value'=>'required',
-            'price'=>'required',
-        ]);
-
-        $response = $this->electricityService->createElectricity($request);
-
-        // return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Ditambahkan.');
+        try {
+            $request->validate([
+                'name'=>'required',
+                'type'=>'required',
+                'value'=>'required',
+                'price'=>'required'
+            ]);
+    
+            $response = $this->electricityService->createElectricity($request);
+    
+            // return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Ditambahkan.');    
+        } catch (Exception $e) {
+            // return redirect('/master/electricity')->with('error', 'Data Listrik PLN Gagal Ditambahkan.');    
+        }
     }
 
     /**
@@ -103,16 +107,20 @@ class ElectricityController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name'=>'required',
-            'type'=>'required',
-            'value'=>'required',
-            'price'=>'required',
-        ]);
-
-        $response = $this->electricityService->updateElectricityById($request, $id);
-
-        // return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Di Update.');
+        try {
+            $request->validate([
+                'name'=>'required',
+                'type'=>'required',
+                'value'=>'required',
+                'price'=>'required'
+            ]);
+    
+            $response = $this->electricityService->updateElectricityById($request, $id);
+    
+            // return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Di Update.');
+        } catch (Exception $e) {
+            // return redirect('/master/electricity')->with('error', 'Data Listrik PLN Gagal Di Update.');
+        }
     }
 
     /**

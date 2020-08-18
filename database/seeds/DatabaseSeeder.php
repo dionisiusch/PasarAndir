@@ -16,8 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(EmployerSeeder::class);
         $this->call(AreaSeeder::class);
         $this->call(FloorSeeder::class);
-        $this->call(NoSeeder::class);
-        $this->call(AreaNoSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(ElectricitySeeder::class);
         $this->call(StallSeeder::class);
