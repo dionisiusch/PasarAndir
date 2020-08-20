@@ -17,7 +17,7 @@ class StallSeeder extends Seeder
     {
         DB::table('stalls')->insert([
             'user_id' => 1,
-            'area_no_id' => 1,
+            'area_id' => 1,
             'category_id' => 1,
             'name' => 'Toko Kelontong Kevin Hoax',
             'length' => 1,
@@ -30,7 +30,7 @@ class StallSeeder extends Seeder
 
         DB::table('stalls')->insert([
             'user_id' => 2,
-            'area_no_id' => 2,
+            'area_id' => 2,
             'category_id' => 2,
             'name' => 'Toko Grosir Kevin Hoax',
             'length' => 1,

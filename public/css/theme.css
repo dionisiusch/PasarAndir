@@ -2,20 +2,20 @@
 [Master Stylesheet]
 
 Project:  CoolAdmin
-Version:	1.0
-Last change:	08/10/2018 [Add Define a table of contents Link]
-Assigned to:	Hau Nguyen
-Primary use:	Open Source
+Version:    1.0
+Last change:    08/10/2018 [Add Define a table of contents Link]
+Assigned to:    Hau Nguyen
+Primary use:    Open Source
 -------------------------------------------------------------------*/
 /*------------------------------------------------------------------
 [LAYOUT]
 
 * body
     + Header / header
-	+ Page Content / .page-content .name-page
+    + Page Content / .page-content .name-page
         + Section Layouts / section .name-section
         ...
-	+ Footer / footer
+    + Footer / footer
 
 -------------------------------------------------------------------*/
 /*------------------------------------------------------------------
@@ -28,7 +28,7 @@ Primary use:	Open Source
 /*------------------------------------------------------------------
 [Typography]
 
-Notes:	decreasing heading by 0.4em with every subsequent heading level
+Notes:  decreasing heading by 0.4em with every subsequent heading level
 -------------------------------------------------------------------*/
 /*-----------------------------------------------------*/
 /*                   SETTINGS                          */
@@ -323,7 +323,7 @@ section {
 @media (max-width: 991px) {
     .main-content {
         padding-top: 50px;
-	padding-bottom: 100px;
+    padding-bottom: 100px;
     }
 }
 
@@ -1565,6 +1565,10 @@ section {
 
 .account-dropdown__footer a:hover {
     background: #4272d7;
+    color: #fff;
+}
+
+.account-dropdown__footer a:not([href]):hover {
     color: #fff;
 }
 

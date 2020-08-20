@@ -3,7 +3,7 @@
              <div class="row"> 
             <div class="col-md-12">
                 <!-- DATA TABLE -->
-                <h3 class="title-5 m-b-35">Master Data Lantai</h3>
+                <h3 class="title-5 m-b-35">Master Data Kategori</h3>
                   <div class="table-data__tool-left">
                     <div class="rs-select2--light rs-select2--md" style="display: contents">
                        <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i style="font-size:150%" class="zmdi zmdi-search"></i>
@@ -17,8 +17,7 @@
                   <table class="table table-data2">
                     <thead>
                       <tr>
-                        <th>Kode Lantai</th>
-                        <th>Nama Lantai</th>
+                        <th>Nama Kategori</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -46,18 +45,14 @@
             <div class="modal-body">
               <div class="card">
                                     <div class="card-header">
-                                        <strong>Tambah Data</strong> Lantai
+                                        <strong>Tambah Data</strong> Kategori
                                     </div>
                                     <div class="card-body card-block">
-                                        <form action="{{ route('master.floor.store') }}" method="post">
+                                        <form action="{{ route('master.category.store') }}" method="post">
                                             @csrf
-                                            <div class="form-group">
-                                                <label class="form-control-label">Kode Lantai</label>
-                                                <input type="text" name="code" placeholder="Kode Lantai.." class="form-control">
-                                            </div>
                                              <div class="form-group">
-                                                <label class=" form-control-label">Nama Lantai</label>
-                                                <input type="text" name="name" placeholder="Nama Lantai.." class="form-control">
+                                                <label class=" form-control-label">Nama Kategori</label>
+                                                <input type="text" name="name" placeholder="Nama Kategori.." class="form-control">
                                             </div>
                                        
                                     </div>
@@ -86,19 +81,15 @@
             <div class="modal-body">
               <div class="card">
                                     <div class="card-header">
-                                        <strong>Update Data</strong> Lantai
+                                        <strong>Update Data</strong> Kategori
                                     </div>
                                     <div class="card-body card-block">
                                         <form id="update" action="" method="post">
                                             @csrf
                                             @method('PUT')
-                                            <div class="form-group">
-                                                <label class="form-control-label">Kode Lantai</label>
-                                                <input id="code-update" type="text" name="code" placeholder="Kode Lantai.." class="form-control">
-                                            </div>
                                              <div class="form-group">
-                                                <label class=" form-control-label">Nama Lantai</label>
-                                                <input id="name-update" type="text" name="name" placeholder="Nama Lantai.." class="form-control">
+                                                <label class=" form-control-label">Nama Kategori</label>
+                                                <input id="name-update" type="text" name="name" placeholder="Nama Kategori.." class="form-control">
                                             </div>
                                        
                                     </div>
@@ -130,7 +121,7 @@ $.ajaxSetup({
  function fetch_customer_data(query = '')
  {
   $.ajax({
-   url:"/floorsearch",
+   url:"/categorysearch",
    method:'GET',
    dataType:'json',
    data:{query:query},
@@ -154,7 +145,7 @@ $.ajaxSetup({
   if(confirm("Hapus data ini?"))
   {
    $.ajax({
-        url:'/master/floor/'+id,
+        url:'/master/category/'+id,
         type: 'post',
         data: {_method: 'delete'},
     success: function(result) {
@@ -177,14 +168,13 @@ $(document).on('click', '.edit', function(){
    var id = $(this).attr('id');
 
      $.ajax({
-   url:"/master/floor/"+id,
+   url:"/master/category/"+id,
    method:'GET',
    dataType:'json',
    data:{id:id},
    success:function(response)
    {
-   	 $('#update').attr('action', '/master/floor/'+id);
-   	 $('#code-update').val(response.code);
+   	 $('#update').attr('action', '/master/category/'+id);
    	 $('#name-update').val(response.name);
    console.log(response);
    }, error: function(request,msg,error) {

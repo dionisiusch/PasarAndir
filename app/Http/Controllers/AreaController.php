@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Services\AreaService;
 use App\Http\Services\FloorService;
 use GuzzleHttp\Client;
+use DB;
 
 class AreaController extends Controller
 {
@@ -32,7 +33,7 @@ class AreaController extends Controller
         $areas = $this->areaService->showAllAreas();
         $floors = $this->floorService->showAllFloors();
 
-        // return view('master.area.areaShow');
+       return view('master.area.areaShow');
     }
 
     /**
@@ -62,7 +63,7 @@ class AreaController extends Controller
 
         $response = $this->areaService->createArea($request);
 
-        // return redirect('/master/areas')->with('success', 'Data Area Berhasil Ditambahkan.');
+        return redirect('/master/area')->with('success', 'Data Area Berhasil Ditambahkan.');
     }
 
     /**
@@ -79,9 +80,10 @@ class AreaController extends Controller
             $floor = $this->floorService->getFloorById($area->floor_id);
       
             $data = array(
-                'floor' => $floor,
+                'floor' => $floor->id,
+                'floor_name' => $floor->name,
                 'price' => $area->price,
-                'no'  => $area->name,
+                'no'  => $area->no,
                 'name'  => $area->name,
                 'id'  => $id
             );
@@ -119,7 +121,7 @@ class AreaController extends Controller
 
         $response = $this->areaService->updateAreaById($request, $id);
 
-        // return redirect('/master/areas')->with('success', 'Data Area Berhasil Di Update.');
+        return redirect('/master/area')->with('success', 'Data Area Berhasil Di Update.');
     }
 
     /**
@@ -149,18 +151,25 @@ class AreaController extends Controller
                 $data = $this->areaService->searchArea($query);
             } else {
                 $data = DB::table('areas')
-                ->get();
+                ->whereNull('deleted_at')->get();
             }
          
             $total_row = $data->count();
 			if($total_row > 0) {
 				foreach($data as $row) {
+                    $floor = $this->floorService->getFloorById($row->floor_id);     
                     $output .= '
 					<tr class="tr-shadow">
-						<td>'.$row->code.'</td>
+						<td>['. $floor->code.'] '.$floor->name .'</td>
 						<td>
 						'.$row->name.'
 						</td>
+                        <td>
+                        '.$row->no.'
+                        </td>
+                        <td>
+                        '.$row->price.'
+                        </td>
 						<td>
 							<div class="table-data-feature">
 							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
@@ -191,4 +200,29 @@ class AreaController extends Controller
    		    return json_encode($data);
  		}
 	}
+
+    public function select2(Request $request){
+     $search = $request->search;
+
+      if($search != ''){
+         $areas = $this->areaService->searchArea($search);
+      }else{
+         $areas = DB::table('areas')
+         ->whereNull('deleted_at')->get();
+      }
+
+      $response = array();
+      // $preselect = '';
+      foreach($areas as $area){
+        $floor = $this->floorService->getFloorById($area->floor_id);
+        $text = $floor->name." Blok ".$area->name." No. ".$area->no;
+         $response[] = array(
+              "id"=>$area->id,
+              "text"=>$text
+         );
+         
+      }
+        
+      echo json_encode($response);
+   }
 }

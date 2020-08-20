@@ -6,6 +6,7 @@ use App\Model\Electricity;
 use Illuminate\Http\Request;
 use App\Http\Services\ElectricityService;
 use GuzzleHttp\Client;
+use DB;
 
 class ElectricityController extends Controller
 {
@@ -26,7 +27,7 @@ class ElectricityController extends Controller
     {
         $electricities = $this->electricityService->showAllElectricities();
 
-        // return view('master.electricity.electricityShow');
+        return view('master.electricity.electricityShow');
     }
 
     /**
@@ -57,9 +58,9 @@ class ElectricityController extends Controller
     
             $response = $this->electricityService->createElectricity($request);
     
-            // return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Ditambahkan.');    
+            return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Ditambahkan.');    
         } catch (Exception $e) {
-            // return redirect('/master/electricity')->with('error', 'Data Listrik PLN Gagal Ditambahkan.');    
+            return redirect('/master/electricity')->with('error', 'Data Listrik PLN Gagal Ditambahkan.');    
         }
     }
 
@@ -117,9 +118,9 @@ class ElectricityController extends Controller
     
             $response = $this->electricityService->updateElectricityById($request, $id);
     
-            // return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Di Update.');
+            return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Di Update.');
         } catch (Exception $e) {
-            // return redirect('/master/electricity')->with('error', 'Data Listrik PLN Gagal Di Update.');
+            return redirect('/master/electricity')->with('error', 'Data Listrik PLN Gagal Di Update.');
         }
     }
 
@@ -150,7 +151,7 @@ class ElectricityController extends Controller
                 $data = $this->electricityService->searchElectricity($query);
             } else {
                 $data = DB::table('electricities')
-                ->get();
+                ->whereNull('deleted_at')->get();
             }
          
             $total_row = $data->count();
@@ -158,10 +159,16 @@ class ElectricityController extends Controller
 				foreach($data as $row) {
                     $output .= '
 					<tr class="tr-shadow">
-						<td>'.$row->code.'</td>
+						<td>'.$row->name.'</td>
 						<td>
-						'.$row->name.'
+						'.$row->type.'
 						</td>
+                        <td>
+                        '.$row->value.'
+                        </td>
+                        <td>
+                        '.$row->price.'
+                        </td>
 						<td>
 							<div class="table-data-feature">
 							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">

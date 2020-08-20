@@ -14,7 +14,7 @@
              
             <div class="col-md-6 col-lg-3">  
 
-              <div class="statistic__item statistic__item--green" onclick="location.href='{{ url('master/area/show') }}'">       
+              <div class="statistic__item statistic__item--green" onclick="location.href='{{ url('master/area/') }}'">       
                 <h2 class="text">Area</h2>
                 <div class="icon">
                   <i class="zmdi zmdi-pin-drop"></i>
@@ -24,7 +24,7 @@
             </div>
              
              <div class="col-md-6 col-lg-3">
-              <div class="statistic__item statistic__item--blue">
+              <div class="statistic__item statistic__item--blue" onclick="location.href='{{ url('master/category/') }}'">
                 <h2 class="text">Kategori</h2>
                 <div class="icon">
                   <i class="zmdi zmdi-format-align-left"></i>
@@ -32,7 +32,7 @@
               </div>
             </div>
             <div class="col-md-6 col-lg-3">
-              <div class="statistic__item statistic__item--red">
+              <div class="statistic__item statistic__item--red" onclick="location.href='{{ url('master/electricity/') }}'">
                 <h2 class="text">Listrik</h2>
                 <div class="icon">
                   <i class="zmdi zmdi-flash"></i>
@@ -71,16 +71,8 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-              <div class="statistic__item statistic__item--blue">
-                <h2 class="text">Air</h2>
-                <div class="icon">
-                  <i class="zmdi zmdi-invert-colors"></i>
-                </div>
-              </div>
-            </div>
                <div class="col-md-6 col-lg-3">
-              <div class="statistic__item statistic__item--green">
+              <div class="statistic__item statistic__item--blue" onclick="location.href='{{ url('master/stall') }}'">
                 <h2 class="text">Kios</h2>
                 <div class="icon">
                    <i class="zmdi zmdi-home"></i>
@@ -88,7 +80,7 @@
               </div>
             </div>
             <div class="col-md-6 col-lg-3">
-              <div class="statistic__item statistic__item--blue">
+              <div class="statistic__item statistic__item--green" onclick="location.href='{{ url('master/user/') }}'">
                 <h2 class="text">User</h2>
                 <div class="icon">
                   <i class="zmdi zmdi-accounts-list-alt"></i>

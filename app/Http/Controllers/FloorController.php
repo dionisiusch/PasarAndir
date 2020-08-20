@@ -120,7 +120,7 @@ class FloorController extends Controller
   
       return redirect('/master/floor')->with('success', 'Data Lantai Berhasil Di Update.');            
     } catch (Exception $e) {
-      return redirect('/master/floor')->with('success', 'Data Lantai Gagal Di Update.');            
+      return redirect('/master/floor')->with('error', 'Data Lantai Gagal Di Update.');            
     }
   }
 
@@ -165,10 +165,10 @@ class FloorController extends Controller
       $output = '';
       $query = $request->get('query');
       if($query != '') {
-				$data = $this->floorService->searchCategory($id);
+				$data = $this->floorService->searchFloor($query);
      	} else {
       	$data = DB::table('floors')
-      	->get();
+    
 			}
 			 
 			$total_row = $data->count();
@@ -209,5 +209,29 @@ class FloorController extends Controller
 
    		return json_encode($data);
  		}
-	}
+
+  }
+
+  public function select2(Request $request){
+     $search = $request->search;
+
+      if($search != ''){
+         $floors = $this->floorService->searchFloor($search);
+      }else{
+         $floors = DB::table('floors')
+         ->get();
+      }
+
+      $response = array();
+      // $preselect = '';
+      foreach($floors as $floor){
+         $response[] = array(
+              "id"=>$floor->id,
+              "text"=>$floor->name
+         );
+         // $preselect.='<option value="'.$floor->id.'"> '.$floor->name.'</option>';
+      }
+       // $response['option'] = $preselect; 
+      echo json_encode($response);
+   }
 }
