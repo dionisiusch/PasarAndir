@@ -29,7 +29,7 @@ Route::group([
         Route::get('/', 'FloorController@index')->name('master.floor.show');
         Route::post('/', 'FloorController@store')->name('master.floor.store');
         Route::get('/{id}', 'FloorController@show')->name('master.floor.find');
-        Route::put('/{id}', 'FloorController@update')->name('master.floor.update');
+        Route::put('/{id}', 'FloorController@update')->name('master.floor.update');;
         Route::delete('/{id}', 'FloorController@destroy')->name('master.floor.delete');
     });
     
@@ -37,15 +37,15 @@ Route::group([
         'prefix' => '/category' 
         // 'middleware' => 'auth'
     ], function () {
-        Route::get('/', 'CategoryController@index')->name('master.category.show');
-        Route::post('/', 'CategoryController@store')->name('master.category.store');
-        Route::get('/{id}', 'CategoryController@show')->name('master.category.find');
-        Route::put('/{id}', 'CategoryController@update')->name('master.category.update');
-        Route::delete('/{id}', 'CategoryController@destroy')->name('master.category.delete');
+        Route::get('/', 'CategoryController@index');
+        Route::post('/', 'CategoryController@store');
+        Route::get('/{id}', 'CategoryController@show');
+        Route::put('/{id}', 'CategoryController@update');
+        Route::delete('/{id}', 'CategoryController@destroy');
     });
     
     Route::group([
-        'prefix' => '/nos' 
+        'prefix' => '/no' 
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'NoController@index');
@@ -56,63 +56,41 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => '/area' 
-        // 'middleware' => 'auth'
-    ], function () {
-        Route::get('/', 'AreaController@index')->name('master.area.index');
-        Route::post('/', 'AreaController@store')->name('master.area.store');
-        Route::get('/{id}', 'AreaController@show')->name('master.area.show');
-        Route::put('/{id}', 'AreaController@update')->name('master.area.update');;
-        Route::delete('/{id}', 'AreaController@destroy')->name('master.area.delete');
-    });
-
-    Route::group([
         'prefix' => '/stall' 
         // 'middleware' => 'auth'
     ], function () {
-        Route::get('/', 'StallController@index')->name('master.stall.index');
-        Route::post('/', 'StallController@store')->name('master.stall.store');
-        Route::get('/{id}', 'StallController@show')->name('master.stall.show');
-        Route::put('/{id}', 'StallController@update')->name('master.stall.update');;
-        Route::delete('/{id}', 'StallController@destroy')->name('master.stall.delete');
+        Route::get('/', 'StallController@index');
+        Route::post('/', 'StallController@store');
+        Route::get('/{id}', 'StallController@show');
+        Route::put('/{id}', 'StallController@update');
+        Route::delete('/{id}', 'StallController@destroy');
     });
 
     Route::group([
         'prefix' => '/electricity' 
         // 'middleware' => 'auth'
     ], function () {
-        Route::get('/', 'ElectricityController@index')->name('master.electricity.index');
-        Route::post('/', 'ElectricityController@store')->name('master.electricity.store');;
-        Route::get('/{id}', 'ElectricityController@show')->name('master.electricity.show');;
-        Route::put('/{id}', 'ElectricityController@update')->name('master.electricity.update');;
-        Route::delete('/{id}', 'ElectricityController@destroy')->name('master.electricity.delete');;
+        Route::get('/', 'ElectricityController@index');
+        Route::post('/', 'ElectricityController@store');
+        Route::get('/{id}', 'ElectricityController@show');
+        Route::put('/{id}', 'ElectricityController@update');
+        Route::delete('/{id}', 'ElectricityController@destroy');
     });
 
-      Route::group([
+    Route::group([
         'prefix' => '/user' 
         // 'middleware' => 'auth'
     ], function () {
-        Route::get('/', 'UserController@index')->name('master.user.index');
-        Route::get('/{id}', 'UserController@show')->name('master.user.show');
-        Route::put('/{id}/pic', 'UserController@updatePIC')->name('master.user.store');
-        Route::put('/{id}/auth', 'UserController@updateAuth')->name('master.user.update');
-        Route::put('/{id}/password/reset', 'UserController@resetPassword')->name('master.user.reset');
-        Route::delete('/{id}', 'UserController@resetToDefault')->name('master.user.delete');
+        Route::get('/', 'UserController@index');
+        Route::get('/{id}', 'UserController@show');
+        Route::put('/{id}/pic', 'UserController@updatePIC');
+        Route::put('/{id}/auth', 'UserController@updateAuth');
+        Route::put('/{id}/password/reset', 'UserController@resetPassword');
+        Route::delete('/{id}', 'UserController@resetToDefault');
     });
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 //route ajax livesearch
-Route::get('/floorsearch', 'FloorController@search')->name('master.floor.search');
-Route::get('/areasearch', 'AreaController@search')->name('master.area.search');
-Route::get('/categorysearch', 'CategoryController@search')->name('master.category.search');
-Route::get('/electricitysearch', 'ElectricityController@search')->name('master.electricity.search');
-Route::get('/stallsearch', 'StallController@search')->name('master.stall.search');
-Route::get('/usersearch', 'UserController@search')->name('master.user.search');
-
-//route aax select2
-Route::get('/floorselect2', 'floorController@select2')->name('master.floor.select2');
-Route::get('/areaselect2', 'areaController@select2')->name('master.area.select2');
-Route::get('/userselect2', 'userController@select2')->name('master.user.select2');
-Route::get('/categoryselect2', 'categoryController@select2')->name('master.category.select2');
+Route::get('/search', 'FloorController@search')->name('master.floor.search');

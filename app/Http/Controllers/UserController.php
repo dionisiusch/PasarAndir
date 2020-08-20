@@ -6,7 +6,6 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Services\UserService;
 use GuzzleHttp\Client;
-use DB;
 
 class UserController extends Controller
 {
@@ -27,7 +26,7 @@ class UserController extends Controller
     {
         $users = $this->userService->showAllUsers();
 
-        return view('master.user.userShow');
+        // return view('master.user.userShow');
     }
 
     /**
@@ -66,9 +65,9 @@ class UserController extends Controller
     
             $response = $this->userService->updatePICUserById($request, $id);
     
-            return redirect('/master/user')->with('success', 'Data PIC User Berhasil Di Update.');
+            // return redirect('/master/user')->with('success', 'Data PIC User Berhasil Di Update.');
         } catch (Exception $e) {
-            return redirect('/master/user')->with('success', 'Data PIC User Gagal Di Update.');
+            // return redirect('/master/user')->with('success', 'Data PIC User Gagal Di Update.');
         }
     }
 
@@ -82,9 +81,9 @@ class UserController extends Controller
     
             $response = $this->userService->updateAuthUserById($request, $id);
     
-            return redirect('/master/user')->with('success', 'Otentikasi User Berhasil Di Update.');
+            // return redirect('/master/user')->with('success', 'Otentikasi User Berhasil Di Update.');
         } catch (Exception $e) {
-            return redirect('/master/user')->with('success', 'Otentikasi User Gagal Di Update.');
+            // return redirect('/master/user')->with('success', 'Otentikasi User Gagal Di Update.');
         }
     }
 
@@ -95,9 +94,9 @@ class UserController extends Controller
         try {
             $response = $this->userService->resetPasswordUserById($id, $password);
     
-            return redirect('/master/user')->with('success', 'Password Baru ' . $password);
+            // return redirect('/master/user')->with('success', 'Password Baru ' . $password);
         } catch (Exception $e) {
-            return redirect('/master/user')->with('success', 'Reset Password Gagal');
+            // return redirect('/master/user')->with('success', 'Reset Password Gagal');
         }
     }
 
@@ -106,9 +105,9 @@ class UserController extends Controller
         try {
             $response = $this->userService->resetToDefaultUserById($id);
     
-            return('User telah dikembalikan ke default. ');
+            // return redirect('/master/user')->with('success', 'User telah dikembalikan ke default. ');
         } catch (Exception $e) {
-            return ('User gagal dikembalikan ke default. ');
+            // return redirect('/master/user')->with('success', 'User gagal dikembalikan ke default. ');
         }
     }
 
@@ -129,15 +128,9 @@ class UserController extends Controller
                 foreach($data as $row) {
                     $output .= '
                     <tr class="tr-shadow">
-                        <td>'.$row->username.'</td>
+                        <td>'.$row->code.'</td>
                         <td>
-                        '.$row->pic_name.'
-                        </td>
-                         <td>
-                        '.$row->pic_phone_number.'
-                        </td>
-                         <td>
-                        '.$row->joined_date.'
+                        '.$row->name.'
                         </td>
                         <td>
                             <div class="table-data-feature">
@@ -169,26 +162,4 @@ class UserController extends Controller
             return json_encode($data);
         }
     }
-
-     public function select2(Request $request){
-     $search = $request->search;
-
-      if($search != ''){
-         $users = $this->userService->searchUser($search);
-      }else{
-         $users = DB::table('users')
-         ->get();
-      }
-
-      $response = array();
-
-      foreach($users as $user){
-         $response[] = array(
-              "id"=>$user->id,
-              "text"=>$user->pic_name
-         );
-      }
-        
-      echo json_encode($response);
-   }
 }
