@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\User;
 use DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
@@ -51,10 +52,10 @@ class UserService
         return $user;
     }
 
-    public function resetToDefaultUserById($id, $password)
+    public function resetToDefaultUserById($id)
     {
         $user = User::find($id);
-        $user->password = Hash::make("PasarAndir"+$id);
+        $user->password = Hash::make("PasarAndir".$id);
         $user->pic_name = null;
         $user->pic_phone_number = null;
         $user->joined_date = null;

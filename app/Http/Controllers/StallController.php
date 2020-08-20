@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Model\Stall;
+use App\User;
+use App\Model\Area;
 use App\Model\Category;
 use Illuminate\Http\Request;
 use App\Http\Services\StallService;
@@ -11,13 +13,14 @@ use App\Http\Services\CategoryService;
 use App\Http\Services\UserService;
 use App\Http\Services\FloorService;
 use GuzzleHttp\Client;
+Use DB;
 
 class StallController extends Controller
 {
     /** @var StallService */
     private $stallService;
 
-    /** @var AreaService */
+    /** @var AreaNoService */
     private $areaService;
 
     /** @var CategoryService */
@@ -36,6 +39,7 @@ class StallController extends Controller
         $this->categoryService = app(CategoryService::class);
         $this->userService = app(UserService::class);
         $this->floorService = app(FloorService::class);
+
     }
 
     /**
@@ -49,7 +53,7 @@ class StallController extends Controller
         $areas = $this->areaService->showAllAreas();
         $categories = $this->categoryService->showAllCategories();
 
-        // return view('master.stall.stallShow');
+        return view('master.stall.stallShow');
     }
 
     /**
@@ -84,9 +88,9 @@ class StallController extends Controller
     
             $response = $this->stallService->createStall($request);
     
-            // return redirect('/master/stall')->with('success', 'Data Kios Berhasil Ditambahkan.');       
+            return redirect('/master/stall')->with('success', 'Data Kios Berhasil Ditambahkan.');       
         } catch (Exception $e) {
-            // return redirect('/master/stall')->with('success', 'Data Kios Gagal Ditambahkan.');       
+            return redirect('/master/stall')->with('success', 'Data Kios Gagal Ditambahkan.');       
         }
     }
 
@@ -107,14 +111,20 @@ class StallController extends Controller
             $floor = $this->floorService->getFloorById($area->floor_id);
       
             $data = array(
-                'floor'  => $floor,
-                'area'  => $area,
-                'user'  => $user->pic_name,
-                'category'  => $category,
+                'floor_name'  => $floor->name,
+                'floor_id'  => $floor->id,
+                'pic_name'  => $user->pic_name,
+                'user_id'  => $user->id,
+                'area_name'  => $area->name,
+                'area_id'  => $area->id,
+                'area_no'  => $area->no,
+                'category_name'  =>$category->name,
+                'category_id'  =>$category->id,
                 'height'  => $stall->height,
                 'width'  => $stall->width,
                 'length'  => $stall->length,
                 'name'  => $stall->name,
+                'status'  => $stall->status,
                 'id'  => $id
             );
             
@@ -157,9 +167,9 @@ class StallController extends Controller
     
             $response = $this->stallService->updateStallById($request, $id);
     
-            // return redirect('/master/stall')->with('success', 'Data Kios Berhasil Di Update.');
+            return redirect('/master/stall')->with('success', 'Data Kios Berhasil Di Update.');
         } catch (Exception $e) {
-            // return redirect('/master/stall')->with('success', 'Data Kios Gagal Di Update.');
+            return redirect('/master/stall')->with('success', 'Data Kios Gagal Di Update.');
         }
     }
 
@@ -190,46 +200,64 @@ class StallController extends Controller
                 $data = $this->stallService->searchStall($query);
             } else {
                 $data = DB::table('stalls')
-                ->get();
+               ->whereNull('deleted_at')->get();
             }
          
             $total_row = $data->count();
-			if($total_row > 0) {
-				foreach($data as $row) {
+            if($total_row > 0) {
+                foreach($data as $row) {
+                    $user = $this->userService->getUserById($row->user_id);
+                    $area = $this->areaService->getAreaById($row->area_id);
+                    $category = $this->categoryService->getCategoryById($row->category_id);
+                    $floor = $this->floorService->getFloorById($area->floor_id);
+                    // $user = $this->userService->getUserById($area->user_id);
+                    if($row->status=="Aktif"){
+                        $status = "<h4><span class='badge badge-success'>Aktif</span></h4>";
+                    }else{
+                         $status = "<h4><span class='badge badge-danger'>Tidak Aktif</span></h4>";
+                    }
                     $output .= '
-					<tr class="tr-shadow">
-						<td>'.$row->code.'</td>
-						<td>
-						'.$row->name.'
-						</td>
-						<td>
-							<div class="table-data-feature">
-							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
-								<i class="zmdi zmdi-edit"></i>
-							</button>
-							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
-								<i class="zmdi zmdi-delete"></i>
-							</button>
-							</div>
-						</td>
-					</tr>
-					<tr class="spacer"></tr> 
-        	        ';
-      	        }
+                    <tr class="tr-shadow">
+                        <td>'.$user->pic_name.'</td>
+                        <td>
+                        '.$floor->name.' Blok
+                        '.$area->name.' No.
+                        '.$area->no.'
+                        </td>
+                        <td>'.$category->name.'</td>
+                        <td>'.$row->name.'</td>
+                        <td>'.$row->width.'</td>
+                        <td>'.$row->length.'</td>
+                        <td>'.$row->height.'</td>
+                        <td>'.$status.'</td>
+                        <td>
+                            <div class="table-data-feature">
+                            <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+                                <i class="zmdi zmdi-edit"></i>
+                            </button>
+                            <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+                                <i class="zmdi zmdi-delete"></i>
+                            </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="spacer"></tr> 
+                    ';
+                }
             } else {
-				$output = '
-				<tr class="tr-shadow">
-				    <td align="center" colspan="3">Data not found.</td>
-				</tr>
-				';
-			}
-			
-			$data = array(
-				'table_data'  => $output,
-				'total_data'  => $total_row
-			);
-			
-   		    return json_encode($data);
- 		}
-	}
+                $output = '
+                <tr class="tr-shadow">
+                    <td align="center" colspan="3">Data not found.</td>
+                </tr>
+                ';
+            }
+            
+            $data = array(
+                'table_data'  => $output,
+                'total_data'  => $total_row
+            );
+            
+            return json_encode($data);
+        }
+    }
 }
