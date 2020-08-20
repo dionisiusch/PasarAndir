@@ -34,7 +34,7 @@ Route::group([
     });
     
     Route::group([
-        'prefix' => '/categories' 
+        'prefix' => '/category' 
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'CategoryController@index');
@@ -45,7 +45,7 @@ Route::group([
     });
     
     Route::group([
-        'prefix' => '/nos' 
+        'prefix' => '/no' 
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'NoController@index');
@@ -56,18 +56,7 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => '/areanos' 
-        // 'middleware' => 'auth'
-    ], function () {
-        Route::get('/', 'AreaNoController@index');
-        Route::post('/', 'AreaNoController@store');
-        Route::get('/{id}', 'AreaNoController@show');
-        Route::put('/{id}', 'AreaNoController@update');
-        Route::delete('/{id}', 'AreaNoController@destroy');
-    });
-
-    Route::group([
-        'prefix' => '/stalls' 
+        'prefix' => '/stall' 
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'StallController@index');
@@ -78,7 +67,7 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => '/electricities' 
+        'prefix' => '/electricity' 
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'ElectricityController@index');
@@ -86,6 +75,18 @@ Route::group([
         Route::get('/{id}', 'ElectricityController@show');
         Route::put('/{id}', 'ElectricityController@update');
         Route::delete('/{id}', 'ElectricityController@destroy');
+    });
+
+    Route::group([
+        'prefix' => '/user' 
+        // 'middleware' => 'auth'
+    ], function () {
+        Route::get('/', 'UserController@index');
+        Route::get('/{id}', 'UserController@show');
+        Route::put('/{id}/pic', 'UserController@updatePIC');
+        Route::put('/{id}/auth', 'UserController@updateAuth');
+        Route::put('/{id}/password/reset', 'UserController@resetPassword');
+        Route::delete('/{id}', 'UserController@resetToDefault');
     });
 });
 

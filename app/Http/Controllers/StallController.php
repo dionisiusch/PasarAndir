@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Model\Stall;
-use App\Model\AreaNo;
 use App\Model\Category;
 use Illuminate\Http\Request;
 use App\Http\Services\StallService;
-use App\Http\Services\AreaNoService;
+use App\Http\Services\AreaService;
 use App\Http\Services\CategoryService;
 use App\Http\Services\UserService;
 use App\Http\Services\FloorService;
@@ -18,8 +17,8 @@ class StallController extends Controller
     /** @var StallService */
     private $stallService;
 
-    /** @var AreaNoService */
-    private $areaNoService;
+    /** @var AreaService */
+    private $areaService;
 
     /** @var CategoryService */
     private $categoryService;
@@ -33,7 +32,7 @@ class StallController extends Controller
     public function __construct()
     {
         $this->stallService = app(StallService::class);
-        $this->areaNoService = app(AreaNoService::class);
+        $this->areaService = app(AreaService::class);
         $this->categoryService = app(CategoryService::class);
         $this->userService = app(UserService::class);
         $this->floorService = app(FloorService::class);
@@ -47,7 +46,7 @@ class StallController extends Controller
     public function index()
     {
         $stalls = $this->stallService->showAllStalls();
-        $areaNos = $this->areaNoService->showAllAreaNos();
+        $areas = $this->areaService->showAllAreas();
         $categories = $this->categoryService->showAllCategories();
 
         // return view('master.stall.stallShow');
@@ -74,7 +73,7 @@ class StallController extends Controller
         try {
             $request->validate([
                 'user_id'=>'required',
-                'area_no_id'=>'required',
+                'area_id'=>'required',
                 'category_id'=>'required',
                 'name'=>'required',
                 'length'=>'required',
@@ -104,17 +103,14 @@ class StallController extends Controller
             $stall = $this->stallService->getStallById($id);
             $category = $this->categoryService->getCategoryById($stall->category_id);
             $user = $this->userService->getUserById($stall->user_id);
-            $area_no = $this->areaNoService->getAreaNoById($stall->area_no_id);
-            $area = $this->areaNoService->getAreaById($area_no->area_id);
-            $no = $this->areaNoService->getNoById($area_no->no_id);
+            $area = $this->areaService->getAreaById($stall->area_id);
             $floor = $this->floorService->getFloorById($area->floor_id);
       
             $data = array(
-                'floor_name'  => $floor->name,
-                'no'  => $no->no,
-                'area_name'  => $area->name,
-                'pic_name'  => $user->pic_name,
-                'category_name'  => $category->name,
+                'floor'  => $floor,
+                'area'  => $area,
+                'user'  => $user->pic_name,
+                'category'  => $category,
                 'height'  => $stall->height,
                 'width'  => $stall->width,
                 'length'  => $stall->length,
@@ -150,7 +146,7 @@ class StallController extends Controller
         try {
             $request->validate([
                 'user_id'=>'required',
-                'area_no_id'=>'required',
+                'area_id'=>'required',
                 'category_id'=>'required',
                 'name'=>'required',
                 'length'=>'required',
