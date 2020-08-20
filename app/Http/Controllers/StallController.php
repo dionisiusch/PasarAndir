@@ -194,42 +194,42 @@ class StallController extends Controller
             }
          
             $total_row = $data->count();
-      if($total_row > 0) {
-        foreach($data as $row) {
+			if($total_row > 0) {
+				foreach($data as $row) {
                     $output .= '
-          <tr class="tr-shadow">
-            <td>'.$row->code.'</td>
-            <td>
-            '.$row->name.'
-            </td>
-            <td>
-              <div class="table-data-feature">
-              <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
-                <i class="zmdi zmdi-edit"></i>
-              </button>
-              <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
-                <i class="zmdi zmdi-delete"></i>
-              </button>
-              </div>
-            </td>
-          </tr>
-          <tr class="spacer"></tr> 
-                  ';
-                }
+					<tr class="tr-shadow">
+						<td>'.$row->code.'</td>
+						<td>
+						'.$row->name.'
+						</td>
+						<td>
+							<div class="table-data-feature">
+							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+								<i class="zmdi zmdi-edit"></i>
+							</button>
+							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+								<i class="zmdi zmdi-delete"></i>
+							</button>
+							</div>
+						</td>
+					</tr>
+					<tr class="spacer"></tr> 
+        	        ';
+      	        }
             } else {
-        $output = '
-        <tr class="tr-shadow">
-            <td align="center" colspan="3">Data not found.</td>
-        </tr>
-        ';
-      }
-      
-      $data = array(
-        'table_data'  => $output,
-        'total_data'  => $total_row
-      );
-      
-          return json_encode($data);
-    }
-  }
+				$output = '
+				<tr class="tr-shadow">
+				    <td align="center" colspan="3">Data not found.</td>
+				</tr>
+				';
+			}
+			
+			$data = array(
+				'table_data'  => $output,
+				'total_data'  => $total_row
+			);
+			
+   		    return json_encode($data);
+ 		}
+	}
 }
