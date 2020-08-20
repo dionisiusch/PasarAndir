@@ -16,7 +16,7 @@ class CreateStallsTable extends Migration
         Schema::create('stalls', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('area_no_id');
+            $table->foreignId('area_id');
             $table->foreignId('category_id');
             $table->string('name');
             $table->bigInteger('length');
