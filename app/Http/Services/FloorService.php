@@ -48,7 +48,7 @@ class FloorService
         return $floor;
     }
 
-    public function searchCategory($query)
+    public function searchFloor($query)
     {
         return DB::table('floors')
             ->where('name', 'like', '%'.$query.'%')

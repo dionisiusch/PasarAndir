@@ -3,7 +3,7 @@
              <div class="row"> 
             <div class="col-md-12">
                 <!-- DATA TABLE -->
-                <h3 class="title-5 m-b-35">Master Data Lantai</h3>
+                <h3 class="title-5 m-b-35">Master Data Listrik</h3>
                   <div class="table-data__tool-left">
                     <div class="rs-select2--light rs-select2--md" style="display: contents">
                        <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i style="font-size:150%" class="zmdi zmdi-search"></i>
@@ -17,8 +17,11 @@
                   <table class="table table-data2">
                     <thead>
                       <tr>
-                        <th>Kode Lantai</th>
-                        <th>Nama Lantai</th>
+                        <th>Kode Listrik</th>
+                        <th>Tipe</th>
+                        <th>Value</th>
+                        <th>Harga</th>
+
                         <th></th>
                       </tr>
                     </thead>
@@ -46,19 +49,28 @@
             <div class="modal-body">
               <div class="card">
                                     <div class="card-header">
-                                        <strong>Tambah Data</strong> Lantai
+                                        <strong>Tambah Data</strong> Listrik
                                     </div>
                                     <div class="card-body card-block">
-                                        <form action="{{ route('master.floor.store') }}" method="post">
+                                        <form action="{{ route('master.electricity.store') }}" method="post">
                                             @csrf
-                                            <div class="form-group">
-                                                <label class="form-control-label">Kode Lantai</label>
-                                                <input type="text" name="code" placeholder="Kode Lantai.." class="form-control">
+                                             <div class="form-group">
+                                                <label class="form-control-label">Kode Listrik</label>
+                                                <input id="name" type="text" name="name" placeholder="Kode Listrik.." class="form-control">
                                             </div>
                                              <div class="form-group">
-                                                <label class=" form-control-label">Nama Lantai</label>
-                                                <input type="text" name="name" placeholder="Nama Lantai.." class="form-control">
+                                                <label class=" form-control-label">Tipe</label>
+                                                <input id="type" type="text" name="type" placeholder="Tipe.." class="form-control">
                                             </div>
+                                            <div class="form-group">
+                                                <label class=" form-control-label">Value</label>
+                                                <input id="value" type="number" name="value" placeholder="Value.." class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class=" form-control-label">Harga</label>
+                                                <input id="price" type="number" name="price" placeholder="Harga.." class="form-control">
+                                            </div>
+                                       
                                        
                                     </div>
                                     <div class="card-footer">
@@ -86,19 +98,27 @@
             <div class="modal-body">
               <div class="card">
                                     <div class="card-header">
-                                        <strong>Update Data</strong> Lantai
+                                        <strong>Update Data</strong> Listrik
                                     </div>
                                     <div class="card-body card-block">
                                         <form id="update" action="" method="post">
                                             @csrf
                                             @method('PUT')
                                             <div class="form-group">
-                                                <label class="form-control-label">Kode Lantai</label>
-                                                <input id="code-update" type="text" name="code" placeholder="Kode Lantai.." class="form-control">
+                                                <label class="form-control-label">Kode Listrik</label>
+                                                <input id="name-update" type="text" name="name" placeholder="Kode Listrik.." class="form-control">
                                             </div>
                                              <div class="form-group">
-                                                <label class=" form-control-label">Nama Lantai</label>
-                                                <input id="name-update" type="text" name="name" placeholder="Nama Lantai.." class="form-control">
+                                                <label class=" form-control-label">Tipe</label>
+                                                <input id="type-update" type="text" name="type" placeholder="Tipe.." class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class=" form-control-label">Value</label>
+                                                <input id="value-update" type="number" name="value" placeholder="Tipe.." class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class=" form-control-label">Harga</label>
+                                                <input id="price-update" type="number" name="price" placeholder="Tipe.." class="form-control">
                                             </div>
                                        
                                     </div>
@@ -130,7 +150,7 @@ $.ajaxSetup({
  function fetch_customer_data(query = '')
  {
   $.ajax({
-   url:"/floorsearch",
+   url:"/electricitysearch",
    method:'GET',
    dataType:'json',
    data:{query:query},
@@ -154,7 +174,7 @@ $.ajaxSetup({
   if(confirm("Hapus data ini?"))
   {
    $.ajax({
-        url:'/master/floor/'+id,
+        url:'/master/electricity/'+id,
         type: 'post',
         data: {_method: 'delete'},
     success: function(result) {
@@ -177,16 +197,19 @@ $(document).on('click', '.edit', function(){
    var id = $(this).attr('id');
 
      $.ajax({
-   url:"/master/floor/"+id,
+   url:"/master/electricity/"+id,
    method:'GET',
    dataType:'json',
    data:{id:id},
    success:function(response)
    {
-   	 $('#update').attr('action', '/master/floor/'+id);
-   	 $('#code-update').val(response.code);
+   	 $('#update').attr('action', '/master/electricity/'+id);
    	 $('#name-update').val(response.name);
-   console.log(response);
+   	 $('#type-update').val(response.type);
+     $('#value-update').val(response.value);
+     $('#price-update').val(response.price);
+
+        console.log(response);
    }, error: function(request,msg,error) {
        console.log(msg);
        console.log(error);

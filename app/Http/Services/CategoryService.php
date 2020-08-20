@@ -3,7 +3,7 @@
 namespace App\Http\Services;
 
 use App\Model\Category;
-
+use DB;
 class CategoryService
 {
     public function showAllCategories()

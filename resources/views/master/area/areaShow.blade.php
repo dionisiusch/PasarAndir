@@ -3,7 +3,7 @@
              <div class="row"> 
             <div class="col-md-12">
                 <!-- DATA TABLE -->
-                <h3 class="title-5 m-b-35">Master Data Lantai</h3>
+                <h3 class="title-5 m-b-35">Master Data Area</h3>
                   <div class="table-data__tool-left">
                     <div class="rs-select2--light rs-select2--md" style="display: contents">
                        <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i style="font-size:150%" class="zmdi zmdi-search"></i>
@@ -18,8 +18,9 @@
                     <thead>
                       <tr>
                         <th>Kode Lantai</th>
-                        <th>Nama Lantai</th>
-                        <th></th>
+                        <th>Blok</th>
+                        <th>Nomor Blok</th>
+                        <th>Harga</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -46,19 +47,29 @@
             <div class="modal-body">
               <div class="card">
                                     <div class="card-header">
-                                        <strong>Tambah Data</strong> Lantai
+                                        <strong>Tambah Data</strong> Area
                                     </div>
                                     <div class="card-body card-block">
-                                        <form action="{{ route('master.floor.store') }}" method="post">
+                                        <form action="{{ route('master.area.store') }}" method="post">
                                             @csrf
                                             <div class="form-group">
-                                                <label class="form-control-label">Kode Lantai</label>
-                                                <input type="text" name="code" placeholder="Kode Lantai.." class="form-control">
+                                              <label class=" form-control-label">Lantai</label>
+                                            <select name="floor_id" id='selFloor' class='form-control'>
+                                            </select>
                                             </div>
                                              <div class="form-group">
-                                                <label class=" form-control-label">Nama Lantai</label>
-                                                <input type="text" name="name" placeholder="Nama Lantai.." class="form-control">
+                                                <label class=" form-control-label">Blok</label>
+                                                <input type="text" name="name" placeholder="Blok.." class="form-control">
                                             </div>
+                                            <div class="form-group">
+                                                <label class=" form-control-label">Nomor Blok</label>
+                                                <input type="text" name="no" placeholder="Nomor Blok.." class="form-control">
+                                            </div>
+                                             <div class="form-group">
+                                                <label class=" form-control-label">Harga</label>
+                                                <input type="number" name="price" placeholder="Harga.." class="form-control">
+                                            </div>
+
                                        
                                     </div>
                                     <div class="card-footer">
@@ -86,19 +97,28 @@
             <div class="modal-body">
               <div class="card">
                                     <div class="card-header">
-                                        <strong>Update Data</strong> Lantai
+                                        <strong>Update Data</strong> Area<div class="form-group">
                                     </div>
                                     <div class="card-body card-block">
                                         <form id="update" action="" method="post">
                                             @csrf
                                             @method('PUT')
-                                            <div class="form-group">
-                                                <label class="form-control-label">Kode Lantai</label>
-                                                <input id="code-update" type="text" name="code" placeholder="Kode Lantai.." class="form-control">
+                                            <div class="form-group">    
+                                                <label class="form-control-label">Lantai</label>
+                                                <select name="floor_id" id='selFloor-update' class='form-control'>
+                                            </select>
                                             </div>
                                              <div class="form-group">
-                                                <label class=" form-control-label">Nama Lantai</label>
-                                                <input id="name-update" type="text" name="name" placeholder="Nama Lantai.." class="form-control">
+                                                <label class=" form-control-label">Blok</label>
+                                                <input id="blok-update" type="text" name="name" placeholder="Blok.." class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class=" form-control-label">Nomor Blok</label>
+                                                <input id="no-update" type="text" name="no" placeholder="Nomor Blok.." class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class=" form-control-label">Harga</label>
+                                                <input id="harga-update" type="number" name="price" placeholder="Harga.." class="form-control">
                                             </div>
                                        
                                     </div>
@@ -119,6 +139,7 @@
 <script>
   
 $(document).ready(function(){
+
 $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -130,7 +151,7 @@ $.ajaxSetup({
  function fetch_customer_data(query = '')
  {
   $.ajax({
-   url:"/floorsearch",
+   url:"/areasearch",
    method:'GET',
    dataType:'json',
    data:{query:query},
@@ -154,7 +175,7 @@ $.ajaxSetup({
   if(confirm("Hapus data ini?"))
   {
    $.ajax({
-        url:'/master/floor/'+id,
+        url:'/master/area/'+id,
         type: 'post',
         data: {_method: 'delete'},
     success: function(result) {
@@ -177,25 +198,76 @@ $(document).on('click', '.edit', function(){
    var id = $(this).attr('id');
 
      $.ajax({
-   url:"/master/floor/"+id,
+   url:"/master/area/"+id,
    method:'GET',
    dataType:'json',
    data:{id:id},
    success:function(response)
    {
-   	 $('#update').attr('action', '/master/floor/'+id);
-   	 $('#code-update').val(response.code);
-   	 $('#name-update').val(response.name);
-   console.log(response);
+   	 $('#update').attr('action', '/master/area/'+id);
+   	 $('#blok-update').val(response.name);
+   	 $('#no-update').val(response.no);
+     $('#harga-update').val(response.price);
+     var option = new Option(response.floor_name, response.floor,false, false);
+     option.selected = true;
+     $("#selFloor-update" ).append(option);
+     $("#selFloor-update" ).trigger("change");
+
    }, error: function(request,msg,error) {
        console.log(msg);
        console.log(error);
     }
   })
-
-
-
 });
+
+ $( "#selFloor" ).select2({
+        maximumSelectionLength: 5,
+        placeholder: "Kode Lantai..",
+        dropdownParent: $("#scrollmodal"),
+        ajax: { 
+          url: "/floorselect2",
+          dataType: 'json',
+          type:'get',
+          delay: 250,
+          data: function (params) {
+            return {
+              search: params.term // search term
+            };
+          },
+          processResults: function (response) {
+            console.log(response);
+            return {
+              results: response
+            };
+          },
+          cache: false
+        }
+
+      });
+
+ $( "#selFloor-update" ).select2({
+        maximumSelectionLength: 5,
+        placeholder: "Kode Lantai..",
+        dropdownParent: $("#scrollmodal-update"),
+        ajax: { 
+          url: "/floorselect2",
+          dataType: 'json',
+          type:'get',
+          delay: 250,
+          data: function (params) {
+            return {
+              search: params.term // search term
+            };
+          },
+          processResults: function (response) {
+            return {
+              results: response
+            };
+          },
+          cache: false
+        }
+
+      });
 
 });
 </script>

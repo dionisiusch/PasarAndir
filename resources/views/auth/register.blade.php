@@ -43,7 +43,7 @@
                     <div class="login-content">
                         <div class="login-logo">
                             <a href="#">
-                                <img src="images/icon/logo.png" alt="Pasar Andir">
+                                <img src="{{ asset('assets/img/logo.png') }}" alt="Pasar Andir">
                             </a>
                         </div>
                         <div class="login-form">

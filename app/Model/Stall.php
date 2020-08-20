@@ -13,5 +13,5 @@ class Stall extends Model
 
     protected $table = 'stalls';
 
-    protected $fillable = ['user_id', 'area_no_id', 'category_id', 'name', 'length', 'width', 'height', 'status'];
+    protected $fillable = ['user_id', 'area_id', 'category_id', 'name', 'length', 'width', 'height', 'status'];
 }

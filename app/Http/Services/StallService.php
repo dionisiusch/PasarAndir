@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Model\Stall;
+use DB;
 
 class StallService
 {

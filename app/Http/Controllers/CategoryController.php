@@ -6,6 +6,7 @@ use App\Model\Category;
 use Illuminate\Http\Request;
 use App\Http\Services\CategoryService;
 use GuzzleHttp\Client;
+use DB;
 
 class CategoryController extends Controller
 {
@@ -25,7 +26,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = $this->categoryService->showAllCategories();
-        // return view('master.category.categoryShow');
+        return view('master.category.categoryShow');
     }
 
     /**
@@ -53,9 +54,9 @@ class CategoryController extends Controller
     
             $response = $this->categoryService->createCategory($request);
     
-            // return redirect('/master/category')->with('success', 'Data Kategori Kios Berhasil Ditambahkan.');       
+            return redirect('/master/category')->with('success', 'Data Kategori Kios Berhasil Ditambahkan.');       
         } catch (Exception $e) {
-            // return redirect('/master/category')->with('success', 'Data Kategori Kios Gagal Ditambahkan.'); 
+            return redirect('/master/category')->with('success', 'Data Kategori Kios Gagal Ditambahkan.'); 
         }
     }
 
@@ -107,9 +108,9 @@ class CategoryController extends Controller
     
             $response = $this->categoryService->updateCategoryById($request, $id);
     
-            // return redirect('/master/category')->with('success', 'Data Kategori Kios Berhasil Di Update.');       
+             return redirect('/master/category')->with('success', 'Data Kategori Kios Berhasil Di Update.');       
         } catch (Exception $e) {
-            // return redirect('/master/category')->with('success', 'Data Kategori Kios Gagal Di Update.');       
+            return redirect('/master/category')->with('success', 'Data Kategori Kios Gagal Di Update.');       
         }
     }
 
@@ -140,7 +141,7 @@ class CategoryController extends Controller
                 $data = $this->categoryService->searchCategory($query);
             } else {
                 $data = DB::table('categories')
-                ->get();
+                ->whereNull('deleted_at')->get();
             }
          
             $total_row = $data->count();
@@ -148,10 +149,7 @@ class CategoryController extends Controller
 				foreach($data as $row) {
                     $output .= '
 					<tr class="tr-shadow">
-						<td>'.$row->code.'</td>
-						<td>
-						'.$row->name.'
-						</td>
+						<td>'.$row->name.'</td>
 						<td>
 							<div class="table-data-feature">
 							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
@@ -169,7 +167,7 @@ class CategoryController extends Controller
             } else {
 				$output = '
 				<tr class="tr-shadow">
-				    <td align="center" colspan="3">Data not found.</td>
+				    <td align="center" colspan="2">Data not found.</td>
 				</tr>
 				';
 			}
@@ -182,4 +180,27 @@ class CategoryController extends Controller
    		    return json_encode($data);
  		}
 	}
+
+      public function select2(Request $request){
+     $search = $request->search;
+
+      if($search != ''){
+         $categories = $this->categoryService->searchCategory($search);
+      }else{
+         $categories = DB::table('categories')
+         ->whereNull('deleted_at')->get();
+      }
+
+      $response = array();
+      // $preselect = '';
+      foreach($categories as $category){
+         $response[] = array(
+              "id"=>$category->id,
+              "text"=>$category->name
+         );
+         
+      }
+        
+      echo json_encode($response);
+   }
 }

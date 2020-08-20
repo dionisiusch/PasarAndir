@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Model\Area;
+use DB;
 
 class AreaService
 {
@@ -46,15 +47,10 @@ class AreaService
 
     public function deleteAreaById($id)
     {
-        try {
-            $area = Area::find($id);
-            $area->delete();
-    
-            return $area;
-        } catch (Exception $e) {
-            console.log($e);
-            return null;
-        }
+        $area = Area::find($id);
+        $area->delete();
+
+        return $area;
     }
 
     public function searchArea($query)
