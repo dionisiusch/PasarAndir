@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\User;
+use DB;
 
 class UserService
 {
