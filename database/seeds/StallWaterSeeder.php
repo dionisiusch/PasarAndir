@@ -20,6 +20,7 @@ class StallWaterSeeder extends Seeder
             'meter_before' => 0,
             'meter_after' => 10,
             'price' => 5000,
+            'fixed_price' => 0,
             'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
             'updated_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
         ]);
@@ -29,6 +30,7 @@ class StallWaterSeeder extends Seeder
             'meter_before' => 0,
             'meter_after' => 10,
             'price' => 5000,
+            'fixed_price' => 0,
             'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
             'updated_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
         ]);

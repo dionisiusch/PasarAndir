@@ -13,5 +13,5 @@ class StallElectricity extends Model
 
     protected $table = 'stall_electricities';
 
-    protected $fillable = ['stall_id', 'electricity_id', 'meter_before', 'meter_after', 'price'];
+    protected $fillable = ['stall_id', 'electricity_id', 'meter_before', 'meter_after', 'kva_price', 'kwh_price'];
 }

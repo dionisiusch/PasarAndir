@@ -13,5 +13,5 @@ class StallWater extends Model
 
     protected $table = 'stall_waters';
 
-    protected $fillable = ['stall_id', 'meter_before', 'meter_after', 'price'];
+    protected $fillable = ['stall_id', 'meter_before', 'meter_after', 'price', 'fixed_price'];
 }

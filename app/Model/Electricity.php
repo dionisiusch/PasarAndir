@@ -13,5 +13,5 @@ class Electricity extends Model
 
     protected $table = 'electricities';
 
-    protected $fillable = ['name', 'type', 'value', 'price'];
+    protected $fillable = ['name', 'power_meter', 'kva_price', 'kwh_price'];
 }

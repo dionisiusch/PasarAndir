@@ -140,8 +140,7 @@ class CategoryController extends Controller
             if($query != '') {
                 $data = $this->categoryService->searchCategory($query);
             } else {
-                $data = DB::table('categories')
-                ->whereNull('deleted_at')->get();
+                $data = $this->categoryService->showAllCategories();
             }
          
             $total_row = $data->count();
@@ -187,8 +186,7 @@ class CategoryController extends Controller
       if($search != ''){
          $categories = $this->categoryService->searchCategory($search);
       }else{
-         $categories = DB::table('categories')
-         ->whereNull('deleted_at')->get();
+         $categories = $this->categoryService->showAllCategories();
       }
 
       $response = array();

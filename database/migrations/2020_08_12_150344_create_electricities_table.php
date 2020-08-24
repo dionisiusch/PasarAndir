@@ -16,9 +16,9 @@ class CreateElectricitiesTable extends Migration
         Schema::create('electricities', function (Blueprint $table) {
             $table->id();
             $table->string('name', 50);
-            $table->enum('type', ['kwh', 'kvh']);
-            $table->integer('value');
-            $table->bigInteger('price');
+            $table->integer('power_meter');
+            $table->bigInteger('kva_price');
+            $table->bigInteger('kwh_price');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -167,7 +167,7 @@ class FloorController extends Controller
       if($query != '') {
 				$data = $this->floorService->searchFloor($query);
      	} else {
-      	$data = DB::table('floors')
+      	$data = $this->floorService->showAllFloors();
     
 			}
 			 
@@ -218,8 +218,7 @@ class FloorController extends Controller
       if($search != ''){
          $floors = $this->floorService->searchFloor($search);
       }else{
-         $floors = DB::table('floors')
-         ->get();
+         $floors = $this->floorService->showAllFloors();
       }
 
       $response = array();

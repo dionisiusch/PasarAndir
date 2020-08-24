@@ -150,8 +150,7 @@ class AreaController extends Controller
             if($query != '') {
                 $data = $this->areaService->searchArea($query);
             } else {
-                $data = DB::table('areas')
-                ->whereNull('deleted_at')->get();
+                $data = $this->areaService->showAllAreas();
             }
          
             $total_row = $data->count();
@@ -207,8 +206,7 @@ class AreaController extends Controller
       if($search != ''){
          $areas = $this->areaService->searchArea($search);
       }else{
-         $areas = DB::table('areas')
-         ->whereNull('deleted_at')->get();
+         $areas = $this->areaService->showAllAreas();
       }
 
       $response = array();

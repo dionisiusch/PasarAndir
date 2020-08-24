@@ -20,7 +20,8 @@ class StallElectricitySeeder extends Seeder
             'electricity_id' => 1,
             'meter_before' => 0,
             'meter_after' => 40,
-            'price' => 5000,
+            'kva_price' => 54,
+            'kwh_price' => 2100,
             'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
             'updated_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
         ]);
@@ -30,7 +31,8 @@ class StallElectricitySeeder extends Seeder
             'electricity_id' => 1,
             'meter_before' => 0,
             'meter_after' => 40,
-            'price' => 5000,
+            'kva_price' => 54,
+            'kwh_price' => 2100,
             'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
             'updated_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
         ]);

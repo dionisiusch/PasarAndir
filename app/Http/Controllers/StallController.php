@@ -199,8 +199,7 @@ class StallController extends Controller
             if($query != '') {
                 $data = $this->stallService->searchStall($query);
             } else {
-                $data = DB::table('stalls')
-               ->whereNull('deleted_at')->get();
+                $data = $this->stallService->showAllStalls();
             }
          
             $total_row = $data->count();

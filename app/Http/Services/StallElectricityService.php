@@ -20,7 +20,8 @@ class StallElectricityService
             'electricity_id' => $data->get('electricity_id'),
             'meter_before' => $data->get('meter_before'),
             'meter_after' => $data->get('meter_after'),
-            'price' => $data->get('price') //HARUSNYA GA GINI, NANTI DIBENERIN KALO UDAH MAU JADI
+            'kva_price' => $data->get('kva_price'), //HARUSNYA GA GINI, NANTI DIBENERIN KALO UDAH MAU JADI
+            'kwh_price' => $data->get('kva_price') //HARUSNYA GA GINI, NANTI DIBENERIN KALO UDAH MAU JADI
         ]);
         $stallElectricity->save();
 

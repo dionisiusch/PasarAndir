@@ -19,6 +19,7 @@ class CreateStallWatersTable extends Migration
             $table->bigInteger('meter_before');
             $table->bigInteger('meter_after');
             $table->bigInteger('price');
+            $table->bigInteger('fixed_price'); //BIAYA TETAP
             $table->timestamps();
             $table->softDeletes();
         });

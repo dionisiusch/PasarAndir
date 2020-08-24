@@ -51,9 +51,9 @@ class ElectricityController extends Controller
         try {
             $request->validate([
                 'name'=>'required',
-                'type'=>'required',
-                'value'=>'required',
-                'price'=>'required'
+                'power_meter'=>'required',
+                'kva_price'=>'required',
+                'kwh_price'=>'required'
             ]);
     
             $response = $this->electricityService->createElectricity($request);
@@ -77,9 +77,9 @@ class ElectricityController extends Controller
             $electricity = $this->electricityService->getElectricityById($id);
       
             $data = array(
-            'price'  => $electricity->price,
-            'value'  => $electricity->value,
-            'type'  => $electricity->type,
+            'kwh_price'  => $electricity->kwh_price,
+            'kva_price'  => $electricity->kva_price,
+            'power_meter'  => $electricity->type,
             'name'  => $electricity->name,
             'id'  => $id
             );
@@ -111,9 +111,9 @@ class ElectricityController extends Controller
         try {
             $request->validate([
                 'name'=>'required',
-                'type'=>'required',
-                'value'=>'required',
-                'price'=>'required'
+                'power_meter'=>'required',
+                'kva_price'=>'required',
+                'kwh_price'=>'required'
             ]);
     
             $response = $this->electricityService->updateElectricityById($request, $id);
@@ -150,8 +150,7 @@ class ElectricityController extends Controller
             if($query != '') {
                 $data = $this->electricityService->searchElectricity($query);
             } else {
-                $data = DB::table('electricities')
-                ->whereNull('deleted_at')->get();
+                $data = $this->electricityService->showAllElectricities();
             }
          
             $total_row = $data->count();

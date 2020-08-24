@@ -19,7 +19,8 @@ class CreateStallElectricitiesTable extends Migration
             $table->foreignId('electricity_id');
             $table->bigInteger('meter_before');
             $table->bigInteger('meter_after');
-            $table->bigInteger('price');
+            $table->bigInteger('kva_price');
+            $table->bigInteger('kwh_price');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -18,9 +18,9 @@ class ElectricityService
     {
         $electricity = new Electricity([
             'name' => $data->get('name'),
-            'type' => $data->get('type'),
-            'value' => $data->get('value'),
-            'price' => $data->get('price')
+            'power_meter' => $data->get('power_meter'),
+            'kva_price' => $data->get('kva_price'),
+            'kwh_price' => $data->get('kwh_price')
         ]);
         $electricity->save();
 
@@ -38,9 +38,9 @@ class ElectricityService
     {
         $electricity = Electricity::find($id);
         $electricity->name = $data->get('name');
-        $electricity->type = $data->get('type');
-        $electricity->value = $data->get('value');
-        $electricity->price = $data->get('price');
+        $electricity->power_meter = $data->get('power_meter');
+        $electricity->kva_price = $data->get('kva_price');
+        $electricity->kwh_price = $data->get('kwh_price');
         $electricity->save();
 
         return $electricity;
@@ -65,6 +65,7 @@ class ElectricityService
             ->where('name', 'like', '%'.$query.'%')
             ->orWhere('type', 'like', '%'.$query.'%')
             ->orWhere('value', 'like', '%'.$query.'%')
+            ->whereNull('deleted_at')
             ->get();
     }
 }

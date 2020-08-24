@@ -19,7 +19,8 @@ class StallWaterService
             'stall_id' => $data->get('stall_id'),
             'meter_before' => $data->get('meter_before'),
             'meter_after' => $data->get('meter_after'),
-            'price' => $data->get('price') //HARUSNYA GA GINI, NANTI DIBENERIN KALO UDAH MAU JADI
+            'price' => $data->get('price'), //HARUSNYA GA GINI, NANTI DIBENERIN KALO UDAH MAU JADI
+            'fixed_price' => $data->get('price') //HARUSNYA GA GINI, NANTI DIBENERIN KALO UDAH MAU JADI
         ]);
         $stallWaters->save();
 

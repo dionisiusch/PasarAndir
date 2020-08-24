@@ -120,8 +120,7 @@ class UserController extends Controller
             if($query != '') {
                 $data = $this->userService->searchUser($query);
             } else {
-                $data = DB::table('users')
-                ->get();
+                $data = $this->userService->showAllUsers();
             }
          
             $total_row = $data->count();
@@ -176,8 +175,7 @@ class UserController extends Controller
       if($search != ''){
          $users = $this->userService->searchUser($search);
       }else{
-         $users = DB::table('users')
-         ->get();
+         $users = $this->userService->showAllUsers();
       }
 
       $response = array();
