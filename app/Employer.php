@@ -11,6 +11,8 @@ class Employer extends Authenticatable
 {
     use Notifiable;
 
+    protected $guard = 'employer';
+
     /**
      * The attributes that are mass assignable.
      *

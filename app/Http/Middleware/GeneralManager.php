@@ -13,17 +13,21 @@ class GeneralManager
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $guard = 'employer')
     {
-        if (!Auth::check()) {
+        if (!Auth::guard($guard)->check()) {
             return redirect()->route('login');
         }
 
-        if (Auth::user()->role == 1) {
+        if (Auth::guard($guard)->user()->role == 1) {
             return $next($request);
         }
 
-        if (Auth::user()->role == 2 || Auth::user()->role == 3) {
+        if (Auth::guard($guard)->user()->role == 2) {
+            return redirect()->route('login');
+        }
+
+        if (Auth::guard($guard)->user()->role == 3) {
             return redirect()->route('login');
         }
     }

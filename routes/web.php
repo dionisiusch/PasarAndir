@@ -43,17 +43,6 @@ Route::group([
         Route::put('/{id}', 'CategoryController@update')->name('master.category.update');
         Route::delete('/{id}', 'CategoryController@destroy')->name('master.category.delete');
     });
-    
-    Route::group([
-        'prefix' => '/nos' 
-        // 'middleware' => 'auth'
-    ], function () {
-        Route::get('/', 'NoController@index');
-        Route::post('/', 'NoController@store');
-        Route::get('/{id}', 'NoController@show');
-        Route::put('/{id}', 'NoController@update');
-        Route::delete('/{id}', 'NoController@destroy');
-    });
 
     Route::group([
         'prefix' => '/area' 
