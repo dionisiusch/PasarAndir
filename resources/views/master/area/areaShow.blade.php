@@ -3,7 +3,7 @@
              <div class="row"> 
             <div class="col-md-12">
                 <!-- DATA TABLE -->
-                <h3 class="title-5 m-b-35">Master Data Area</h3>
+                <h3 class="title-5 m-b-35">Master Data Blok</h3>
                   <div class="table-data__tool-left">
                     <div class="rs-select2--light rs-select2--md" style="display: contents">
                        <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i style="font-size:150%" class="zmdi zmdi-search"></i>
@@ -20,7 +20,7 @@
                         <th>Kode Lantai</th>
                         <th>Blok</th>
                         <th>Nomor Blok</th>
-                        <th>Harga</th>
+                        <th>Harga/m</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -47,7 +47,7 @@
             <div class="modal-body">
               <div class="card">
                                     <div class="card-header">
-                                        <strong>Tambah Data</strong> Area
+                                        <strong>Tambah Data</strong> Blok
                                     </div>
                                     <div class="card-body card-block">
                                         <form action="{{ route('master.area.store') }}" method="post">
@@ -66,8 +66,8 @@
                                                 <input type="text" name="no" placeholder="Nomor Blok.." class="form-control">
                                             </div>
                                              <div class="form-group">
-                                                <label class=" form-control-label">Harga</label>
-                                                <input type="number" name="price" placeholder="Harga.." class="form-control">
+                                                <label class=" form-control-label">Harga/m</label>
+                                                <input type="text" id="price" name="price" placeholder="Harga.." class="form-control">
                                             </div>
 
                                        
@@ -97,7 +97,7 @@
             <div class="modal-body">
               <div class="card">
                                     <div class="card-header">
-                                        <strong>Update Data</strong> Area<div class="form-group">
+                                        <strong>Update Data</strong> Blok<div class="form-group">
                                     </div>
                                     <div class="card-body card-block">
                                         <form id="update" action="" method="post">
@@ -117,8 +117,8 @@
                                                 <input id="no-update" type="text" name="no" placeholder="Nomor Blok.." class="form-control">
                                             </div>
                                             <div class="form-group">
-                                                <label class=" form-control-label">Harga</label>
-                                                <input id="harga-update" type="number" name="price" placeholder="Harga.." class="form-control">
+                                                <label class=" form-control-label">Harga/m</label>
+                                                <input id="harga-update" type="text" name="price" placeholder="Harga.." class="form-control">
                                             </div>
                                        
                                     </div>
@@ -204,10 +204,11 @@ $(document).on('click', '.edit', function(){
    data:{id:id},
    success:function(response)
    {
-   	 $('#update').attr('action', '/master/area/'+id);
-   	 $('#blok-update').val(response.name);
-   	 $('#no-update').val(response.no);
-     $('#harga-update').val(response.price);
+     $('#update').attr('action', '/master/area/'+id);
+     $('#blok-update').val(response.name);
+     $('#no-update').val(response.no);
+     $('#harga-update').val() ;
+     alert(rupiah(response.price));
      var option = new Option(response.floor_name, response.floor,false, false);
      option.selected = true;
      $("#selFloor-update" ).append(option);
@@ -268,6 +269,30 @@ $(document).on('click', '.edit', function(){
         }
 
       });
+
+ function rupiah(angka){
+  var number_string = angka.replace(/[^,\d]/g, '').toString(),
+  split       = number_string.split('.'),
+  sisa        = split[0].length % 3,
+  rupiah        = split[0].substr(0, sisa),
+  ribuan        = split[0].substr(sisa).match(/\d{3}/gi);
+ 
+  // tambahkan titik jika yang di input sudah menjadi angka ribuan
+  if(ribuan){
+    separator = sisa ? '.' : '';
+    rupiah += separator + ribuan.join('.');
+  }
+ 
+  rupiah = split[1] != undefined ? rupiah + '' + split[1] + '' : rupiah;
+  return('Rp ' + rupiah);
+}
+
+
+ $(document).on('keyup', '#price', function(){
+  var value = $(this).val();
+  var result = rupiah(value);
+  $(this).val(result);
+ });
 
 });
 </script>

@@ -18,9 +18,9 @@
                     <thead>
                       <tr>
                         <th>Kode Listrik</th>
-                        <th>Tipe</th>
-                        <th>Value</th>
-                        <th>Harga</th>
+                        <th>Power Meter</th>
+                        <th>Harga/kva</th>
+                        <th>Harga/kwh</th>
 
                         <th></th>
                       </tr>
@@ -59,16 +59,16 @@
                                                 <input id="name" type="text" name="name" placeholder="Kode Listrik.." class="form-control">
                                             </div>
                                              <div class="form-group">
-                                                <label class=" form-control-label">Tipe</label>
-                                                <input id="type" type="text" name="type" placeholder="Tipe.." class="form-control">
+                                                <label class=" form-control-label">Power Meter</label>
+                                                <input id="power_meter" type="text" name="power_meter" placeholder="Power Meter.." class="form-control">
                                             </div>
                                             <div class="form-group">
-                                                <label class=" form-control-label">Value</label>
-                                                <input id="value" type="number" name="value" placeholder="Value.." class="form-control">
+                                                <label class=" form-control-label">Harga/kva</label>
+                                                <input id="kva" name="kva_price" placeholder="Harga/kva.." class="form-control">
                                             </div>
                                             <div class="form-group">
-                                                <label class=" form-control-label">Harga</label>
-                                                <input id="price" type="number" name="price" placeholder="Harga.." class="form-control">
+                                                <label class=" form-control-label">Harga/kwh</label>
+                                                <input id="kwh" name="kwh_price" placeholder="Harga/kwh.." class="form-control">
                                             </div>
                                        
                                        
@@ -108,17 +108,17 @@
                                                 <label class="form-control-label">Kode Listrik</label>
                                                 <input id="name-update" type="text" name="name" placeholder="Kode Listrik.." class="form-control">
                                             </div>
-                                             <div class="form-group">
-                                                <label class=" form-control-label">Tipe</label>
-                                                <input id="type-update" type="text" name="type" placeholder="Tipe.." class="form-control">
+                                                 <div class="form-group">
+                                                <label class=" form-control-label">Power Meter</label>
+                                                <input id="power_meter-update" type="text" name="power_meter" placeholder="Power Meter.." class="form-control">
                                             </div>
                                             <div class="form-group">
-                                                <label class=" form-control-label">Value</label>
-                                                <input id="value-update" type="number" name="value" placeholder="Tipe.." class="form-control">
+                                                <label class=" form-control-label">Harga/kva</label>
+                                                <input id="kva-update" type="text" name="kva_price" placeholder="Harga/kva.." class="form-control">
                                             </div>
                                             <div class="form-group">
-                                                <label class=" form-control-label">Harga</label>
-                                                <input id="price-update" type="number" name="price" placeholder="Tipe.." class="form-control">
+                                                <label class=" form-control-label">Harga/kwh</label>
+                                                <input id="kwh-update" type="text" name="kwh_price" placeholder="Harga/kwh.." class="form-control">
                                             </div>
                                        
                                     </div>
@@ -146,6 +146,24 @@ $.ajaxSetup({
       });
 
  fetch_customer_data();
+
+function rupiah(angka){
+  var number_string = angka.replace(/[^,\d]/g, '').toString(),
+  split       = number_string.split('.'),
+  sisa        = split[0].length % 3,
+  rupiah        = split[0].substr(0, sisa),
+  ribuan        = split[0].substr(sisa).match(/\d{3}/gi);
+ 
+  // tambahkan titik jika yang di input sudah menjadi angka ribuan
+  if(ribuan){
+    separator = sisa ? '.' : '';
+    rupiah += separator + ribuan.join('.');
+  }
+ 
+  rupiah = split[1] != undefined ? rupiah + '' + split[1] + '' : rupiah;
+  return('Rp ' + rupiah);
+}
+
 
  function fetch_customer_data(query = '')
  {
@@ -203,22 +221,47 @@ $(document).on('click', '.edit', function(){
    data:{id:id},
    success:function(response)
    {
-   	 $('#update').attr('action', '/master/electricity/'+id);
-   	 $('#name-update').val(response.name);
-   	 $('#type-update').val(response.type);
-     $('#value-update').val(response.value);
-     $('#price-update').val(response.price);
-
+     $('#update').attr('action', '/master/electricity/'+id);
+     $('#name-update').val(response.name);
+     $('#power_meter-update').val(response.power_meter);
+     $('#kva-update').val(rupiah(response.kva_price.toString()));
+     $('#kwh-update').val(rupiah(response.kwh_price.toString()));
         console.log(response);
    }, error: function(request,msg,error) {
        console.log(msg);
        console.log(error);
     }
   })
-
-
-
 });
+
+
+
+ $(document).on('keyup', '#kva', function(){
+  var value = $(this).val();
+  var result = rupiah(value);
+  $('#kva').val(result);
+ });
+
+
+ $(document).on('keyup', '#kwh', function(){
+  var value = $(this).val();
+  var result = rupiah(value);
+  $('#kwh').val(result);
+ });
+
+ $(document).on('keyup', '#kva-update', function(){
+  var value = $(this).val();
+  var result = rupiah(value);
+  $('#kva-update').val(result);
+ });
+
+
+ $(document).on('keyup', '#kwh-update', function(){
+  var value = $(this).val();
+  var result = rupiah(value);
+  $('#kwh-update').val(result);
+ });
+
 
 });
 </script>

@@ -5,22 +5,21 @@ namespace App\Http\Controllers;
 use App\Model\Electricity;
 use Illuminate\Http\Request;
 use App\Http\Services\ElectricityService;
-use App\Http\Helpers\Helper;
 use GuzzleHttp\Client;
 use DB;
+use App\Http\Helpers\Helper;
 
 class ElectricityController extends Controller
 {
     /** @var ElectricityService */
     private $electricityService;
-
-    /** @var Helper */
+        /** @var Helper */
     private $helper;
 
     public function __construct()
     {
         $this->electricityService = app(ElectricityService::class);
-        $this->helper = app(Helper::class);
+           $this->helper = app(Helper::class);
     }
 
     /**
@@ -60,10 +59,8 @@ class ElectricityController extends Controller
                 'kva_price'=>'required',
                 'kwh_price'=>'required'
             ]);
-
             $request->kva_price = $this->helper->price_decoder($request->kva_price);
             $request->kwh_price = $this->helper->price_decoder($request->kwh_price);
-    
             $response = $this->electricityService->createElectricity($request);
     
             return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Ditambahkan.');    
@@ -85,11 +82,11 @@ class ElectricityController extends Controller
             $electricity = $this->electricityService->getElectricityById($id);
       
             $data = array(
-                'kwh_price'  => $electricity->kwh_price,
-                'kva_price'  => $electricity->kva_price,
-                'power_meter'  => $electricity->type,
-                'name'  => $electricity->name,
-                'id'  => $id
+            'kwh_price'  => $electricity->kwh_price,
+            'kva_price'  => $electricity->kva_price,
+            'power_meter'  => $electricity->type,
+            'name'  => $electricity->name,
+            'id'  => $id
             );
             
             return json_encode($data);
@@ -123,8 +120,7 @@ class ElectricityController extends Controller
                 'kva_price'=>'required',
                 'kwh_price'=>'required'
             ]);
-
-            $request->kva_price = $this->helper->price_decoder($request->kva_price);
+              $request->kva_price = $this->helper->price_decoder($request->kva_price);
             $request->kwh_price = $this->helper->price_decoder($request->kwh_price);
     
             $response = $this->electricityService->updateElectricityById($request, $id);
@@ -165,48 +161,48 @@ class ElectricityController extends Controller
             }
          
             $total_row = $data->count();
-			if($total_row > 0) {
-				foreach($data as $row) {
+            if($total_row > 0) {
+                foreach($data as $row) {
                     $output .= '
-					<tr class="tr-shadow">
-						<td>'.$row->name.'</td>
-						<td>
-						'.$row->type.'
-						</td>
+                    <tr class="tr-shadow">
+                        <td>'.$row->name.'</td>
                         <td>
-                        '.$row->value.'
+                        '.$row->power_meter.'
                         </td>
                         <td>
-                        '.$row->price.'
+                        '.parent::rupiah($row->kva_price).'
                         </td>
-						<td>
-							<div class="table-data-feature">
-							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
-								<i class="zmdi zmdi-edit"></i>
-							</button>
-							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
-								<i class="zmdi zmdi-delete"></i>
-							</button>
-							</div>
-						</td>
-					</tr>
-					<tr class="spacer"></tr> 
-        	        ';
-      	        }
+                        <td>
+                        '.parent::rupiah($row->kwh_price).'
+                        </td>
+                        <td>
+                            <div class="table-data-feature">
+                            <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+                                <i class="zmdi zmdi-edit"></i>
+                            </button>
+                            <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+                                <i class="zmdi zmdi-delete"></i>
+                            </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="spacer"></tr> 
+                    ';
+                }
             } else {
-				$output = '
-				<tr class="tr-shadow">
-				    <td align="center" colspan="3">Data not found.</td>
-				</tr>
-				';
-			}
-			
-			$data = array(
-				'table_data'  => $output,
-				'total_data'  => $total_row
-			);
-			
-   		    return json_encode($data);
- 		}
-	}
+                $output = '
+                <tr class="tr-shadow">
+                    <td align="center" colspan="3">Data not found.</td>
+                </tr>
+                ';
+            }
+            
+            $data = array(
+                'table_data'  => $output,
+                'total_data'  => $total_row
+            );
+            
+            return json_encode($data);
+        }
+    }
 }

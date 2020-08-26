@@ -6,26 +6,27 @@ use App\Model\Area;
 use Illuminate\Http\Request;
 use App\Http\Services\AreaService;
 use App\Http\Services\FloorService;
-use App\Http\Helpers\Helper;
 use GuzzleHttp\Client;
 use DB;
+use App\Http\Helpers\Helper;
 
 class AreaController extends Controller
 {
     /** @var AreaService */
     private $areaService;
 
+        /** @var Helper */
+    private $helper;
+
+
     /** @var FloorService */
     private $floorService;
-
-    /** @var Helper */
-    private $helper;
 
     public function __construct()
     {
         $this->areaService = app(AreaService::class);
         $this->floorService = app(FloorService::class);
-        $this->helper = app(Helper::class);
+                $this->helper = app(Helper::class);
     }
 
     /**
@@ -37,6 +38,7 @@ class AreaController extends Controller
     {
         $areas = $this->areaService->showAllAreas();
         $floors = $this->floorService->showAllFloors();
+
 
        return view('master.area.areaShow');
     }
@@ -64,9 +66,7 @@ class AreaController extends Controller
             'name'=>'required',
             'price'=>'required'
         ]);
-
         $request->price = $this->helper->price_decoder($request->price);
-
         $response = $this->areaService->createArea($request);
 
         return redirect('/master/area')->with('success', 'Data Area Berhasil Ditambahkan.');
@@ -123,9 +123,7 @@ class AreaController extends Controller
             'name'=>'required',
             'price'=>'required'
         ]);
-
         $request->price = $this->helper->price_decoder($request->price);
-
         $response = $this->areaService->updateAreaById($request, $id);
 
         return redirect('/master/area')->with('success', 'Data Area Berhasil Di Update.');
@@ -161,51 +159,51 @@ class AreaController extends Controller
             }
          
             $total_row = $data->count();
-			if($total_row > 0) {
-				foreach($data as $row) {
+            if($total_row > 0) {
+                foreach($data as $row) {
                     $floor = $this->floorService->getFloorById($row->floor_id);     
                     $output .= '
-					<tr class="tr-shadow">
-						<td>['. $floor->code.'] '.$floor->name .'</td>
-						<td>
-						'.$row->name.'
-						</td>
+                    <tr class="tr-shadow">
+                        <td>['. $floor->code.'] '.$floor->name .'</td>
+                        <td>
+                        '.$row->name.'
+                        </td>
                         <td>
                         '.$row->no.'
                         </td>
                         <td>
-                        '.$row->price.'
+                        '.parent::rupiah($row->price).'
                         </td>
-						<td>
-							<div class="table-data-feature">
-							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
-								<i class="zmdi zmdi-edit"></i>
-							</button>
-							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
-								<i class="zmdi zmdi-delete"></i>
-							</button>
-							</div>
-						</td>
-					</tr>
-					<tr class="spacer"></tr> 
-        	        ';
-      	        }
+                        <td>
+                            <div class="table-data-feature">
+                            <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+                                <i class="zmdi zmdi-edit"></i>
+                            </button>
+                            <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+                                <i class="zmdi zmdi-delete"></i>
+                            </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="spacer"></tr> 
+                    ';
+                }
             } else {
-				$output = '
-				<tr class="tr-shadow">
-				    <td align="center" colspan="3">Data not found.</td>
-				</tr>
-				';
-			}
-			
-			$data = array(
-				'table_data'  => $output,
-				'total_data'  => $total_row
-			);
-			
-   		    return json_encode($data);
- 		}
-	}
+                $output = '
+                <tr class="tr-shadow">
+                    <td align="center" colspan="3">Data not found.</td>
+                </tr>
+                ';
+            }
+            
+            $data = array(
+                'table_data'  => $output,
+                'total_data'  => $total_row
+            );
+            
+            return json_encode($data);
+        }
+    }
 
     public function select2(Request $request){
      $search = $request->search;

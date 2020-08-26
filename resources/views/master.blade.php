@@ -15,7 +15,7 @@
             <div class="col-md-6 col-lg-3">  
 
               <div class="statistic__item statistic__item--green" onclick="location.href='{{ url('master/area/') }}'">       
-                <h2 class="text">Area</h2>
+                <h2 class="text">Blok</h2>
                 <div class="icon">
                   <i class="zmdi zmdi-pin-drop"></i>
                 </div>

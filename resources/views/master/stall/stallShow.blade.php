@@ -1,44 +1,44 @@
-	@extends('layouts.app')
-	@section('content')
-	             <div class="row"> 
-	            <div class="col-md-12">
-	                <!-- DATA TABLE -->
-	                <h3 class="title-5 m-b-35">Master Data Kios</h3>
-	                  <div class="table-data__tool-left">
-	                    <div class="rs-select2--light rs-select2--md" style="display: contents">
-	                       <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i style="font-size:150%" class="zmdi zmdi-search"></i>
-	                      
-	                      <button style="float:right" type="button" class="au-btn au-btn-icon au-btn--green au-btn--small" data-toggle="modal" data-target="#scrollmodal">
-	                       <i class="zmdi zmdi-plus"></i>Tambah Data</button>
-	                    </div>
-	                  </div>
-	                
-	                <div class="table-responsive table-responsive-data2">
-	                  <table class="table table-data2">
-	                    <thead>
-	                     <tr>
-	                        <th>User</th>
-	                        <th>Area</th>
-	                        <th>Kategori</th>
-	                        <th>Nama Kios</th>
-	                        <th>Panjang(m)</th>
-	                        <th>Lebar(m)</th>
-	                        <th>Tinggi(m)</th>
-	                        <th>Status</th>
-	                      </tr>
-	                    </thead>
-	                    <tbody>
-	                    </tbody>
-	                  </table>
-	                <!-- END DATA TABLE -->
-	              </div>
-	            </div>
+  @extends('layouts.app')
+  @section('content')
+               <div class="row"> 
+              <div class="col-md-12">
+                  <!-- DATA TABLE -->
+                  <h3 class="title-5 m-b-35">Master Data Kios</h3>
+                    <div class="table-data__tool-left">
+                      <div class="rs-select2--light rs-select2--md" style="display: contents">
+                         <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i style="font-size:150%" class="zmdi zmdi-search"></i>
+                        
+                        <button style="float:right" type="button" class="au-btn au-btn-icon au-btn--green au-btn--small" data-toggle="modal" data-target="#scrollmodal">
+                         <i class="zmdi zmdi-plus"></i>Tambah Data</button>
+                      </div>
+                    </div>
+                  
+                  <div class="table-responsive table-responsive-data2">
+                    <table class="table table-data2">
+                      <thead>
+                       <tr>
+                          <th>User</th>
+                          <th>Blok</th>
+                          <th>Kategori</th>
+                          <th>Nama Kios</th>
+                          <th>Panjang(m)</th>
+                          <th>Lebar(m)</th>
+                          <th>Tinggi(m)</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  <!-- END DATA TABLE -->
+                </div>
+              </div>
 
-	        </div>
-	</div>
+          </div>
+  </div>
 </div>
 
-	   <!-- modal scroll -->
+     <!-- modal scroll -->
       <div class="modal fade" id="scrollmodal" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
@@ -60,12 +60,12 @@
                                                 <select name="user_id" id='selUser' class='form-control'></select>
                                             </div>
                                             <div class="form-group">
-                                                <label class="form-control-label">Area</label>
+                                                <label class="form-control-label">Blok</label>
                                                <select name="area_id" id='selArea' class='form-control'>
                                             </select>
                                             </div>
                                             <div class="form-group">
-                                                <label class="form-control-label">User</label>
+                                                <label class="form-control-label">Kategori</label>
                                                 <select name="category_id" id='selKategori' class='form-control'>
                                             </select>
                                             </div>
@@ -87,10 +87,10 @@
                                             </div>
                                              <div class="form-group">
                                                 <label class=" form-control-label">Status</label>
-	                                                <select class="form-control" name="status" id="status">
-													  <option value="Aktif">Aktif</option>
-													  <option value="Tidak Aktif">Tidak Aktif</option>
-													</select>
+                                                  <select class="form-control" name="status" id="status">
+                            <option value="Aktif">Aktif</option>
+                            <option value="Tidak Aktif">Tidak Aktif</option>
+                          </select>
                                             </div>
                                        
                                     </div>
@@ -130,7 +130,7 @@
                                             <select name="user_id" id='selUser-update' class='form-control'>
                                             </select>
                                             <div class="form-group">
-                                              <label class=" form-control-label">Area</label>
+                                              <label class=" form-control-label">Blok</label>
                                             <select name="area_id" id='selArea-update' class='form-control'>
                                             </select>
                                             <div class="form-group">
@@ -156,10 +156,10 @@
                                             </div>
                                              <div class="form-group">
                                                 <label class=" form-control-label">Status</label>
-	                                                <select class="form-control" name="status" id="status-update">
-													  <option value="Aktif">Aktif</option>
-													  <option value="Tidak Aktif">Tidak Aktif</option>
-													</select>
+                                                  <select class="form-control" name="status" id="status-update">
+                            <option value="Aktif">Aktif</option>
+                            <option value="Tidak Aktif">Tidak Aktif</option>
+                          </select>
                                             </div>
                                        
                                     </div>
@@ -178,10 +178,10 @@
 
 
 
-	<script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
-	<script>
-	  
-	$(document).ready(function(){
+  <script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
+  <script>
+    
+  $(document).ready(function(){
 
 $.ajaxSetup({
         headers: {
@@ -246,9 +246,9 @@ $.ajaxSetup({
    data:{id:id},
    success:function(response)
    {
-   	 $('#update').attr('action', '/master/stall/'+id);
-   	 $('#name-update').val(response.name);
-   	 $('#length-update').val(response.length);
+     $('#update').attr('action', '/master/stall/'+id);
+     $('#name-update').val(response.name);
+     $('#length-update').val(response.length);
      $('#width-update').val(response.width);
      $('#height-update').val(response.height);
      
@@ -269,9 +269,9 @@ $.ajaxSetup({
      $("#selArea-update" ).trigger("change");
 
      if(response.status=="Aktif"){
-     	$("#status-update").val("Aktif").change();
+      $("#status-update").val("Aktif").change();
      }else{
-     	$("#status-update").val("Tidak Aktif").change();;
+      $("#status-update").val("Tidak Aktif").change();;
      }
 
    }, error: function(request,msg,error) {
@@ -309,7 +309,7 @@ $.ajaxSetup({
 
   $( "#selArea" ).select2({
         maximumSelectionLength: 5,
-        placeholder: "Area..",
+        placeholder: "Blok..",
         dropdownParent: $("#scrollmodal"),
         ajax: { 
           url: "/areaselect2",
@@ -434,4 +434,4 @@ $.ajaxSetup({
 
 </script>
 
-	@endsection
+  @endsection
