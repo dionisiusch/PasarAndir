@@ -72,10 +72,32 @@
               <a href="/home">
                 <i class="fas fa-tachometer-alt"></i>Dashboard</a>
               </li>
-                <li class="{{Request::routeIs('master*') ? 'active' : '' }}">
-                  <a href="/master">
-                    <i class="fas fa-table"></i>Master Data</a>
-                  </li>
+
+                                 <li class="active has-sub">
+                            <a class="js-arrow" href="#">
+                               <i class="fas fa-table"></i></a><a href="/master"> Master Data</a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{Request::routeIs('master*') ? 'block' : '' }}">
+                                <li class="{{Request::routeIs('master.area*') ? 'active' : '' }}">
+                                    <a href="/master/area">Blok</a>
+                                </li>
+                               <li class="{{Request::routeIs('master.category*') ? 'active' : '' }}">
+                                    <a href="/master/category">Kategori</a>
+                                </li>
+                               <li class="{{Request::routeIs('master.floor*') ? 'active' : '' }}">
+                                    <a href="/master/floor">Lantai</a>
+                                </li>
+                               <li class="{{Request::routeIs('master.user*') ? 'active' : '' }}">
+                                    <a href="/master/user">User</a>
+                                </li>
+                                 <li class="{{Request::routeIs('master.electricity*') ? 'active' : '' }}">
+                                    <a href="/master/electricity">Listrik</a>
+                                </li>
+                                <li class="{{Request::routeIs('master.stall*') ? 'active' : '' }}">
+                                    <a href="/master/stall">Kios</a>
+                                </li>
+                            </ul>
+                        </li>  
+
                           </ul>
                         </div>
                       </nav>
@@ -96,11 +118,30 @@
                               <a href="/home">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                               </li>
-                                <li class="{{Request::routeIs('master*') ? 'active' : '' }}">
-                                  <a href="/master">
-                                    <i class="fas fa-table"></i>Master Data</a>
-                                  </li>
-                                  
+                                 <li class="{{Request::routeIs('master*') ? 'active has-sub' : '' }}">
+                            <a class="js-arrow" href="#">
+                               <i class="fas fa-table"></i></a><a href="/master"> Master Data</a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:block">
+                                <li class="{{Request::routeIs('master.area*') ? 'active' : '' }}">
+                                    <a href="/master/area">Blok</a>
+                                </li>
+                               <li class="{{Request::routeIs('master.category*') ? 'active' : '' }}">
+                                    <a href="/master/category">Kategori</a>
+                                </li>
+                               <li class="{{Request::routeIs('master.floor*') ? 'active' : '' }}">
+                                    <a href="/master/floor">Lantai</a>
+                                </li>
+                               <li class="{{Request::routeIs('master.user*') ? 'active' : '' }}">
+                                    <a href="/master/user">User</a>
+                                </li>
+                                 <li class="{{Request::routeIs('master.electricity*') ? 'active' : '' }}">
+                                    <a href="/master/electricity">Listrik</a>
+                                </li>
+                                <li class="{{Request::routeIs('master.stall*') ? 'active' : '' }}">
+                                    <a href="/master/stall">Kios</a>
+                                </li>
+                            </ul>
+                        </li>  
                                           </ul>
                                         </nav>
                                       </div>

@@ -1,23 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+<div class="col-lg-6">
+                                <div class="au-card m-b-10">
+                                    <div class="au-card-inner">
+                                        <h3 class="title-2 m-b-40">Data Kios</h3>
+                                      <canvas id="pieChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+<script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
