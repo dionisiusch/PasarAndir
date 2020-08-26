@@ -15,7 +15,7 @@ class FloorController extends Controller
   /** @var FloorService */
   private $floorService;
 
-  /** @var FloorService */
+  /** @var AreaService */
   private $areaService;
 
   public function __construct()

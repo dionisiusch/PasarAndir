@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Model\Electricity;
 use Illuminate\Http\Request;
 use App\Http\Services\ElectricityService;
+use App\Http\Helpers\Helper;
 use GuzzleHttp\Client;
 use DB;
 
@@ -13,9 +14,13 @@ class ElectricityController extends Controller
     /** @var ElectricityService */
     private $electricityService;
 
+    /** @var Helper */
+    private $helper;
+
     public function __construct()
     {
         $this->electricityService = app(ElectricityService::class);
+        $this->helper = app(Helper::class);
     }
 
     /**
@@ -55,6 +60,9 @@ class ElectricityController extends Controller
                 'kva_price'=>'required',
                 'kwh_price'=>'required'
             ]);
+
+            $request->kva_price = $this->helper->price_decoder($request->kva_price);
+            $request->kwh_price = $this->helper->price_decoder($request->kwh_price);
     
             $response = $this->electricityService->createElectricity($request);
     
@@ -77,11 +85,11 @@ class ElectricityController extends Controller
             $electricity = $this->electricityService->getElectricityById($id);
       
             $data = array(
-            'kwh_price'  => $electricity->kwh_price,
-            'kva_price'  => $electricity->kva_price,
-            'power_meter'  => $electricity->type,
-            'name'  => $electricity->name,
-            'id'  => $id
+                'kwh_price'  => $electricity->kwh_price,
+                'kva_price'  => $electricity->kva_price,
+                'power_meter'  => $electricity->type,
+                'name'  => $electricity->name,
+                'id'  => $id
             );
             
             return json_encode($data);
@@ -115,6 +123,9 @@ class ElectricityController extends Controller
                 'kva_price'=>'required',
                 'kwh_price'=>'required'
             ]);
+
+            $request->kva_price = $this->helper->price_decoder($request->kva_price);
+            $request->kwh_price = $this->helper->price_decoder($request->kwh_price);
     
             $response = $this->electricityService->updateElectricityById($request, $id);
     

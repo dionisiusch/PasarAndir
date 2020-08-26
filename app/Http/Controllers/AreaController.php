@@ -6,6 +6,7 @@ use App\Model\Area;
 use Illuminate\Http\Request;
 use App\Http\Services\AreaService;
 use App\Http\Services\FloorService;
+use App\Http\Helpers\Helper;
 use GuzzleHttp\Client;
 use DB;
 
@@ -17,10 +18,14 @@ class AreaController extends Controller
     /** @var FloorService */
     private $floorService;
 
+    /** @var Helper */
+    private $helper;
+
     public function __construct()
     {
         $this->areaService = app(AreaService::class);
         $this->floorService = app(FloorService::class);
+        $this->helper = app(Helper::class);
     }
 
     /**
@@ -57,9 +62,10 @@ class AreaController extends Controller
         $request->validate([
             'floor_id'=>'required',
             'name'=>'required',
-            'no'=>'required',
             'price'=>'required'
         ]);
+
+        $request->price = $this->helper->price_decoder($request->price);
 
         $response = $this->areaService->createArea($request);
 
@@ -115,9 +121,10 @@ class AreaController extends Controller
         $request->validate([
             'floor_id'=>'required',
             'name'=>'required',
-            'no'=>'required',
             'price'=>'required'
         ]);
+
+        $request->price = $this->helper->price_decoder($request->price);
 
         $response = $this->areaService->updateAreaById($request, $id);
 

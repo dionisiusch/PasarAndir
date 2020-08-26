@@ -19,7 +19,7 @@ class AreaService
         $area = new Area([
             'floor_id' => $data->get('floor_id'),
             'name' => $data->get('name'),
-            'no' => $data->get('no'),
+            'no' => $data->get('no') ? $data->get('no') : null,
             'price' => $data->get('price')
         ]);
         $area->save();
@@ -38,7 +38,7 @@ class AreaService
         $area = Area::find($id);
         $area->floor_id = $data->get('floor_id');
         $area->name = $data->get('name');
-        $area->no = $data->get('no');
+        $area->no = $data->get('no') ? $data->get('no') : null;
         $area->price = $data->get('price');
         $area->save();
 

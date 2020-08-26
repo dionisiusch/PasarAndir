@@ -17,7 +17,7 @@ class CreateAreasTable extends Migration
             $table->id();
             $table->foreignId('floor_id');
             $table->string('name', 50);
-            $table->string('no', 10);
+            $table->string('no', 10)->nullable();
             $table->bigInteger('price');
             $table->timestamps();
             $table->softDeletes();
