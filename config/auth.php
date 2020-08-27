@@ -49,7 +49,7 @@ return [
 
         'employer' => [
             'driver' => 'session',
-            'provider' => 'employer',
+            'provider' => 'employers',
         ],
     ],
 
@@ -76,7 +76,7 @@ return [
             'model' => App\User::class,
         ],
 
-        'employer' => [
+        'employers' => [
             'driver' => 'eloquent',
             'model' => App\Employer::class,
         ]
@@ -111,10 +111,10 @@ return [
         ],
 
         'employers' => [
-            'provider' => 'employer',
-            'email' => 'auth.emails.password',
+            'provider' => 'employers',
             'table' => 'password_resets',
             'expire' => 60,
+            'throttle' => 60,
         ],
     ],
 

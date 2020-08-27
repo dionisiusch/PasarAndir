@@ -100,7 +100,7 @@
                                 </form>
                                                 </div>
                                                 <div class="tab-pane fade" id="admin" role="tabpanel" aria-labelledby="profile-tab">
-                                                     <form method="POST" action="">
+                                                     <form method="POST" action="{{ route('employer.login') }}">
                                     @csrf
                                     <div class="form-group">
                                         <label>Username Admin</label>
@@ -145,12 +145,12 @@
 
                                         </div>
                                     </div>
-                                <div class="register-link">
+                                <!-- <div class="register-link">
                                     <p>
                                         Don't you have account?
                                         <a href="/register">Sign Up Here</a>
                                     </p>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

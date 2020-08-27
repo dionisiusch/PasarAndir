@@ -17,6 +17,8 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Auth::routes();
 
+Route::post('/employer/login', 'Auth\EmployerLoginController@login')->name('employer.login');
+
 Route::group([
     'prefix' => '/master' 
     // 'middleware' => 'auth'
