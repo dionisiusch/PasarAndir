@@ -259,4 +259,31 @@ class StallController extends Controller
             return json_encode($data);
         }
     }
+
+    public function select2(Request $request){
+     $search = $request->search;
+
+      if($search != ''){
+         $stalls = $this->stallService->searchStall($search);
+      }else{
+         $stalls = $this->stallService->showAllStalls();
+      }
+
+      $response = array();
+      // $preselect = '';
+      foreach($stalls as $stall){
+        $area = $this->areaService->getAreaById($stall->area_id);
+        $floor = $this->floorService->getFloorById($area->floor_id);
+
+        $output = $floor->name . " Blok " . $area->name . " No. " . $area->no . " | " . $stall->name;
+
+         $response[] = array(
+              "id"=>$stall->id,
+              "text"=>$output
+         );
+         // $preselect.='<option value="'.$floor->id.'"> '.$floor->name.'</option>';
+      }
+       // $response['option'] = $preselect; 
+      echo json_encode($response);
+   }
 }
