@@ -58,6 +58,7 @@ class AreaService
         return DB::table('areas')
             ->where('name', 'like', '%'.$query.'%')
             ->orWhere('no', 'like', '%'.$query.'%')
+            ->whereNull('deleted_at')
             ->get();
     }
 }

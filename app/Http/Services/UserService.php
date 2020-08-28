@@ -10,7 +10,7 @@ class UserService
 {
     public function showAllUsers()
     {
-        $users = User::all();
+        $users = User::all()->except(Auth::guard('employer')->id());
 
         return $users;
     }
@@ -70,6 +70,7 @@ class UserService
             ->where('pic_name', 'like', '%'.$query.'%')
             ->orWhere('pic_phone_number', 'like', '%'.$query.'%')
             ->orWhere('username', 'like', '%'.$query.'%')
+            ->where('id', '!=' , Auth::guard('employer')->id())
             ->get();
     }
 }

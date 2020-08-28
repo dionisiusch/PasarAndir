@@ -15,9 +15,8 @@ class AreaController extends Controller
     /** @var AreaService */
     private $areaService;
 
-        /** @var Helper */
+    /** @var Helper */
     private $helper;
-
 
     /** @var FloorService */
     private $floorService;
@@ -26,7 +25,7 @@ class AreaController extends Controller
     {
         $this->areaService = app(AreaService::class);
         $this->floorService = app(FloorService::class);
-                $this->helper = app(Helper::class);
+        $this->helper = app(Helper::class);
     }
 
     /**

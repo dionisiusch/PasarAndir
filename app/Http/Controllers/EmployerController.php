@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Employer;
 use Illuminate\Http\Request;
+use App\Http\Services\EmployerService;
 
 class EmployerController extends Controller
 {
+    /** @var EmployerService */
+    private $employerService;
+
+    public function __construct()
+    {
+        $this->employerService = app(EmployerService::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +23,9 @@ class EmployerController extends Controller
      */
     public function index()
     {
-        //
+        $employers = $this->employerService->showAllEmployers();
+
+        return view('master.employer.index');
     }
 
     /**
@@ -81,5 +92,83 @@ class EmployerController extends Controller
     public function destroy(Employer $employer)
     {
         //
+    }
+
+    public function search(Request $request)
+    {
+        if($request->ajax()) {
+            $output = '';
+            $query = $request->get('query');
+            if($query != '') {
+                $data = $this->employerService->searchEmployer($query);
+            } else {
+                $data = $this->employerService->showAllEmployers();
+            }
+         
+            $total_row = $data->count();
+            if($total_row > 0) {
+                foreach($data as $row) {
+                    $output .= '
+                    <tr class="tr-shadow">
+                        <td>'.$row->username.'</td>
+                        <td>
+                        '.$row->name.'
+                        </td>
+                         <td>
+                        '.$row->phone_number.'
+                        </td>
+                         <td>
+                        '.$row->email.'
+                        </td>
+                        <td>
+                            <div class="table-data-feature">
+                            <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+                                <i class="zmdi zmdi-edit"></i>
+                            </button>
+                            <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+                                <i class="zmdi zmdi-delete"></i>
+                            </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="spacer"></tr> 
+                    ';
+                }
+            } else {
+                $output = '
+                <tr class="tr-shadow">
+                    <td align="center" colspan="3">Data not found.</td>
+                </tr>
+                ';
+            }
+            
+            $data = array(
+                'table_data'  => $output,
+                'total_data'  => $total_row
+            );
+            
+            return json_encode($data);
+        }
+    }
+
+    public function select2(Request $request){
+        $search = $request->search;
+   
+        if($search != ''){
+            $employers = $this->employerService->searchEmployer($search);
+        }else{
+            $employers = $this->employerService->showAllEmployers();
+        }
+
+        $response = array();
+
+        foreach($employers as $employer){
+            $response[] = array(
+                "id"=>$employer->id,
+                "text"=>$employer->name
+            );
+        }
+           
+        echo json_encode($response);
     }
 }
