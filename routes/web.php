@@ -112,6 +112,7 @@ Route::get('/floorselect2', 'floorController@select2')->name('master.floor.selec
 Route::get('/areaselect2', 'areaController@select2')->name('master.area.select2');
 Route::get('/userselect2', 'userController@select2')->name('master.user.select2');
 Route::get('/categoryselect2', 'categoryController@select2')->name('master.category.select2');
+
 Route::get('/stallselect2', 'stallController@select2')->name('master.stall.select2');
 
 //route chart
