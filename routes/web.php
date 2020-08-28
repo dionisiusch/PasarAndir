@@ -86,7 +86,7 @@ Route::group([
         Route::delete('/{id}', 'ElectricityController@destroy')->name('master.electricity.delete');;
     });
 
-      Route::group([
+    Route::group([
         'prefix' => '/user' 
         // 'middleware' => 'auth'
     ], function () {
@@ -97,6 +97,15 @@ Route::group([
         Route::put('/{id}/password/reset', 'UserController@resetPassword')->name('master.user.reset');
         Route::delete('/{id}', 'UserController@resetToDefault')->name('master.user.delete');
     });
+
+    Route::group([
+        'prefix' => '/employer' 
+        // 'middleware' => 'auth'
+    ], function () {
+        Route::get('/', 'EmployerController@index')->name('master.user.index');
+        Route::post('/', 'Auth\EmployerRegisterController@register')->name('master.employer.store');
+
+    });
 });
 
 //route ajax livesearch
@@ -106,16 +115,11 @@ Route::get('/categorysearch', 'CategoryController@search')->name('master.categor
 Route::get('/electricitysearch', 'ElectricityController@search')->name('master.electricity.search');
 Route::get('/stallsearch', 'StallController@search')->name('master.stall.search');
 Route::get('/usersearch', 'UserController@search')->name('master.user.search');
+Route::get('/employersearch', 'EmployerController@search')->name('master.employer.search');
 
 //route aax select2
 Route::get('/floorselect2', 'floorController@select2')->name('master.floor.select2');
 Route::get('/areaselect2', 'areaController@select2')->name('master.area.select2');
 Route::get('/userselect2', 'userController@select2')->name('master.user.select2');
 Route::get('/categoryselect2', 'categoryController@select2')->name('master.category.select2');
-Route::get('/stallselect2', 'stallController@select2')->name('master.stall.select2');
-
-//route chart
-Route::get('/chartstall', 'chartController@stall')->name('chart.stall');
-
-//route meteran
-Route::get('/meteran', 'meteranController@index')->name('meteran.index');
+Route::get('/employerselect2', 'employerController@select2')->name('master.employer.select2');
