@@ -19,6 +19,8 @@ class EmployerService
         return DB::table('employers')
             ->where('name', 'like', '%'.$query.'%')
             ->orWhere('username', 'like', '%'.$query.'%')
+            ->orWhere('email', 'like', '%'.$query.'%')
+            ->orWhere('phone_number', 'like', '%'.$query.'%')
             ->where('id', '!=' , Auth::guard('employer')->id())
             ->get();
     }
