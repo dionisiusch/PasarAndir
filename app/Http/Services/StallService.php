@@ -68,4 +68,11 @@ class StallService
             ->where('name', 'like', '%'.$query.'%')
             ->get();
     }
+
+    public function getActive()
+    {
+        return DB::table('stalls')
+            ->where('status', 'Aktif')
+            ->get();
+    }
 }
