@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Illuminate\Support\Facades\Auth;
 use Closure;
 
 class Admin
@@ -19,15 +20,15 @@ class Admin
             return redirect()->route('login');
         }
 
-        if (Auth::guard($guard)->user()->role == 2) {
+        if (Auth::guard($guard)->user()->role_id == 2) {
             return $next($request);
         }
 
-        if (Auth::guard($guard)->user()->role == 1) {
+        if (Auth::guard($guard)->user()->role_id == 1) {
             return redirect()->route('login');
         }
 
-        if (Auth::guard($guard)->user()->role == 3) {
+        if (Auth::guard($guard)->user()->role_id == 3) {
             return redirect()->route('login');
         }
     }

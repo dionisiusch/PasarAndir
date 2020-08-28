@@ -13,15 +13,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home')->middleware('role:generalmanager');
+Route::get('/home', 'HomeController@index')->middleware('role:generalmanager');
 
 Auth::routes();
 
-Route::post('/employer/login', 'Auth\EmployerLoginController@login')->name('employer.login');
+Route::group([
+    'prefix' => '/employer' 
+], function () {
+    Route::post('/login', 'Auth\EmployerLoginController@login')->name('employer.login');
+    Route::get('/logout', 'Auth\EmployerLoginController@logout')->name('employer.logout');
+});
+
 
 Route::group([
-    'prefix' => '/master' 
-    // 'middleware' => 'auth'
+    'prefix' => '/master',
+    'middleware' => 'role:generalmanager'
 ], function () {
     Route::get('/', 'MasterController@index')->name('master');
     Route::group([
@@ -91,8 +98,6 @@ Route::group([
         Route::delete('/{id}', 'UserController@resetToDefault')->name('master.user.delete');
     });
 });
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 //route ajax livesearch
 Route::get('/floorsearch', 'FloorController@search')->name('master.floor.search');

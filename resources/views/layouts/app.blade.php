@@ -55,17 +55,6 @@
         </div>
       </div>
       <nav class="navbar-mobile">
-        <!-- Authentication Links -->
-        @guest
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-        </li>
-        @if (Route::has('register'))
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-        </li>
-        @endif
-        @else
         <div class="container-fluid">
           <ul class="navbar-mobile__list list-unstyled">
             <li class="{{Request::routeIs('home') ? 'active' : '' }}">
@@ -282,13 +271,13 @@
                                                 <div class="account-wrap">
                                                   <div class="account-item clearfix js-item-menu">
                                                     <div class="content">
-                                                      <a class="js-acc-btn" href="#">{{ Auth::user()->username }}</a>
+                                                      <a class="js-acc-btn" href="#">{{ Auth::guard('employer')->user()->username }}</a>
                                                     </div>
                                                     <div class="account-dropdown js-dropdown">
                                                       <div class="info clearfix">
                                                         <div class="content">
                                                           <h5 class="name">
-                                                            <a href="#">{{ Auth::user()->username }}</a>
+                                                            <a href="#">{{ Auth::guard('employer')->user()->username }}</a>
                                                           </h5>
                                                         </div>
                                                       </div>
@@ -373,5 +362,4 @@
                                       </body>
 
                                       </html>
-                                      @endguest
                                       <!-- end document-->

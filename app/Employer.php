@@ -30,4 +30,17 @@ class Employer extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function hasRole($role_id)
+    {
+        if ($role_id == "generalmanager") {
+            $role = 1;
+        } else if ($role_id == "admin") {
+            $role = 2;
+        } else {
+            $role = 3;
+        }
+
+        return Employer::where('role_id', $role)->get();
+    }
 }

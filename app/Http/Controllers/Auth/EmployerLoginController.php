@@ -26,13 +26,19 @@ class EmployerLoginController extends Controller
             if ($response = $this->authenticated($request, Auth::guard('employer')->user())) {
                 return $response;
             }
-
+            
             return $request->wantsJson()
                         ? new Response('', 204)
                         : redirect()->intended(route('home'));
             }
 
         return redirect()->back()->withInput($request->only('username', 'remember'));
+    }
+
+    public function logout()
+    {
+        Auth::guard('employer')->logout();
+        return redirect('/login');
     }
 
     public function username()
