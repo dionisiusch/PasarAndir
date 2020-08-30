@@ -60,7 +60,7 @@ Route::group([
         Route::get('/', 'AreaController@index')->name('master.area.index');
         Route::post('/', 'AreaController@store')->name('master.area.store');
         Route::get('/{id}', 'AreaController@show')->name('master.area.show');
-        Route::put('/{id}', 'AreaController@update')->name('master.area.update');;
+        Route::put('/{id}', 'AreaController@update')->name('master.area.update');
         Route::delete('/{id}', 'AreaController@destroy')->name('master.area.delete');
     });
 
@@ -71,7 +71,7 @@ Route::group([
         Route::get('/', 'StallController@index')->name('master.stall.index');
         Route::post('/', 'StallController@store')->name('master.stall.store');
         Route::get('/{id}', 'StallController@show')->name('master.stall.show');
-        Route::put('/{id}', 'StallController@update')->name('master.stall.update');;
+        Route::put('/{id}', 'StallController@update')->name('master.stall.update');
         Route::delete('/{id}', 'StallController@destroy')->name('master.stall.delete');
     });
 
@@ -80,10 +80,22 @@ Route::group([
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'ElectricityController@index')->name('master.electricity.index');
-        Route::post('/', 'ElectricityController@store')->name('master.electricity.store');;
-        Route::get('/{id}', 'ElectricityController@show')->name('master.electricity.show');;
-        Route::put('/{id}', 'ElectricityController@update')->name('master.electricity.update');;
-        Route::delete('/{id}', 'ElectricityController@destroy')->name('master.electricity.delete');;
+        Route::post('/', 'ElectricityController@store')->name('master.electricity.store');
+        Route::get('/{id}', 'ElectricityController@show')->name('master.electricity.show');
+        Route::put('/{id}', 'ElectricityController@update')->name('master.electricity.update');
+        Route::delete('/{id}', 'ElectricityController@destroy')->name('master.electricity.delete');
+    });
+
+    Route::group([
+        'prefix' => '/invoice' 
+        // 'middleware' => 'auth'
+    ], function () {
+        Route::get('/', 'InvoiceController@index')->name('master.invoice.index');
+        Route::post('/', 'InvoiceController@store')->name('master.invoice.store');
+        Route::get('/{id}', 'InvoiceController@show')->name('master.invoice.show');
+        Route::put('/{id}', 'InvoiceController@update')->name('master.invoice.update');
+        Route::put('/{id}/status', 'InvoiceController@updateStatus')->name('master.invoice.updateStatus');
+        Route::delete('/{id}', 'InvoiceController@destroy')->name('master.invoice.delete');
     });
 
     Route::group([
@@ -104,7 +116,6 @@ Route::group([
     ], function () {
         Route::get('/', 'EmployerController@index')->name('master.user.index');
         Route::post('/', 'Auth\EmployerRegisterController@register')->name('master.employer.store');
-
     });
 });
 
