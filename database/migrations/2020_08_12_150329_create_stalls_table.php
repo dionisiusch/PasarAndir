@@ -18,6 +18,7 @@ class CreateStallsTable extends Migration
             $table->foreignId('user_id');
             $table->foreignId('area_id');
             $table->foreignId('category_id');
+            $table->foreignId('electricity_id');
             $table->string('name');
             $table->bigInteger('length');
             $table->bigInteger('width');

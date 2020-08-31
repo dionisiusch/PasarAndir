@@ -6,12 +6,14 @@ use App\Model\Stall;
 use App\User;
 use App\Model\Area;
 use App\Model\Category;
+use App\Model\Electricity;
 use Illuminate\Http\Request;
 use App\Http\Services\StallService;
 use App\Http\Services\AreaService;
 use App\Http\Services\CategoryService;
 use App\Http\Services\UserService;
 use App\Http\Services\FloorService;
+use App\Http\Services\ElectricityService;
 use GuzzleHttp\Client;
 Use DB;
 
@@ -32,6 +34,9 @@ class StallController extends Controller
     /** @var floorService */
     private $floorService;
 
+    /** @var ElectricityService */
+    private $electricityService;
+
     public function __construct()
     {
         $this->stallService = app(StallService::class);
@@ -39,6 +44,7 @@ class StallController extends Controller
         $this->categoryService = app(CategoryService::class);
         $this->userService = app(UserService::class);
         $this->floorService = app(FloorService::class);
+        $this->electricityService = app(ElectricityService::class);
 
     }
 
@@ -79,6 +85,7 @@ class StallController extends Controller
                 'user_id'=>'required',
                 'area_id'=>'required',
                 'category_id'=>'required',
+                'electricity_id'=>'required',
                 'name'=>'required',
                 'length'=>'required',
                 'width'=>'required',
@@ -105,6 +112,7 @@ class StallController extends Controller
         if($request->ajax()) {
             $id = $request->get('id');
             $stall = $this->stallService->getStallById($id);
+            $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
             $category = $this->categoryService->getCategoryById($stall->category_id);
             $user = $this->userService->getUserById($stall->user_id);
             $area = $this->areaService->getAreaById($stall->area_id);
@@ -158,6 +166,7 @@ class StallController extends Controller
                 'user_id'=>'required',
                 'area_id'=>'required',
                 'category_id'=>'required',
+                'electricity_id'=>'required',
                 'name'=>'required',
                 'length'=>'required',
                 'width'=>'required',

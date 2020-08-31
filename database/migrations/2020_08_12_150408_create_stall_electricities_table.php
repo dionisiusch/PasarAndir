@@ -16,7 +16,6 @@ class CreateStallElectricitiesTable extends Migration
         Schema::create('stall_electricities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('stall_id');
-            $table->foreignId('electricity_id');
             $table->bigInteger('meter_before');
             $table->bigInteger('meter_after');
             $table->bigInteger('kva_price');

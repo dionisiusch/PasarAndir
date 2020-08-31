@@ -17,7 +17,6 @@ class StallElectricitySeeder extends Seeder
     {
         DB::table('stall_electricities')->insert([
             'stall_id' => 1,
-            'electricity_id' => 1,
             'meter_before' => 0,
             'meter_after' => 40,
             'kva_price' => 54,
@@ -28,7 +27,6 @@ class StallElectricitySeeder extends Seeder
 
         DB::table('stall_electricities')->insert([
             'stall_id' => 2,
-            'electricity_id' => 1,
             'meter_before' => 0,
             'meter_after' => 40,
             'kva_price' => 54,

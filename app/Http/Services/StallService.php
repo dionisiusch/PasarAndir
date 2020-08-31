@@ -20,6 +20,7 @@ class StallService
             'user_id' => $data->get('user_id'),
             'area_id' => $data->get('area_id'),
             'category_id' => $data->get('category_id'),
+            'electricity_id' => $data->get('electricity_id'),
             'name' => $data->get('name'),
             'length' => $data->get('length'),
             'width' => $data->get('width'),
@@ -44,6 +45,7 @@ class StallService
         $stall->user_id = $data->get('user_id');
         $stall->area_id = $data->get('area_id');
         $stall->category_id = $data->get('category_id');
+        $stall->electricity_id = $data->get('electricity_id');
         $stall->name = $data->get('name');
         $stall->length = $data->get('length');
         $stall->width = $data->get('width');

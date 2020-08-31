@@ -17,7 +17,6 @@ class StallElectricityService
     {
         $stallElectricity = new StallElectricity([
             'stall_id' => $data->get('stall_id'),
-            'electricity_id' => $data->get('electricity_id'),
             'meter_before' => $data->get('meter_before'),
             'meter_after' => $data->get('meter_after'),
             'kva_price' => $data->get('kva_price'), //HARUSNYA GA GINI, NANTI DIBENERIN KALO UDAH MAU JADI
@@ -39,7 +38,6 @@ class StallElectricityService
     {
         $stallElectricity = StallElectricity::find($id);
         $stallElectricity->stall_id = $data->get('stall_id');
-        $stallElectricity->electricity_id = $data->get('electricity_id');
         $stallElectricity->meter_before = $data->get('meter_before');
         $stallElectricity->meter_after = $data->get('meter_after');
         $stallElectricity->save();

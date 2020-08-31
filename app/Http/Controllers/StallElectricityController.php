@@ -62,7 +62,6 @@ class StallElectricityController extends Controller
         try {
             $request->validate([
                 'stall_id'=>'required',
-                'electricity_id'=>'required',
                 'meter_before'=>'required',
                 'meter_after'=>'required',
             ]);
@@ -87,12 +86,10 @@ class StallElectricityController extends Controller
             $id = $request->get('id');
             $stallElectricity = $this->stallElectricityService->getStallElectricityById($id);
             $stall = $this->stallService->getStallById($stallElectricity->stall_id);
-            $electricity = $this->electricityService->getElectricityById($stallElectricity->electricity_id);
 
             $data = array(
                 'meter_after' => $stallElectricity->meter_after,
                 'meter_before' => $stallElectricity->meter_before,
-                'electricity' => $electricity,
                 'stall'  => $stall,
                 'id'  => $id
             );
@@ -124,7 +121,6 @@ class StallElectricityController extends Controller
         try {
             $request->validate([
                 'stall_id'=>'required',
-                'electricity_id'=>'required',
                 'meter_before'=>'required',
                 'meter_after'=>'required',
             ]);
