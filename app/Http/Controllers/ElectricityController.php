@@ -13,13 +13,14 @@ class ElectricityController extends Controller
 {
     /** @var ElectricityService */
     private $electricityService;
-        /** @var Helper */
+
+    /** @var Helper */
     private $helper;
 
     public function __construct()
     {
         $this->electricityService = app(ElectricityService::class);
-           $this->helper = app(Helper::class);
+        $this->helper = app(Helper::class);
     }
 
     /**
@@ -59,9 +60,10 @@ class ElectricityController extends Controller
                 'kva_price'=>'required',
                 'kwh_price'=>'required'
             ]);
-            $request->kva_price = $this->helper->price_decoder($request->kva_price);
-            $request->kwh_price = $this->helper->price_decoder($request->kwh_price);
-            $response = $this->electricityService->createElectricity($request);
+            $kvaPrice = $this->helper->price_decoder($request->kva_price);
+            $kwhPrice = $this->helper->price_decoder($request->kwh_price);
+            
+            $response = $this->electricityService->createElectricity($request, $kvaPrice, $kwhPrice);
     
             return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Ditambahkan.');    
         } catch (Exception $e) {
@@ -120,10 +122,10 @@ class ElectricityController extends Controller
                 'kva_price'=>'required',
                 'kwh_price'=>'required'
             ]);
-              $request->kva_price = $this->helper->price_decoder($request->kva_price);
-            $request->kwh_price = $this->helper->price_decoder($request->kwh_price);
+            $kvaPrice = $this->helper->price_decoder($request->kva_price);
+            $kwhPrice = $this->helper->price_decoder($request->kwh_price);
     
-            $response = $this->electricityService->updateElectricityById($request, $id);
+            $response = $this->electricityService->updateElectricityById($request, $id, $kvaPrice, $kwhPrice);
     
             return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Di Update.');
         } catch (Exception $e) {

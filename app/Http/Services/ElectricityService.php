@@ -14,13 +14,13 @@ class ElectricityService
         return $electricities;
     }
 
-    public function createElectricity($data)
+    public function createElectricity($data, $kvaPrice, $kwhPrice)
     {
         $electricity = new Electricity([
             'name' => $data->get('name'),
             'power_meter' => $data->get('power_meter'),
-            'kva_price' => $data->get('kva_price'),
-            'kwh_price' => $data->get('kwh_price')
+            'kva_price' => $kvaPrice,
+            'kwh_price' => $kwhPrice
         ]);
         $electricity->save();
 
@@ -34,13 +34,13 @@ class ElectricityService
         return $electricity;
     }
 
-    public function updateElectricityById($data, $id)
+    public function updateElectricityById($data, $id, $kvaPrice, $kwhPrice)
     {
         $electricity = Electricity::find($id);
         $electricity->name = $data->get('name');
         $electricity->power_meter = $data->get('power_meter');
-        $electricity->kva_price = $data->get('kva_price');
-        $electricity->kwh_price = $data->get('kwh_price');
+        $electricity->kva_price = $kvaPrice;
+        $electricity->kwh_price = $kwhPrice;
         $electricity->save();
 
         return $electricity;

@@ -65,8 +65,8 @@ class AreaController extends Controller
             'name'=>'required',
             'price'=>'required'
         ]);
-        $request->price = $this->helper->price_decoder($request->price);
-        $response = $this->areaService->createArea($request);
+        $price = $this->helper->price_decoder($request->price);
+        $response = $this->areaService->createArea($request, $price);
 
         return redirect('/master/area')->with('success', 'Data Area Berhasil Ditambahkan.');
     }
@@ -122,8 +122,8 @@ class AreaController extends Controller
             'name'=>'required',
             'price'=>'required'
         ]);
-        $request->price = $this->helper->price_decoder($request->price);
-        $response = $this->areaService->updateAreaById($request, $id);
+        $price = $this->helper->price_decoder($request->price);
+        $response = $this->areaService->updateAreaById($request, $id, $price);
 
         return redirect('/master/area')->with('success', 'Data Area Berhasil Di Update.');
     }

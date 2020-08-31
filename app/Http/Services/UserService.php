@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\User;
 use DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserService
 {

@@ -14,13 +14,13 @@ class AreaService
         return $areas;
     }
 
-    public function createArea($data)
+    public function createArea($data, $price)
     {
         $area = new Area([
             'floor_id' => $data->get('floor_id'),
             'name' => $data->get('name'),
             'no' => $data->get('no') ? $data->get('no') : null,
-            'price' => $data->get('price')
+            'price' => $price
         ]);
         $area->save();
 
@@ -33,13 +33,13 @@ class AreaService
         return $area;
     }
 
-    public function updateAreaById($data, $id)
+    public function updateAreaById($data, $id, $price)
     {
         $area = Area::find($id);
         $area->floor_id = $data->get('floor_id');
         $area->name = $data->get('name');
         $area->no = $data->get('no') ? $data->get('no') : null;
-        $area->price = $data->get('price');
+        $area->price = $price;
         $area->save();
 
         return $area;
