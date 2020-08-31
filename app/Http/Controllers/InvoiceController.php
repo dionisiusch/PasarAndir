@@ -77,7 +77,6 @@ class InvoiceController extends Controller
             'month_bill'=>'required',
             'grace_date'=>'required',
             'status'=>'required',
-            'electricity_id'=>'required',
             'electricity_meter_before'=>'required',
             'electricity_meter_after'=>'required',
             'water_meter_before'=>'required',
@@ -87,11 +86,11 @@ class InvoiceController extends Controller
         $requestStallElectricity = new Request();
         $requestStallWater = new Request();
         
-        $electricity = $this->electricityService->getElectricityById($request->electricity_id);
+        $stall = $this->stallService->getStallById($request->stall_id);
+        $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
 
         $requestStallElectricity->replace([
             'stall_id' => $request->stall_id,
-            'electricity_id' => $request->electricity_id,
             'meter_before'=> $request->electricity_meter_before,
             'meter_after'=> $request->electricity_meter_after,
             'kva_price' => $electricity->kva_price,
@@ -127,7 +126,7 @@ class InvoiceController extends Controller
             $stall = $this->stallService->getStallById($invoice->stall_id);
             $stallElectricity = $this->stallElectricityService->getStallElectricityById($invoice->stall_electricity_id);
             $stallWater = $this->stallWaterService->getStallWaterById($invoice->stall_water_id);
-            $electricity = $this->electricityService->getElectricityById($stallElectricity->electricity_id);
+            $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
             $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
             $billElectricityKva = $electricity->power_meter * $stallElectricity->kva_price;
             $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
