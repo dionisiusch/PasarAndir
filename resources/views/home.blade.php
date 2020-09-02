@@ -33,9 +33,6 @@ $.ajax({
      async: false
   })
 
-alert(stall_inactive);
-
-
 	var randomScalingFactor = function() {
 			return Math.round(Math.random() * 100);
 		};

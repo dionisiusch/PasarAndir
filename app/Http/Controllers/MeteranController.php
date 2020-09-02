@@ -3,6 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Services\ElectricityService;
+use App\Http\Services\StallElectricityService;
+use App\Http\Services\StallWaterService;
+use App\Http\Services\StallService;
+use App\Model\Stall;
+use App\Model\stallElectricity;
+use App\Model\StallWater;
+use App\Model\Electricity;
+
+use DB;
+
 
 class MeteranController extends Controller
 {
@@ -11,9 +22,19 @@ class MeteranController extends Controller
      *
      * @return void
      */
+    private $electricityService;
+    private $stallService;
+    private $stallWaterService;
+     private $stallElectricityService;
+ 
+ 
+
     public function __construct()
     {
-        
+          $this->electricityService = app(ElectricityService::class);
+           $this->stallElectricityService = app(StallElectricityService::class);
+          $this->stallService = app(StallService::class); 
+          $this->stallWaterService = app(StallWaterService::class); 
     }
 
     /**
@@ -25,4 +46,56 @@ class MeteranController extends Controller
     {
         return view('meteran');
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'stall_id'=>'required',
+            'electricity_meter_before'=>'required',
+            'electricity_meter_after'=>'required',
+            'water_meter_before'=>'required',
+            'water_meter_after'=>'required'
+        ]);
+        
+        $stall = $this->stallService->getStallById($request->stall_id);
+        $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+
+        $stallElectricity =  array(
+            'stall_id' => $request->stall_id,
+            'kwh_price'  => $electricity->kwh_price,
+            'kva_price'  => $electricity->kva_price,
+            'meter_before'=> $request->electricity_meter_before,
+            'meter_after'=> $request->electricity_meter_after
+            );
+
+        $stallWater =  array(
+            'stall_id' => $request->stall_id,
+            'meter_before'=> $request->water_meter_before,
+            'meter_after'=> $request->water_meter_after
+            );
+
+        $queryStallElectricity = $this->stallElectricityService->createStallElectricity($stallElectricity);
+        $queryStallWater = $this->stallWaterService->createStallWater($stallWater);
+
+        // return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Ditambahkan.');       
+    }
+
+     public function getElectricityName(Request $request){
+     $search = $request->get('id');
+     
+    $requestStall = $this->stallService->getStallById($search);
+    $requestElectricity = $this->electricityService->getElectricityById($requestStall->electricity_id);
+     
+      $response = array();
+      // $preselect = '';
+    foreach($requestElectricity as $electricity){
+         $response = array(
+              "name"=>"[Kode : ".$requestElectricity->name."]"
+         );
+         // $preselect.='<option value="'.$floor->id.'"> '.$floor->name.'</option>';
+       }
+       // $response['option'] = $preselect; 
+      echo json_encode($response);
+   }
+
 }

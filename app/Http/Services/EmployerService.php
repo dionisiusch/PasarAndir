@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Employer;
 use DB;
+use Auth;
 
 class EmployerService
 {
