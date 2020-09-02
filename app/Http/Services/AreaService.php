@@ -55,9 +55,17 @@ class AreaService
 
     public function searchArea($query)
     {
+        $floorId = DB::table('floors')
+            ->where('code', 'like', '%'.$query.'%')
+            ->orWhere('name', 'like', '%'.$query.'%')
+            ->whereNull('deleted_at')
+            ->pluck('id');
+
         return DB::table('areas')
             ->where('name', 'like', '%'.$query.'%')
             ->orWhere('no', 'like', '%'.$query.'%')
+            ->orWhere('price', 'like', '%'.$query.'%')
+            ->orWhereIn('floor_id', $floorId)
             ->whereNull('deleted_at')
             ->get();
     }

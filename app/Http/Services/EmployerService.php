@@ -15,6 +15,14 @@ class EmployerService
         return $employers;
     }
 
+    public function deleteEmployerById($id)
+    {
+        $employer = Employer::find($id);
+        $employer->delete();
+
+        return $employer;
+    }
+
     public function searchEmployer($query)
     {
         return DB::table('employers')

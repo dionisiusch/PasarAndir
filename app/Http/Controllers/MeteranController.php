@@ -25,16 +25,14 @@ class MeteranController extends Controller
     private $electricityService;
     private $stallService;
     private $stallWaterService;
-     private $stallElectricityService;
- 
- 
+    private $stallElectricityService;
 
     public function __construct()
     {
-          $this->electricityService = app(ElectricityService::class);
-           $this->stallElectricityService = app(StallElectricityService::class);
-          $this->stallService = app(StallService::class); 
-          $this->stallWaterService = app(StallWaterService::class); 
+        $this->electricityService = app(ElectricityService::class);
+        $this->stallElectricityService = app(StallElectricityService::class);
+        $this->stallService = app(StallService::class); 
+        $this->stallWaterService = app(StallWaterService::class); 
     }
 
     /**
@@ -60,42 +58,47 @@ class MeteranController extends Controller
         $stall = $this->stallService->getStallById($request->stall_id);
         $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
 
-        $stallElectricity =  array(
-            'stall_id' => $request->stall_id,
-            'kwh_price'  => $electricity->kwh_price,
-            'kva_price'  => $electricity->kva_price,
-            'meter_before'=> $request->electricity_meter_before,
-            'meter_after'=> $request->electricity_meter_after
-            );
+        $requestStallElectricity = new Request();
+        $requestStallWater = new Request();
 
-        $stallWater =  array(
+        $requestStallElectricity->replace([
+            'stall_id' => $request->stall_id,
+            'meter_before'=> $request->electricity_meter_before,
+            'meter_after'=> $request->electricity_meter_after,
+            'kva_price' => $electricity->kva_price,
+            'kwh_price' => $electricity->kwh_price
+        ]);
+
+        $requestStallWater->replace([
             'stall_id' => $request->stall_id,
             'meter_before'=> $request->water_meter_before,
-            'meter_after'=> $request->water_meter_after
-            );
+            'meter_after'=> $request->water_meter_after,
+            'price' => 0,
+            'fixed_price' => 0
+        ]);
 
-        $queryStallElectricity = $this->stallElectricityService->createStallElectricity($stallElectricity);
-        $queryStallWater = $this->stallWaterService->createStallWater($stallWater);
+        $queryStallElectricity = $this->stallElectricityService->createStallElectricity($requestStallElectricity);
+        $queryStallWater = $this->stallWaterService->createStallWater($requestStallWater);
 
         return redirect('/meteran')->with('success', 'Data Meteran Berhasil Ditambahkan.');       
     }
 
      public function getElectricityName(Request $request){
-     $search = $request->get('id');
-     
-    $requestStall = $this->stallService->getStallById($search);
-    $requestElectricity = $this->electricityService->getElectricityById($requestStall->electricity_id);
-     
-      $response = array();
-      // $preselect = '';
-    foreach($requestElectricity as $electricity){
-         $response = array(
-              "name"=>"[Kode : ".$requestElectricity->name."]"
-         );
-         // $preselect.='<option value="'.$floor->id.'"> '.$floor->name.'</option>';
-       }
-       // $response['option'] = $preselect; 
-      echo json_encode($response);
+        $search = $request->get('id');
+        
+        $requestStall = $this->stallService->getStallById($search);
+        $requestElectricity = $this->electricityService->getElectricityById($requestStall->electricity_id);
+        
+        $response = array();
+        // $preselect = '';
+        foreach($requestElectricity as $electricity){
+            $response = array(
+                "name"=>"[Kode : ".$requestElectricity->name."]"
+            );
+            // $preselect.='<option value="'.$floor->id.'"> '.$floor->name.'</option>';
+        }
+        // $response['option'] = $preselect; 
+        echo json_encode($response);
    }
 
 }

@@ -116,6 +116,7 @@ Route::group([
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'EmployerController@index')->name('master.employer.index');
+        Route::delete('/{id}', 'EmployerController@destroy')->name('master.employer.delete');
         Route::post('/', 'Auth\EmployerRegisterController@register')->name('master.employer.store');
     });
 });

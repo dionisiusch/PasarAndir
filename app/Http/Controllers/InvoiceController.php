@@ -71,43 +71,18 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
+        //DISCOUNT AND FINE NOT REQUIRED
         $request->validate([
             'stall_id'=>'required',
+            'stall_electricity_id'=>'required',
+            'stall_water_id'=>'required',
             'minimal_payment'=>'required',
             'month_bill'=>'required',
             'grace_date'=>'required',
-            'status'=>'required',
-            'electricity_meter_before'=>'required',
-            'electricity_meter_after'=>'required',
-            'water_meter_before'=>'required',
-            'water_meter_after'=>'required'
+            'status'=>'required'
         ]);
 
-        $requestStallElectricity = new Request();
-        $requestStallWater = new Request();
-        
-        $stall = $this->stallService->getStallById($request->stall_id);
-        $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
-
-        $requestStallElectricity->replace([
-            'stall_id' => $request->stall_id,
-            'meter_before'=> $request->electricity_meter_before,
-            'meter_after'=> $request->electricity_meter_after,
-            'kva_price' => $electricity->kva_price,
-            'kwh_price' => $electricity->kwh_price
-        ]);
-
-        $requestStallWater->replace([
-            'stall_id' => $request->stall_id,
-            'meter_before'=> $request->water_meter_before,
-            'meter_after'=> $request->water_meter_after,
-            'price' => 0,
-            'fixed_price' => 0
-        ]);
-
-        $stallElectricity = $this->stallElectricityService->createStallElectricity($requestStallElectricity);
-        $stallWater = $this->stallWaterService->createStallWater($requestStallWater);
-        $response = $this->invoiceService->createInvoice($stallElectricity->id, $stallWater->id, $request);
+        $response = $this->invoiceService->createInvoice($request);
 
         // return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Ditambahkan.');       
     }
@@ -202,7 +177,7 @@ class InvoiceController extends Controller
      * @param  \App\Model\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Invoice $invoice)
+    public function destroy($id)
     {
         $msg = 'Data Invoice Gagal Dihapus.';
         $response = $this->invoiceService->deleteInvoiceById($id);
