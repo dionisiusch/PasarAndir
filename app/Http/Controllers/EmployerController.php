@@ -5,15 +5,20 @@ namespace App\Http\Controllers;
 use App\Employer;
 use Illuminate\Http\Request;
 use App\Http\Services\EmployerService;
+use App\Http\Services\RoleService;
 
 class EmployerController extends Controller
 {
     /** @var EmployerService */
     private $employerService;
 
+    /** @var RoleService */
+    private $roleService;
+
     public function __construct()
     {
         $this->employerService = app(EmployerService::class);
+        $this->roleService = app(RoleService::class);
     }
 
     /**
@@ -108,6 +113,7 @@ class EmployerController extends Controller
             $total_row = $data->count();
             if($total_row > 0) {
                 foreach($data as $row) {
+                    $role = $this->roleService->getRoleById($row->role_id);
                     $output .= '
                     <tr class="tr-shadow">
                         <td>'.$row->username.'</td>
