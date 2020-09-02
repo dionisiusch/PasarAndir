@@ -61,40 +61,6 @@
               <a href="/home">
                 <i class="fas fa-tachometer-alt"></i>Dashboard</a>
               </li>
-
-              <li class="active has-sub">
-                <a class="js-arrow" href="#">
-                 <i class="fas fa-table"></i></a><a href="/master"> Master Data</a>
-                 <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{Request::routeIs('master*') ? 'block' : '' }}">
-                  <li class="{{Request::routeIs('master.area*') ? 'active' : '' }}">
-                    <a href="/master/area">Blok</a>
-                  </li>
-                  <li class="{{Request::routeIs('master.category*') ? 'active' : '' }}">
-                    <a href="/master/category">Kategori</a>
-                  </li>
-                  <li class="{{Request::routeIs('master.floor*') ? 'active' : '' }}">
-                    <a href="/master/floor">Lantai</a>
-                  </li>
-                  <li class="{{Request::routeIs('master.user*') ? 'active' : '' }}">
-                    <a href="/master/user">User</a>
-                  </li>
-                  <li class="{{Request::routeIs('master.electricity*') ? 'active' : '' }}">
-                    <a href="/master/electricity">Listrik</a>
-                  </li>
-                  <li class="{{Request::routeIs('master.stall*') ? 'active' : '' }}">
-                    <a href="/master/stall">Kios</a>
-                  </li>
-                   <li class="{{Request::routeIs('master.employer*') ? 'active' : '' }}">
-                    <a href="/master/employer">Karyawan</a>
-                  </li>
-                </ul>
-              </li> 
-              <li class="{{Request::routeIs('meteran') ? 'active' : '' }}">
-                <a href="/meteran">
-                  <i class="fas fa-tachometer-alt"></i>Meteran</a>
-                </li>
-
-
               </ul>
             </div>
           </nav>
@@ -115,37 +81,6 @@
                   <a href="/home">
                     <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                   </li>
-                  <li class="{{Request::routeIs('master*') ? 'active has-sub' : '' }}">
-                    <a class="js-arrow" href="#">
-                     <i class="fas fa-table"></i></a><a href="/master"> Master Data</a>
-                     <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:block">
-                      <li class="{{Request::routeIs('master.area*') ? 'active' : '' }}">
-                        <a href="/master/area">Blok</a>
-                      </li>
-                      <li class="{{Request::routeIs('master.category*') ? 'active' : '' }}">
-                        <a href="/master/category">Kategori</a>
-                      </li>
-                      <li class="{{Request::routeIs('master.floor*') ? 'active' : '' }}">
-                        <a href="/master/floor">Lantai</a>
-                      </li>
-                      <li class="{{Request::routeIs('master.user*') ? 'active' : '' }}">
-                        <a href="/master/user">User</a>
-                      </li>
-                      <li class="{{Request::routeIs('master.electricity*') ? 'active' : '' }}">
-                        <a href="/master/electricity">Listrik</a>
-                      </li>
-                      <li class="{{Request::routeIs('master.stall*') ? 'active' : '' }}">
-                        <a href="/master/stall">Kios</a>
-                      </li>
-                       <li class="{{Request::routeIs('master.employer*') ? 'active' : '' }}">
-                    <a href="/master/employer">Karyawan</a>
-                  </li>
-                    </ul>
-                  </li>
-                   <li class="{{Request::routeIs('meteran') ? 'active' : '' }}">
-                <a href="/meteran">
-                  <i class="fas fa fa-book"></i>Meteran</a>
-                </li>  
                 </ul>
               </nav>
             </div>
@@ -159,16 +94,6 @@
               <div class="section__content section__content--p30">
                 <div class="container-fluid">
                   <div class="header-wrap">
-
-                    <!-- Not Used @dion-->
-                    <form class="form-header" action="" method="POST">
-                      <input class="au-input au-input--xl" type="hidden" name="search" placeholder="Search for datas &amp; reports..." />
-                      <button class="au-btn--submit" type="hidden">
-                        <i class="zmdi zmdi-search"></i>
-                      </button>
-                    </form>
-                    <!-- Not Used @dion-->
-
 
                     <div class="header-button">
                       <div class="noti-wrap">

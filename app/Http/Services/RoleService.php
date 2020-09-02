@@ -2,7 +2,7 @@
 
 namespace App\Http\Services;
 
-use App\Role;
+use App\Model\Role;
 use DB;
 
 class RoleService

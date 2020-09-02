@@ -103,6 +103,7 @@ Route::group([
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'UserController@index')->name('master.user.index');
+        Route::get('/register', 'UserController@register')->name('master.user.register');
         Route::get('/{id}', 'UserController@show')->name('master.user.show');
         Route::put('/{id}/pic', 'UserController@updatePIC')->name('master.user.store');
         Route::put('/{id}/auth', 'UserController@updateAuth')->name('master.user.update');
@@ -142,3 +143,4 @@ Route::get('/chartstall', 'chartController@stall')->name('chart.stall');
 //route meteran
 Route::get('/meteran', 'meteranController@index')->name('meteran.index');
 Route::get('/meteranelectricity', 'meteranController@getElectricityName')->name('meteran.electricity.name');
+Route::post('/', 'MeteranController@store')->name('meteran.store');

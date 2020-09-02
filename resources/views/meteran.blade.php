@@ -9,7 +9,7 @@
 				<strong>Input</strong> Meteran
 			</div>
 			<div class="card-body card-block">
-				<form action="{{ route('master.floor.store') }}" method="post">
+				<form action="{{ route('meteran.store') }}" method="post">
 					@csrf
 					<div class="form-group">
 						<label class="form-control-label">Kios</label>

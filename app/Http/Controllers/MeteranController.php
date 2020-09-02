@@ -77,7 +77,7 @@ class MeteranController extends Controller
         $queryStallElectricity = $this->stallElectricityService->createStallElectricity($stallElectricity);
         $queryStallWater = $this->stallWaterService->createStallWater($stallWater);
 
-        // return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Ditambahkan.');       
+        return redirect('/meteran')->with('success', 'Data Meteran Berhasil Ditambahkan.');       
     }
 
      public function getElectricityName(Request $request){

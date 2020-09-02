@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Employer;
+use App\Model\Role;
 use Illuminate\Http\Request;
 use App\Http\Services\EmployerService;
 use App\Http\Services\RoleService;
@@ -115,6 +116,13 @@ class EmployerController extends Controller
             if($total_row > 0) {
                 foreach($data as $row) {
                     $role = $this->roleService->getRoleById($row->role_id);
+                    if($role->id==1){
+                        $role_text = "<span class='badge badge-success'>".$role->name."</span>";
+                    }else if($role->id==2){
+                        $role_text = "<span class='badge badge-warning'>".$role->name."</span>";
+                    }else{
+                        $role_text = "<span class='badge badge-danger'>".$role->name."</span>";
+                    }
                     $output .= '
                     <tr class="tr-shadow">
                         <td>'.$row->username.'</td>
@@ -128,7 +136,7 @@ class EmployerController extends Controller
                         '.$row->email.'
                         </td>
                          <td>
-                        '.$row->role_id.'
+                        '.$role_text.'
                         </td>
                         <td>
                             <div class="table-data-feature">

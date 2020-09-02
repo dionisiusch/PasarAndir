@@ -112,6 +112,11 @@ class UserController extends Controller
         }
     }
 
+    public function register()
+    {
+        return view('auth.register');
+    }
+
     public function search(Request $request)
     {
         if($request->ajax()) {
