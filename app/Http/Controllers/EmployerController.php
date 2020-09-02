@@ -6,6 +6,7 @@ use App\Employer;
 use Illuminate\Http\Request;
 use App\Http\Services\EmployerService;
 
+
 class EmployerController extends Controller
 {
     /** @var EmployerService */
@@ -25,7 +26,7 @@ class EmployerController extends Controller
     {
         $employers = $this->employerService->showAllEmployers();
 
-        return view('master.employer.index');
+        return view('master.employer.employerShow');
     }
 
     /**
@@ -119,6 +120,9 @@ class EmployerController extends Controller
                         </td>
                          <td>
                         '.$row->email.'
+                        </td>
+                         <td>
+                        '.$row->role_id.'
                         </td>
                         <td>
                             <div class="table-data-feature">

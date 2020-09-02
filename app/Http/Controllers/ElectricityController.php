@@ -19,7 +19,7 @@ class ElectricityController extends Controller
     public function __construct()
     {
         $this->electricityService = app(ElectricityService::class);
-           $this->helper = app(Helper::class);
+        $this->helper = app(Helper::class);
     }
 
     /**

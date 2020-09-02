@@ -114,7 +114,7 @@ Route::group([
         'prefix' => '/employer' 
         // 'middleware' => 'auth'
     ], function () {
-        Route::get('/', 'EmployerController@index')->name('master.user.index');
+        Route::get('/', 'EmployerController@index')->name('master.employer.index');
         Route::post('/', 'Auth\EmployerRegisterController@register')->name('master.employer.store');
     });
 });
@@ -141,3 +141,4 @@ Route::get('/chartstall', 'chartController@stall')->name('chart.stall');
 
 //route meteran
 Route::get('/meteran', 'meteranController@index')->name('meteran.index');
+Route::get('/meteranelectricity', 'meteranController@getElectricityName')->name('meteran.electricity.name');
