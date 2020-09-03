@@ -141,6 +141,8 @@ Route::get('/electricitysearch', 'ElectricityController@search')->name('master.e
 Route::get('/stallsearch', 'StallController@search')->name('master.stall.search');
 Route::get('/usersearch', 'UserController@search')->name('master.user.search');
 Route::get('/employersearch', 'EmployerController@search')->name('master.employer.search');
+Route::get('/receiptsearch', 'ReceiptController@search')->name('master.receipt.search');
+Route::get('/invoicesearch', 'InvoiceController@search')->name('master.invoice.search');
 
 //route aax select2
 Route::get('/floorselect2', 'floorController@select2')->name('master.floor.select2');
