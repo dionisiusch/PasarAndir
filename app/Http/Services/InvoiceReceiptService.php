@@ -2,88 +2,51 @@
 
 namespace App\Http\Services;
 
-use App\Model\Invoice;
+use App\Model\InvoiceReceipt;
 use DB;
 
 class InvoiceService
 {
-    public function showAllInvoices()
+    public function showAllInvoiceReceipts()
     {
-        $invoices = Invoice::all();
+        $invoiceReceipts = InvoiceReceipt::all();
 
-        return $invoices;
+        return $invoiceReceipts;
     }
 
-    public function createInvoice($stallElectricityId, $stallWaterId, $data)
+    public function createInvoiceReceipt($data)
     {
-        $invoice = new Invoice([
-            'stall_id' => $data->get('stall_id'),
-            'stall_electricity_id' => $data->get('stall_electricity_id'),
-            'stall_water_id' => $data->get('stall_water_id'),
-            'discount' => $data->get('discount') ?  $data->get('discount') : 0,
-            'minimal_payment' => $data->get('minimal_payment'),
-            'fine' => $data->get('fine') ? $data->get('fine') : 0,
-            'month_bill' => $data->get('month_bill'),
-            'status' => $data->get('status')
+        $invoiceReceipt = new InvoiceReceipt([
+            'invoice_id' => $data->get('invoice_id'),
+            'receipt_id' => $data->get('receipt_id')
         ]);
-        $invoice->save();
+        $invoiceReceipt->save();
 
-        return $invoice;
+        return $invoiceReceipt;
     }
 
-    public function getInvoiceById($id)
+    public function showAllInvoiceReceiptsByUserId($userId)
     {
-        $invoice = Invoice::find($id);
-
-        return $invoice;
+        //
     }
 
-    public function updateInvoiceById($data, $id)
+    public function showAllInvoiceReceiptsByStallId($stallId)
     {
-        $invoice = Invoice::find($id);
-        $invoice->stall_id = $data->get('stall_id');
-        $invoice->discount = $data->get('discount') ? $data->get('discount') : 0;
-        $invoice->minimal_payment = $data->get('minimal_payment');
-        $invoice->fine = $data->get('fine') ? $data->get('fine') : 0;
-        $invoice->month_bill = $data->get('month_bill');
-        $invoice->grace_date = $data->get('grace_date');
-        $invoice->save();
-
-        return $invoice;
+        //
     }
 
-    public function updateInvoiceStatusById($data, $id)
+    public function deleteInvoiceReceiptByInvoiceId($invoiceId)
     {
-        $invoice = Invoice::find($id);
-        $invoice->status = $data->get('status');
-        $invoice->save();
-
-        return $invoice;
+        //
     }
 
-    public function deleteInvoiceById($id)
+    public function deleteInvoiceReceiptByReceiptId($receiptId)
     {
-        $invoice = Invoice::find($id);
-        $invoice->delete();
-
-        return $invoice;
+        //
     }
 
-    public function searchInvoice($query)
+    public function searchInvoiceReceipt($query)
     {
-        $stallId = DB::table('stalls')
-            ->where('name', 'like', '%'.$query.'%')
-            ->pluck('id');
-
-        return DB::table('invoices')
-            ->where('discount', 'like', '%'.$query.'%')
-            ->orWhere('minimal_payment', 'like', '%'.$query.'%')
-            ->orWhere('fine', 'like', '%'.$query.'%')
-            ->orWhere('month_bill', 'like', '%'.$query.'%')
-            ->orWhere('grace_date', 'like', '%'.$query.'%')
-            ->orWhere('status', 'like', '%'.$query.'%')
-            ->orWhereIn('stall_id', $stallId)
-            ->whereNull('deleted_at')
-            ->get();
+        //
     }
 }

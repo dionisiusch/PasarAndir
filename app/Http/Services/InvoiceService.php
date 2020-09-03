@@ -73,6 +73,7 @@ class InvoiceService
     {
         $stallId = DB::table('stalls')
             ->where('name', 'like', '%'.$query.'%')
+            ->whereNull('deleted_at')
             ->pluck('id');
 
         return DB::table('invoices')
