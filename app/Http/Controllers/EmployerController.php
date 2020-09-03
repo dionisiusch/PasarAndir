@@ -102,6 +102,28 @@ class EmployerController extends Controller
         }
     }
 
+    public function updatePassword(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'old_password'=> ['required', 'string'],
+                'new_password' => ['required', 'string', 'min:8', 'confirmed'],
+            ]);
+
+            $employer = $this->employerService->getEmployerById($id);
+
+            if(Hash::make($employer->password) != Hash::make($request->old_password)){
+                // return redirect('/master/employer')->with('error', 'Password Employer Gagal Di Ubah.'); 
+            }
+    
+            $response = $this->employerService->updateEmployerPasswordById($request->new_password, $id);
+    
+            // return redirect('/master/employer')->with('success', 'Data Employer Berhasil Di Ubah.');       
+        } catch (Exception $e) {
+            // return redirect('/master/employer')->with('error', 'Data Employer Gagal Di Ubah.');       
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *

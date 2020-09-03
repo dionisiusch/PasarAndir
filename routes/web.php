@@ -128,10 +128,13 @@ Route::group([
     ], function () {
         Route::get('/', 'EmployerController@index')->name('master.employer.index');
         Route::put('/{id}', 'EmployerController@update')->name('master.employer.update');
+        Route::put('/{id}/password', 'EmployerController@updatePassword')->name('master.employer.updatePassword');
         Route::delete('/{id}', 'EmployerController@destroy')->name('master.employer.delete');
         Route::post('/', 'Auth\EmployerRegisterController@register')->name('master.employer.store');
     });
 });
+
+Route::put('/password', 'UserController@updatePassword')->name('master.user.updatePassword');
 
 //route ajax livesearch
 Route::get('/floorsearch', 'FloorController@search')->name('master.floor.search');

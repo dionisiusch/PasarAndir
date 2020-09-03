@@ -18,9 +18,17 @@ class UserService
 
     public function getUserById($id)
     {
-        return DB::table('users')
-            ->where('id', $id)
+        return User::where('id', $id)
             ->first();
+    }
+
+    public function updateUserPasswordById($newPassword, $id)
+    {
+        $user = User::find($id);
+        $user->password = Hash::make($newPassword);
+        $user->save();
+
+        return $user;
     }
 
     public function updatePICUserById($data, $id)
