@@ -85,9 +85,21 @@ class EmployerController extends Controller
      * @param  \App\Model\Employer  $employer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Employer $employer)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $request->validate([
+                'name'=>'required',
+                'email'=>['required', 'email', 'unique:employers'],
+                'phone_number'=>['required', 'max:13', 'unique:employers'],
+            ]);
+    
+            $response = $this->employerService->updateEmployerById($request);
+    
+            // return redirect('/master/employer')->with('success', 'Data Employer Berhasil Di Update.');       
+        } catch (Exception $e) {
+            // return redirect('/master/employer')->with('error', 'Data Employer Gagal Di Update.');       
+        }
     }
 
     /**

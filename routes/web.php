@@ -99,6 +99,17 @@ Route::group([
     });
 
     Route::group([
+        'prefix' => '/receipt' 
+        // 'middleware' => 'auth'
+    ], function () {
+        Route::get('/', 'ReceiptController@index')->name('master.receipt.index');
+        Route::post('/', 'ReceiptController@store')->name('master.receipt.store');
+        Route::get('/{id}', 'ReceiptController@show')->name('master.receipt.show');
+        Route::put('/{id}', 'ReceiptController@update')->name('master.receipt.update');
+        Route::delete('/{id}', 'ReceiptController@destroy')->name('master.receipt.delete');
+    });
+
+    Route::group([
         'prefix' => '/user' 
         // 'middleware' => 'auth'
     ], function () {
@@ -116,6 +127,7 @@ Route::group([
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'EmployerController@index')->name('master.employer.index');
+        Route::put('/{id}', 'EmployerController@update')->name('master.employer.update');
         Route::delete('/{id}', 'EmployerController@destroy')->name('master.employer.delete');
         Route::post('/', 'Auth\EmployerRegisterController@register')->name('master.employer.store');
     });

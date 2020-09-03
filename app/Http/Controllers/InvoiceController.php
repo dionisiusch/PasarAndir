@@ -188,4 +188,59 @@ class InvoiceController extends Controller
 
         return $msg;
     }
+
+    public function search(Request $request)
+    {
+        if($request->ajax()) {
+            $output = '';
+            $query = $request->get('query');
+            if($query != '') {
+                $data = $this->invoiceService->searchInvoice($query);
+            } else {
+                $data = $this->invoiceService->showAllInvoices();
+            }
+         
+            $total_row = $data->count();
+			if($total_row > 0) {
+				foreach($data as $row) {
+                    $stall = $this->stallService->getStallById($row->stall_id);
+                    $output .= '
+                    <tr class="tr-shadow">
+                        <td>'.$stall->name.'</td>
+                        <td>'.$row->discount.'</td>
+                        <td>'.$row->minimal_payment.'</td>
+                        <td>'.$row->fine.'</td>
+                        <td>'.$row->month_bil.'</td>
+                        <td>'.$row->grace_date.'</td>
+                        <td>'.$row->status.'</td>
+						<td>
+							<div class="table-data-feature">
+							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+								<i class="zmdi zmdi-edit"></i>
+							</button>
+							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+								<i class="zmdi zmdi-delete"></i>
+							</button>
+							</div>
+						</td>
+					</tr>
+					<tr class="spacer"></tr> 
+        	        ';
+      	        }
+            } else {
+				$output = '
+				<tr class="tr-shadow">
+				    <td align="center" colspan="2">Data not found.</td>
+				</tr>
+				';
+			}
+			
+			$data = array(
+				'table_data'  => $output,
+				'total_data'  => $total_row
+			);
+			
+   		    return json_encode($data);
+ 		}
+	}
 }

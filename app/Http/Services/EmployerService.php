@@ -15,6 +15,17 @@ class EmployerService
         return $employers;
     }
 
+    public function updateEmployerById($data, $id)
+    {
+        $employer = Stall::find($id);
+        $employer->name = $data->get('name');
+        $employer->email = $data->get('email');
+        $employer->phone_number = $data->get('phone_number');
+        $employer->save();
+
+        return $employer;
+    }
+
     public function deleteEmployerById($id)
     {
         $employer = Employer::find($id);
