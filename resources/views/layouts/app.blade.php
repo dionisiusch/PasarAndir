@@ -64,6 +64,16 @@
 
               <li class="active has-sub">
                 <a class="js-arrow" href="#">
+                 <i class="fas fa-table"></i></a><a href="/master"> Invoice</a>
+                 <ul class="list-unstyled navbar__sub-list js-sub-list" style="display: block">
+                  <li class="{{Request::routeIs('master.invoice*') ? 'active' : '' }}">
+                    <a href="/master/invoice">Invoice</a>
+                  </li>
+                </ul>
+              </li> 
+
+              <li class="active has-sub">
+                <a class="js-arrow" href="#">
                  <i class="fas fa-table"></i></a><a href="/master"> Master Data</a>
                  <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{Request::routeIs('master*') ? 'block' : '' }}">
                   <li class="{{Request::routeIs('master.area*') ? 'active' : '' }}">
@@ -115,6 +125,18 @@
                   <a href="/home">
                     <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                   </li>
+
+                  
+              <li class="active has-sub">
+                <a class="js-arrow" href="#">
+                 <i class="fas fa-table"></i></a><a href="/master"> Invoice</a>
+                 <ul class="list-unstyled navbar__sub-list js-sub-list" style="display: block">
+                  <li class="{{Request::routeIs('master.invoice*') ? 'active' : '' }}">
+                    <a href="/master/invoice">Invoice</a>
+                  </li>
+                </ul>
+              </li> 
+              
                   <li class="{{Request::routeIs('master*') ? 'active has-sub' : '' }}">
                     <a class="js-arrow" href="#">
                      <i class="fas fa-table"></i></a><a href="/master"> Master Data</a>

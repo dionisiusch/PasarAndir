@@ -14,6 +14,7 @@ use App\Http\Services\StallService;
 use App\Http\Services\StallElectricityService;
 use App\Http\Services\StallWaterService;
 use GuzzleHttp\Client;
+use DB;
 
 class InvoiceController extends Controller
 {
@@ -50,7 +51,7 @@ class InvoiceController extends Controller
     {
         $invoices = $this->invoiceService->showAllInvoices();
 
-        return view('master.invoice.index');
+        return view('master.invoice.invoiceShow');
     }
 
     /**
