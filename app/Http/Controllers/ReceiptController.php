@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Model\Receipt;
 use App\Model\Stall;
 use Illuminate\Http\Request;
-use App\Http\Services\CategoryService;
+use App\Http\Services\ReceiptService;
 use App\Http\Services\StallService;
 use GuzzleHttp\Client;
 use DB;
