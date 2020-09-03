@@ -63,8 +63,9 @@ class ElectricityService
     {
         return DB::table('electricities')
             ->where('name', 'like', '%'.$query.'%')
-            ->orWhere('type', 'like', '%'.$query.'%')
-            ->orWhere('value', 'like', '%'.$query.'%')
+            ->orWhere('power_meter', 'like', '%'.$query.'%')
+            ->orWhere('kva_price', 'like', '%'.$query.'%')
+            ->orWhere('kwh_price', 'like', '%'.$query.'%')
             ->whereNull('deleted_at')
             ->get();
     }

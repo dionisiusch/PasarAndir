@@ -53,6 +53,7 @@ class FloorService
         return DB::table('floors')
             ->where('name', 'like', '%'.$query.'%')
             ->orWhere('code', 'like', '%'.$query.'%')
+            ->whereNull('deleted_at')
             ->get();
     }
 }

@@ -70,8 +70,10 @@ class UserService
         return DB::table('users')
             ->where('pic_name', 'like', '%'.$query.'%')
             ->orWhere('pic_phone_number', 'like', '%'.$query.'%')
+            ->orWhere('joined_date', 'like', '%'.$query.'%')
             ->orWhere('username', 'like', '%'.$query.'%')
             ->where('id', '!=' , Auth::guard('employer')->id())
+            ->whereNull('deleted_at')
             ->get();
     }
 }

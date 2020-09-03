@@ -96,9 +96,16 @@ class EmployerController extends Controller
      * @param  \App\Model\Employer  $employer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employer $employer)
+    public function destroy($id)
     {
-        //
+        $msg = 'Data Employer Gagal Dihapus.';
+        $response = $this->employerService->deleteEmployerById($id);
+
+        if($response){
+            $msg = 'Data Employer Berhasil Dihapus.';
+        }
+
+        return $msg;
     }
 
     public function search(Request $request)
