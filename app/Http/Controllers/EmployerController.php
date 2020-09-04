@@ -157,6 +157,11 @@ class EmployerController extends Controller
         return $msg;
     }
 
+    public function register()
+    {
+        return view('auth.registeremployer');
+    }
+
     public function search(Request $request)
     {
         if($request->ajax()) {

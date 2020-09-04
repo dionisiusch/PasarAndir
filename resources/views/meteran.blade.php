@@ -22,8 +22,8 @@
 								<td colspan="2">Meteran Listrik <span id="electricity_meter_code" style="font-weight: "></span></td>
 							</tr>
 							<tr>
-								<td>Meteran Sebelum</td>
-								<td>Meteran Sekarang</td>
+								<td>Stand Awal</td>
+								<td>Stand Akhir</td>
 							</tr>
 							<tr>
 								<td><input type="number" name="electricity_meter_before" placeholder="...."  class="form-control"></td>
@@ -39,8 +39,8 @@
 								<td colspan="2">Meteran Air <span id="electricity_meter_code" style="font-weight: bold"></span></td>
 							</tr>
 							<tr>
-								<td>Meteran Sebelum</td>
-								<td>Meteran Sekarang</td>
+								<td>Stand Awal</td>
+								<td>Stand Akhir</td>
 							</tr>
 							<tr>
 								<td><input type="number" name="water_meter_before" placeholder="...." value="0" class="form-control"></td>
