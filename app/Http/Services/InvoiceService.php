@@ -85,6 +85,7 @@ class InvoiceService
             ->orWhere('status', 'like', '%'.$query.'%')
             ->orWhereIn('stall_id', $stallId)
             ->whereNull('deleted_at')
+            ->orderBy('status', 'asc')
             ->get();
     }
 }
