@@ -13,6 +13,9 @@ use App\Http\Services\ElectricityService;
 use App\Http\Services\StallService;
 use App\Http\Services\StallElectricityService;
 use App\Http\Services\StallWaterService;
+use App\Http\Services\UserService;
+use App\Http\Services\AreaService;
+use App\Http\Services\FloorService;
 use GuzzleHttp\Client;
 
 class InvoiceController extends Controller
@@ -32,6 +35,15 @@ class InvoiceController extends Controller
     /** @var StallService */
     private $stallService;
 
+    /** @var AreaNoService */
+    private $areaService;
+
+    /** @var floorService */
+    private $floorService;
+
+    /** @var userService */
+    private $userService;
+
     public function __construct()
     {
         $this->invoiceService = app(InvoiceService::class);
@@ -39,6 +51,9 @@ class InvoiceController extends Controller
         $this->stallWaterService = app(StallWaterService::class);
         $this->electricityService = app(ElectricityService::class);
         $this->stallService = app(StallService::class);
+        $this->areaService = app(AreaService::class);
+        $this->floorService = app(FloorService::class);
+        $this->userService = app(UserService::class);
     }
 
     /**
@@ -99,6 +114,9 @@ class InvoiceController extends Controller
             $id = $request->get('id');
             $invoice = $this->invoiceService->getInvoiceById($id);
             $stall = $this->stallService->getStallById($invoice->stall_id);
+            $area = $this->areaService->getAreaById($stall->area_id);
+            $floor = $this->floorService->getFloorById($area->floor_id);
+            $user = $this->userService->getUserById($stall->user_id);
             $stallElectricity = $this->stallElectricityService->getStallElectricityById($invoice->stall_electricity_id);
             $stallWater = $this->stallWaterService->getStallWaterById($invoice->stall_water_id);
             $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
@@ -110,7 +128,12 @@ class InvoiceController extends Controller
                 'grand_total' => $billElectricityKwh + $billElectricityKva + $billWater + $invoice->fine - $invoice->discount,
                 'sub_total' => $billElectricityKwh + $billElectricityKva + $billWater,
                 'water_bill' => $billWater,
+                'kwh_price' => $stallElectricity->kwh_price,
+                'kva_price' => $stallElectricity->kva_price,
+                'electricity_meter_after' => $stallElectricity->meter_after,
+                'electricity_meter_before' => $stallElectricity->meter_before,
                 'electricity_bill' => $billElectricityKwh + $billElectricityKva,
+                'electricity_power_meter' => $electricity->power_meter,
                 'electricity_name' => $electricity->name,
                 'updated_at' => $invoice->updated_at,
                 'created_at' => $invoice->created_at,
@@ -120,6 +143,12 @@ class InvoiceController extends Controller
                 'fine' => $invoice->fine,
                 'minimal_payment'  => $invoice->minimal_payment,
                 'discount'  => $invoice->discount,
+                'floor_name' => $floor->name,
+                'floor_code' => $floor->code,
+                'area_no' => $area->no,
+                'area_name' => $area_name,
+                'pic_phone_number' => $user->pic_phone_number,
+                'pic_name' => $user->pic_name,
                 'id'  => $id
             );
             
