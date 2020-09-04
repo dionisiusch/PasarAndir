@@ -11,7 +11,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Title Page-->
-  <title>Dashboard</title>
+  <title>PT AMAN PRIMA JAYA</title>
 
   <!-- Fontfaces CSS-->
   <link href="{{ asset('css/font-face.css') }}" rel="stylesheet" media="all">
@@ -61,21 +61,17 @@
               <a href="/home">
                 <i class="fas fa-tachometer-alt"></i>Dashboard</a>
               </li>
-
-              <li class="active has-sub">
-                <a class="js-arrow" href="#">
-                 <i class="fas fa-table"></i></a><a href="/master"> Invoice</a>
-                 <ul class="list-unstyled navbar__sub-list js-sub-list" style="display: block">
-                  <li class="{{Request::routeIs('master.invoice*') ? 'active' : '' }}">
-                    <a href="/master/invoice">Invoice</a>
-                  </li>
-                </ul>
-              </li> 
-
+              <li class="{{Request::routeIs('meteran') ? 'active' : '' }}">
+                <a href="/meteran">
+                  <i class="fas fa-tachometer-alt"></i>Meteran</a>
+                </li>
               <li class="active has-sub">
                 <a class="js-arrow" href="#">
                  <i class="fas fa-table"></i></a><a href="/master"> Master Data</a>
                  <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{Request::routeIs('master*') ? 'block' : '' }}">
+                 <li class="{{Request::routeIs('master.invoice*') ? 'active' : '' }}">
+                      <a href="/master/invoice">Invoice</a>
+                     </li>
                   <li class="{{Request::routeIs('master.area*') ? 'active' : '' }}">
                     <a href="/master/area">Blok</a>
                   </li>
@@ -99,10 +95,7 @@
                   </li>
                 </ul>
               </li> 
-              <li class="{{Request::routeIs('meteran') ? 'active' : '' }}">
-                <a href="/meteran">
-                  <i class="fas fa-tachometer-alt"></i>Meteran</a>
-                </li>
+             
 
 
               </ul>
@@ -125,22 +118,17 @@
                   <a href="/home">
                     <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                   </li>
-
-                  
-              <li class="active has-sub">
-                <a class="js-arrow" href="#">
-                 <i class="fas fa-table"></i></a><a href="/master"> Invoice</a>
-                 <ul class="list-unstyled navbar__sub-list js-sub-list" style="display: block">
-                  <li class="{{Request::routeIs('master.invoice*') ? 'active' : '' }}">
-                    <a href="/master/invoice">Invoice</a>
-                  </li>
-                </ul>
-              </li> 
-              
+                  <li class="{{Request::routeIs('meteran') ? 'active' : '' }}">
+                <a href="/meteran">
+                  <i class="fas fa fa-book"></i>Meteran</a>
+                </li>  
                   <li class="{{Request::routeIs('master*') ? 'active has-sub' : '' }}">
                     <a class="js-arrow" href="#">
                      <i class="fas fa-table"></i></a><a href="/master"> Master Data</a>
                      <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:block">
+                     <li class="{{Request::routeIs('master.invoice*') ? 'active' : '' }}">
+                      <a href="/master/invoice">Invoice</a>
+                     </li>
                       <li class="{{Request::routeIs('master.area*') ? 'active' : '' }}">
                         <a href="/master/area">Blok</a>
                       </li>
@@ -164,10 +152,7 @@
                   </li>
                     </ul>
                   </li>
-                   <li class="{{Request::routeIs('meteran') ? 'active' : '' }}">
-                <a href="/meteran">
-                  <i class="fas fa fa-book"></i>Meteran</a>
-                </li>  
+              
                 </ul>
               </nav>
             </div>
@@ -194,77 +179,6 @@
 
                     <div class="header-button">
                       <div class="noti-wrap">
-                        <div class="noti__item js-item-menu">
-                          <i class="zmdi zmdi-comment-more"></i>
-                          <span class="quantity">1</span>
-                          <div class="mess-dropdown js-dropdown">
-                            <div class="mess__title">
-                              <p>You have 2 news message</p>
-                            </div>
-                            <div class="mess__item">
-                              <div class="image img-cir img-40">
-                                <img src="images/icon/avatar-06.jpg" alt="Michelle Moreno" />
-                              </div>
-                              <div class="content">
-                                <h6>Michelle Moreno</h6>
-                                <p>Have sent a photo</p>
-                                <span class="time">3 min ago</span>
-                              </div>
-                            </div>
-                            <div class="mess__item">
-                              <div class="image img-cir img-40">
-                                <img src="images/icon/avatar-04.jpg" alt="Diane Myers" />
-                              </div>
-                              <div class="content">
-                                <h6>Diane Myers</h6>
-                                <p>You are now connected on message</p>
-                                <span class="time">Yesterday</span>
-                              </div>
-                            </div>
-                            <div class="mess__footer">
-                              <a href="#">View all messages</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="noti__item js-item-menu">
-                          <i class="zmdi zmdi-email"></i>
-                          <span class="quantity">1</span>
-                          <div class="email-dropdown js-dropdown">
-                            <div class="email__title">
-                              <p>You have 3 New Emails</p>
-                            </div>
-                            <div class="email__item">
-                              <div class="image img-cir img-40">
-                                <img src="images/icon/avatar-06.jpg" alt="Cynthia Harvey" />
-                              </div>
-                              <div class="content">
-                                <p>Meeting about new dashboard...</p>
-                                <span>Cynthia Harvey, 3 min ago</span>
-                              </div>
-                            </div>
-                            <div class="email__item">
-                              <div class="image img-cir img-40">
-                                <img src="images/icon/avatar-05.jpg" alt="Cynthia Harvey" />
-                              </div>
-                              <div class="content">
-                                <p>Meeting about new dashboard...</p>
-                                <span>Cynthia Harvey, Yesterday</span>
-                              </div>
-                            </div>
-                            <div class="email__item">
-                              <div class="image img-cir img-40">
-                                <img src="images/icon/avatar-04.jpg" alt="Cynthia Harvey" />
-                              </div>
-                              <div class="content">
-                                <p>Meeting about new dashboard...</p>
-                                <span>Cynthia Harvey, April 12,,2018</span>
-                              </div>
-                            </div>
-                            <div class="email__footer">
-                              <a href="#">See all emails</a>
-                            </div>
-                          </div>
-                        </div>
                         <div class="noti__item js-item-menu">
                           <i class="zmdi zmdi-notifications"></i>
                           <span class="quantity">3</span>
@@ -319,7 +233,7 @@
                               </div>
                             </div>
                             <div class="account-dropdown__body">
-                              <div class="account-dropdown__item">
+                              <!-- <div class="account-dropdown__item">
                                 <a href="#">
                                   <i class="zmdi zmdi-account"></i>Account</a>
                                 </div>
@@ -330,7 +244,7 @@
                                   <div class="account-dropdown__item">
                                     <a href="#">
                                       <i class="zmdi zmdi-money-box"></i>Billing</a>
-                                    </div>
+                                    </div> -->
                                   </div>
                                   <div class="account-dropdown__footer">
                                     <form id="logout-form" action="{{ url('logout') }}" method="POST">
