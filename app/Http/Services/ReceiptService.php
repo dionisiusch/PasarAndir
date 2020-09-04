@@ -32,6 +32,13 @@ class ReceiptService
         return $receipt;
     }
 
+    public function getReceiptIdByStallIds($stallIds)
+    {
+        $receiptId = Receipt::whereIn('stall_id', $stallIds)->pluck('id');
+
+        return $receiptId;
+    }
+
     public function updateReceiptById($data, $id)
     {
         $receipt = Receipt::find($id);

@@ -39,6 +39,13 @@ class StallService
         return $stall;
     }
 
+    public function getStallIdByUserId($id)
+    {
+        $stallId = Stall::where('user_id', $id)->pluck('id');
+        
+        return $stallId;
+    }
+
     public function updateStallById($data, $id)
     {
         $stall = Stall::find($id);

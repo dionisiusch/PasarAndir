@@ -136,9 +136,15 @@ Route::group([
     });
 });
 
-Route::get('/user', 'HomeController@indexUser')->name('home.user')->middleware('auth:web');
-Route::get('/user/index', 'HomeController@indexUser')->middleware('auth:web');
-Route::put('/password', 'UserController@updatePassword')->name('master.user.updatePassword');
+Route::group([
+    'prefix' => '/user', 
+    'middleware' => 'auth:web'
+], function () {
+    Route::get('/', 'HomeController@indexUser')->name('home.user');
+    Route::get('/index', 'HomeController@indexUser');
+    Route::get('/payment/history', 'InvoiceReceiptController@paymentHistory')->name('master.user.history');
+    Route::put('/password', 'UserController@updatePassword')->name('master.user.updatePassword');
+});
 
 //route ajax livesearch
 Route::get('/floorsearch', 'FloorController@search')->name('master.floor.search');

@@ -6,6 +6,8 @@ use App\Model\Receipt;
 use App\Model\Stall;
 use Illuminate\Http\Request;
 use App\Http\Services\ReceiptService;
+use App\Http\Services\InvoiceService;
+use App\Http\Services\InvoiceReceiptService;
 use App\Http\Services\StallService;
 use GuzzleHttp\Client;
 use DB;
@@ -15,12 +17,20 @@ class ReceiptController extends Controller
     /** @var ReceiptService */
     private $receiptService;
 
+    /** @var InvoiceService */
+    private $invoiceService;
+
+    /** @var InvoiceReceiptService */
+    private $invoiceReceiptService;
+
     /** @var StallService */
     private $stallService;
 
     public function __construct()
     {
         $this->receiptService = app(ReceiptService::class);
+        $this->invoiceService = app(InvoiceService::class);
+        $this->invoiceReceiptService = app(InvoiceReceiptService::class);
         $this->stallService = app(StallService::class);
     }
 
@@ -56,11 +66,13 @@ class ReceiptController extends Controller
     {
         try {
             $request->validate([
+                'invoice_id'=>'required',
                 'stall_id'=>'required',
                 'payment'=>'required'
             ]);
     
-            $response = $this->receiptService->createReceipt($request);
+            $receipt = $this->receiptService->createReceipt($request);
+            $invoiceReceipt = $this->invoiceReceiptService->createInvoiceReceipt($request->invoice_id, $receipt->id);
     
             return redirect('/master/receipt')->with('success', 'Data Receipt Kios Berhasil Ditambahkan.');       
         } catch (Exception $e) {
@@ -79,9 +91,12 @@ class ReceiptController extends Controller
         if($request->ajax()) {
             $id = $request->get('id');
             $receipt = $this->receiptService->getReceiptById($id);
+            $invoiceIds = $this->invoiceReceiptService->showAllInvoicesByReceiptId($id);
+            $invoices = $this->invoiceService->getInvoiceById($invoiceIds);
             $stall = $this->stallService->getStallById($receipt->stall_id);
       
             $data = array(
+                'invoices' => $invoices,
                 'payment' => $receipt->stall,
                 'stall'  => $stall,
                 'id'  => $id

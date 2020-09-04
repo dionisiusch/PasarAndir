@@ -14,11 +14,11 @@ class InvoiceService
         return $invoiceReceipts;
     }
 
-    public function createInvoiceReceipt($data)
+    public function createInvoiceReceipt($invoice_id, $receipt_id)
     {
         $invoiceReceipt = new InvoiceReceipt([
-            'invoice_id' => $data->get('invoice_id'),
-            'receipt_id' => $data->get('receipt_id')
+            'invoice_id' => $invoice_id,
+            'receipt_id' => $receipt_id
         ]);
         $invoiceReceipt->save();
 

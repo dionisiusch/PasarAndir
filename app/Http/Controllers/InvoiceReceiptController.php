@@ -3,10 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\Model\InvoiceReceipt;
+use App\Model\Invoice;
+use App\Model\Receipt;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Services\InvoiceReceiptService;
+use App\Http\Services\InvoiceService;
+use App\Http\Services\ReceiptService;
+use App\Http\Services\StallService;
+use App\Http\Services\UserService;
 
 class InvoiceReceiptController extends Controller
 {
+    /** @var InvoiceReceiptService */
+    private $invoiceReceiptService;
+
+    /** @var InvoiceService */
+    private $invoiceService;
+
+    /** @var ReceiptService */
+    private $receiptService;
+
+    /** @var StallService */
+    private $stallService;
+
+    /** @var UserService */
+    private $userService;
+
+    public function __construct()
+    {
+        $this->invoiceReceiptService = app(InvoiceReceiptService::class);
+        $this->invoiceService = app(InvoiceService::class);
+        $this->receiptService = app(ReceiptService::class);
+        $this->stallService = app(StallService::class);
+        $this->userService = app(UserService::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,6 +48,13 @@ class InvoiceReceiptController extends Controller
     public function index()
     {
         //
+    }
+
+    public function paymentHistory()
+    {
+        $stallIds = $this->stallService->getStallByUserId(Auth::guard('web')->user()->id);
+        $receiptIds = $this->receiptService->getReceiptIdByStallIds($stallIds);
+        $invoiceReceipts = $this->invoiceReceiptService->showAllInvoiceReceiptsByReceiptIds($receiptsIds);
     }
 
     /**
