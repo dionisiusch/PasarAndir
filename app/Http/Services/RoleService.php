@@ -20,4 +20,12 @@ class RoleService
 
         return $role;
     }
+
+    public function searchRole($query)
+    {
+        return DB::table('roles')
+            ->where('name', 'like', '%'.$query.'%')
+            ->whereNull('deleted_at')
+            ->get();
+    }
 }

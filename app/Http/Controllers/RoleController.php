@@ -3,10 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Model\Role;
+use App\Http\Services\RoleService;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+    /** @var RoleService */
+    private $roleService;
+
+    public function __construct()
+    {
+        $this->roleService = app(RoleService::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -81,5 +90,26 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         //
+    }
+
+    public function select2(Request $request){
+        $search = $request->search;
+   
+        if($search != ''){
+            $roles = $this->roleService->searchRole($search);
+        }else{
+            $roles = $this->roleService->showAllRoles();
+        }
+
+        $response = array();
+
+        foreach($roles as $role){
+            $response[] = array(
+                "id"=>$role->id,
+                "text"=>$role->name
+            );
+        }
+           
+        echo json_encode($response);
     }
 }
