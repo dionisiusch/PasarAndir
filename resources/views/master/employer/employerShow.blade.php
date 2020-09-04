@@ -7,7 +7,8 @@
                   <div class="table-data__tool-left">
                     <div class="rs-select2--light rs-select2--md" style="display: contents">
                        <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i style="font-size:150%" class="zmdi zmdi-search"></i>
-                      
+                       <button  onclick="window.location.href='/master/employer/register'" style="float:right" type="button" class="au-btn au-btn-icon au-btn--green au-btn--small" >
+                       <i class="zmdi zmdi-plus"></i>Tambah Karyawan</button>
                     </div>
                   </div>
                 
@@ -37,7 +38,7 @@
       
 
          <!-- modal scroll update -->
-  {{--     <div class="modal fade" id="scrollmodal-update" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
+  <div class="modal fade" id="scrollmodal-update" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -60,11 +61,9 @@
                                                 <label class=" form-control-label">Nama PIC</label>
                                                 <input type="text" id="name" name="name" placeholder="Nama PIC.." class="form-control">
                                                 <label class=" form-control-label">Nomor Telepon</label>
-                                                <input type="number" id="phone_number" name="phone_number" placeholder="Nomor Telepon.." class="form-control">
+                                                <input type="text" id="phone_number" name="phone_number" placeholder="Nomor Telepon.." class="form-control">
                                                 <label class=" form-control-label">Email</label>
-                                                <input type="date" id="joined_date" name="joined_date" placeholder="Tanggal Gabung.." class="form-control">
-                                                <label class=" form-control-label">Role</label>
-                                                <input type="date" id="joined_date" name="joined_date" placeholder="Tanggal Gabung.." class="form-control">
+                                                <input type="email" id="email" name="email" placeholder="Email.." class="form-control">
                                             </div>
                                        
                                     </div>
@@ -77,7 +76,7 @@
                                 </div>
             </div>      
           </div>
-        </div>--}}
+        </div>
       <!-- end modal scroll --> 
 
 
@@ -119,7 +118,7 @@ $.ajaxSetup({
   if(confirm("Hapus data ini?"))
   {
    $.ajax({
-        url:'/master/user/'+id,
+        url:'/master/employer/'+id,
         type: 'post',
         data: {_method: 'delete'},
     success: function(result) {
@@ -136,32 +135,32 @@ $.ajaxSetup({
  });
 
 
-// $(document).on('click', '.edit', function(){
+$(document).on('click', '.edit', function(){
 
-//    var id = $(this).attr('id');
+   var id = $(this).attr('id');
 
-//      $.ajax({
-//    url:"/master/user/"+id,
-//    method:'GET',
-//    dataType:'json',
-//    data:{id:id},
-//    success:function(response)
-//    {
-//    	 $('#update').attr('action', '/master/user/'+id+"/pic");
-//      $('#username').val(response.username);
-//    	 $('#pic_name').val(response.pic_name);
-//      $('#pic_phone_number').val(response.pic_phone_number);
-//      $('#joined_date').val(response.joined_date);
-//    console.log(response);
-//    }, error: function(request,msg,error) {
-//        console.log(msg);
-//        console.log(error);
-//     }
-//   })
+     $.ajax({
+   url:"/master/employer/"+id,
+   method:'GET',
+   dataType:'json',
+   data:{id:id},
+   success:function(response)
+   {
+   	 $('#update').attr('action', '/master/employer/'+id);
+     $('#username').val(response.username);
+   	 $('#pic_name').val(response.name);
+     $('#phone_number').val(response.phone_number);
+     $('#email').val(response.email);
+   console.log(response);
+   }, error: function(request,msg,error) {
+       console.log(msg);
+       console.log(error);
+    }
+  })
 
 
 
-// });
+});
 
 });
 </script>

@@ -7,12 +7,18 @@ use App\Model\Stall;
 use App\Model\Electricity;
 use App\Model\StallElectricity;
 use App\Model\StallWater;
+use App\Model\Floor;
+use App\Model\Area;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Services\InvoiceService;
 use App\Http\Services\ElectricityService;
 use App\Http\Services\StallService;
 use App\Http\Services\StallElectricityService;
 use App\Http\Services\StallWaterService;
+use App\Http\Services\UserService;
+use App\Http\Services\AreaService;
+use App\Http\Services\FloorService;
 use GuzzleHttp\Client;
 use DB;
 
@@ -33,6 +39,15 @@ class InvoiceController extends Controller
     /** @var StallService */
     private $stallService;
 
+    /** @var UserService */
+    private $userService;
+
+    /** @var FloorService */
+    private $floorService;
+
+    /** @var AreaService */
+    private $areaService;
+
     public function __construct()
     {
         $this->invoiceService = app(InvoiceService::class);
@@ -40,6 +55,9 @@ class InvoiceController extends Controller
         $this->stallWaterService = app(StallWaterService::class);
         $this->electricityService = app(ElectricityService::class);
         $this->stallService = app(StallService::class);
+        $this->userService = app(UserService::class);
+        $this->areaService = app(AreaService::class);
+        $this->floorService = app(FloorService::class);
     }
 
     /**
@@ -205,20 +223,25 @@ class InvoiceController extends Controller
 			if($total_row > 0) {
 				foreach($data as $row) {
                     $stall = $this->stallService->getStallById($row->stall_id);
+                    $user = $this->userService->getUserById($stall->user_id);
+                    $area = $this->areaService->getAreaById($stall->area_id);
+                    $floor = $this->floorService->getFloorById($area->floor_id);
+                    $blok = "[".$floor->name ."] ". " Blok " . $area->name . " No. " . $area->no;
+                    $status = "";
+                    if($row->status=="Lunas"){
+                        $status = "<span class='badge badge-success'>Lunas</span>";
+                    }else{
+                        $status = "<span class='badge badge-danger'>Belum Lunas</span>";
+                    }
                     $output .= '
-                    <tr class="tr-shadow">
+                    <tr class="tr-shadow invoice-row" id="'.$row->id.'" data-toggle="modal" data-target="#largeModal">
+                        <td>'.$user->pic_name.'</td>
+                        <td>'.$blok.'</td>
                         <td>'.$stall->name.'</td>
-                        <td>'.$row->discount.'</td>
-                        <td>'.$row->minimal_payment.'</td>
-                        <td>'.$row->fine.'</td>
-                        <td>'.$row->month_bil.'</td>
-                        <td>'.$row->grace_date.'</td>
-                        <td>'.$row->status.'</td>
+                        <td>'.$row->month_bill.'</td>
+                        <td>'.$status.'</td>
 						<td>
 							<div class="table-data-feature">
-							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
-								<i class="zmdi zmdi-edit"></i>
-							</button>
 							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
 								<i class="zmdi zmdi-delete"></i>
 							</button>

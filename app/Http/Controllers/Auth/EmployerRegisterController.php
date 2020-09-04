@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Employer;
+use Illuminate\Support\Facades\Hash;
 
 class EmployerRegisterController extends Controller
 {
@@ -30,6 +31,6 @@ class EmployerRegisterController extends Controller
 
         $employer->save();
 
-        // return redirect('/master/employer')->with('success', 'Data Employer Berhasil Ditambahkan.');
+        return redirect('/master/employer')->with('success', 'Data Employer Berhasil Ditambahkan.');
     }
 }

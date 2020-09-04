@@ -37,7 +37,7 @@
 </head>
 
 <body class="animsition">
-    <div class="page-wrapper">
+    <div class="page-wrapper" style="overflow:auto">
         <div class="page-content--bge5">
             <div class="container">
                 <div class="login-wrap">
@@ -48,11 +48,21 @@
                             </a>
                         </div>
                         <div class="login-form">
-                            <form method="POST" action="{{ route('register') }}">
+                            <form method="POST" action="{{ route('master.employer.store') }}">
                              @csrf
                                 <div class="form-group">
                                     <label>Username</label>
                                      <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
+
+                                @error('username')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label>Role</label>
+                                     <input id="role" type="text" class="form-control" name="role_id" required>
 
                                 @error('username')
                                     <span class="invalid-feedback" role="alert">
@@ -76,7 +86,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>PIC Name</label>
-                                    <input id="pic_name" type="text" class="form-control @error('pic_name') is-invalid @enderror" name="pic_name" value="{{ old('pic_name') }}" required autocomplete="pic_name">
+                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name">
 
                                 @error('pic_name')
                                     <span class="invalid-feedback" role="alert">
@@ -85,8 +95,18 @@
                                 @enderror
                                 </div>
                                 <div class="form-group">
+                                    <label>E-mail</label>
+                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" >
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                                </div>
+                               <div class="form-group">
                                     <label>PIC Phone Number</label>
-                                    <input id="pic_phone_number" type="text" class="form-control @error('pic_phone_number') is-invalid @enderror" name="pic_phone_number" value="{{ old('pic_phone_number') }}" required autocomplete="pic_phone_number" >
+                                    <input id="phone_number" type="text" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" value="{{ old('phone_number') }}" required autocomplete="phone_number" >
 
                                 @error('pic_phone_number')
                                     <span class="invalid-feedback" role="alert">
@@ -94,6 +114,8 @@
                                     </span>
                                 @enderror
                                 </div>
+                            
+                                
                                 <div class="login-checkbox">
                                     <label>
                                         <input type="checkbox" name="aggree">Agree the terms and policy

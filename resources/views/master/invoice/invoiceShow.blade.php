@@ -16,11 +16,12 @@
                        <tr>
                           <th>User</th>
                           <th>Blok</th>
+                          <th>Nama Toko</th>
                           <th>Periode</th>
                           <th>Status</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody id="ajax">
                       </tbody>
                     </table>
                   <!-- END DATA TABLE -->
@@ -32,7 +33,7 @@
 </div>
 
      <!-- modal scroll -->
-      <div class="modal fade" id="scrollmodal" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
+      <!-- <div class="modal fade" id="scrollmodal" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -97,8 +98,85 @@
             </div>      
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- end modal scroll -->
+
+      <!-- modal large -->
+			<div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg" style="max-width:1200px"role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="largeModalLabel">Detail Invoice</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<table class="table table-bordered">
+              <tbody id="modal-invoice">
+              <tr>
+              <td colspan='8' style="background-color:#ffd2a6"></td>
+              </tr>
+              <tr>
+              <td style="font-weight:bold">NAMA</td>
+              <td colspan='3' id="name">Entis Sugeng</td>
+              <td style="font-weight:bold">BULAN/TAHUN</td>
+              <td colspan='3'>Agustus 2020</td>
+              </tr>
+              <tr>
+              <td style="font-weight:bold">LOKASI/BLOK</td>
+              <td colspan='3'>Lantai 1.D.2</td>
+              <td style="font-weight:bold">TANGGAL BAYAR</td>
+              <td colspan='3'>21 Agustus 2020</td>
+              </tr>
+              <tr>
+              <td colspan='8' style="background-color:#ffd2a6;text-align:center;font-weight:bold">RINCIAN PEMAKAIAN DAN TAGIHAN</td>
+              </tr>
+              <td colspan="2" style="font-weight:bold">SATUAN</td>
+              <td style="font-weight:bold">BEBAN</td>
+              <td style="font-weight:bold">TARIF/KWH</td>
+              <td style="font-weight:bold">BIAYA PEMAKAIAN/KWH</td>
+              <td style="font-weight:bold">TAGIHAN</td>
+              <td>Rp 89,400</td>
+              <td style="font-weight:bold">TOTAL TAGIHAN</td>
+              </tr>
+              <tr>
+              <td style="font-weight:bold">DATA</td>
+              <td>450</td>
+              <td rowspan="4">Rp 24,300</td>
+              <td rowspan="4">Rp 2,100</td>
+              <td rowspan="4">Rp 65,300</td>
+              <td style="font-weight:bold">BIAYA ADMIN</td>
+              <td></td>
+              <td rowspan="4">Rp 89,300</td>
+              </tr>
+              <tr>
+              <td style="font-weight:bold">STAND AWAL</td>
+              <td>2289</td>
+              <td style="font-weight:bold">BIAYA PERAWATAN</td>
+              <td></td>
+              </tr>
+              <tr>
+              <td style="font-weight:bold">STAND AKHIR</td>
+              <td>2320</td>
+              <td></td>
+              <td></td>
+              </tr>
+              <tr>
+              <td style="font-weight:bold">PEMAKAIAN/KWH</td>
+              <td>31</td>
+              <td></td>
+              <td></td>
+              <tr>
+              <td colspan='4'></td>
+              </tr>
+              </tbody>
+              </table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end modal large -->
 
        
 
@@ -126,7 +204,7 @@ $.ajaxSetup({
    data:{query:query},
    success:function(response)
    {
-   $('tbody').html(response.table_data);
+   $('#ajax').html(response.table_data);
    }, error: function(request,msg,error) {
        console.log(msg);
        console.log(error);
@@ -137,6 +215,23 @@ $.ajaxSetup({
  $(document).on('keyup', '#search', function(){
   var query = $(this).val();
   fetch_customer_data(query);
+ });
+
+ $(document).on('click', '.invoice-row', function(){
+  var id = $(this).attr('id');
+   $.ajax({
+        url:'/master/invoice/'+id,
+        type: 'get',
+        data: {id:id},
+    success: function(response) {
+      $('#name').html(response.name);
+      console.log(response);
+    },
+    error: function(request,msg,error) {
+       console.log(msg);
+       console.log(error);
+    }
+});
  });
 
  $(document).on('click', '.delete', function(){
