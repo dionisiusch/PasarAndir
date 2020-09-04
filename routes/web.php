@@ -134,6 +134,8 @@ Route::group([
     });
 });
 
+Route::get('/user', 'HomeController@indexUser')->name('home.user')->middleware('auth:web');
+Route::get('/user/index', 'HomeController@indexUser')->middleware('auth:web');
 Route::put('/password', 'UserController@updatePassword')->name('master.user.updatePassword');
 
 //route ajax livesearch
