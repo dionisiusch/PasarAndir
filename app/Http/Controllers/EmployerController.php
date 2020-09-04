@@ -62,9 +62,24 @@ class EmployerController extends Controller
      * @param  \App\Model\Employer  $employer
      * @return \Illuminate\Http\Response
      */
-    public function show(Employer $employer)
+    public function show(Request $request)
     {
-        //
+        if($request->ajax()) {
+            $id = $request->get('id');
+            $employer = $this->employerService->getEmployerById($id);
+            $role = $this->roleService->getRoleById($user->role_id);
+      
+            $data = array(
+                'email'  => $employer->email,
+                'phone_number'  => $employer->phone_number,
+                'name'  => $employer->name,
+                'username'  => $employer->username,
+                'role_name' => $role->name,
+                'id'  => $id
+            );
+            
+            return json_encode($data);
+        }
     }
 
     /**
