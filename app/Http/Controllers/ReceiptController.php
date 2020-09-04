@@ -3,10 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Model\Receipt;
+use App\Model\Stall;
 use Illuminate\Http\Request;
+use App\Http\Services\ReceiptService;
+use App\Http\Services\StallService;
+use GuzzleHttp\Client;
+use DB;
 
 class ReceiptController extends Controller
 {
+    /** @var ReceiptService */
+    private $receiptService;
+
+    /** @var StallService */
+    private $stallService;
+
+    public function __construct()
+    {
+        $this->receiptService = app(ReceiptService::class);
+        $this->stallService = app(StallService::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +31,9 @@ class ReceiptController extends Controller
      */
     public function index()
     {
-        //
+        $receipts = $this->receiptService->showAllReceipts();
+
+        return view('master.receipt.index');
     }
 
     /**
@@ -35,7 +54,18 @@ class ReceiptController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $request->validate([
+                'stall_id'=>'required',
+                'payment'=>'required'
+            ]);
+    
+            $response = $this->receiptService->createReceipt($request);
+    
+            return redirect('/master/receipt')->with('success', 'Data Receipt Kios Berhasil Ditambahkan.');       
+        } catch (Exception $e) {
+            return redirect('/master/receipt')->with('success', 'Data Receipt Kios Gagal Ditambahkan.'); 
+        }
     }
 
     /**
@@ -44,9 +74,21 @@ class ReceiptController extends Controller
      * @param  \App\Model\Receipt  $receipt
      * @return \Illuminate\Http\Response
      */
-    public function show(Receipt $receipt)
+    public function show(Request $request)
     {
-        //
+        if($request->ajax()) {
+            $id = $request->get('id');
+            $receipt = $this->receiptService->getReceiptById($id);
+            $stall = $this->stallService->getStallById($receipt->stall_id);
+      
+            $data = array(
+                'payment' => $receipt->stall,
+                'stall'  => $stall,
+                'id'  => $id
+            );
+            
+            return json_encode($data);
+        }
     }
 
     /**
@@ -67,9 +109,20 @@ class ReceiptController extends Controller
      * @param  \App\Model\Receipt  $receipt
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Receipt $receipt)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $request->validate([
+                'stall_id'=>'required',
+                'payment'=>'required'
+            ]);
+    
+            $response = $this->receiptService->updateReceiptById($request, $id);
+    
+            return redirect('/master/receipt')->with('success', 'Data Receipt Kios Berhasil Di Update.');       
+        } catch (Exception $e) {
+            return redirect('/master/receipt')->with('success', 'Data Receipt Kios Gagal Di Update.'); 
+        }
     }
 
     /**
@@ -78,8 +131,64 @@ class ReceiptController extends Controller
      * @param  \App\Model\Receipt  $receipt
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Receipt $receipt)
+    public function destroy($id)
     {
-        //
+        $msg = 'Data Receipt Kios Gagal Dihapus.';
+        $response = $this->receiptService->deleteReceiptById($id);
+
+        if($response){
+            $msg = 'Data Receipt Kios Berhasil Dihapus.';
+        }
+
+        return $msg;
     }
+
+    public function search(Request $request)
+    {
+        if($request->ajax()) {
+            $output = '';
+            $query = $request->get('query');
+            if($query != '') {
+                $data = $this->receiptService->searchReceipt($query);
+            } else {
+                $data = $this->receiptService->showAllReceipts();
+            }
+         
+            $total_row = $data->count();
+			if($total_row > 0) {
+				foreach($data as $row) {
+                    $stall = $this->stallService->getStallById($row->stall_id);
+                    $output .= '
+					<tr class="tr-shadow">
+						<td>'.$row->name.'</td>
+						<td>
+							<div class="table-data-feature">
+							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+								<i class="zmdi zmdi-edit"></i>
+							</button>
+							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+								<i class="zmdi zmdi-delete"></i>
+							</button>
+							</div>
+						</td>
+					</tr>
+					<tr class="spacer"></tr> 
+        	        ';
+      	        }
+            } else {
+				$output = '
+				<tr class="tr-shadow">
+				    <td align="center" colspan="2">Data not found.</td>
+				</tr>
+				';
+			}
+			
+			$data = array(
+				'table_data'  => $output,
+				'total_data'  => $total_row
+			);
+			
+   		    return json_encode($data);
+ 		}
+	}
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Services\UserService;
 use GuzzleHttp\Client;
 use DB;
@@ -52,6 +53,28 @@ class UserController extends Controller
             );
             
             return json_encode($data);
+        }
+    }
+
+    public function updatePassword(Request $request)
+    {
+        try {
+            $request->validate([
+                'old_password'=> ['required', 'string'],
+                'new_password' => ['required', 'string', 'min:8', 'confirmed'],
+            ]);
+
+            $user = $this->userService->getUserById(Auth::guard('web')->id());
+
+            if(Hash::make($user->password) != Hash::make($request->old_password)){
+                // return redirect('/password')->with('error', 'Password User Gagal Di Ubah.'); 
+            }
+    
+            $response = $this->userService->updateUserPasswordById($request->new_password, Auth::guard('web')->id());
+    
+            // return redirect('/password')->with('success', 'Password User Berhasil Di Ubah.');       
+        } catch (Exception $e) {
+            // return redirect('/password')->with('error', 'Password User Gagal Di Ubah.');       
         }
     }
 

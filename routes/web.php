@@ -99,6 +99,17 @@ Route::group([
     });
 
     Route::group([
+        'prefix' => '/receipt' 
+        // 'middleware' => 'auth'
+    ], function () {
+        Route::get('/', 'ReceiptController@index')->name('master.receipt.index');
+        Route::post('/', 'ReceiptController@store')->name('master.receipt.store');
+        Route::get('/{id}', 'ReceiptController@show')->name('master.receipt.show');
+        Route::put('/{id}', 'ReceiptController@update')->name('master.receipt.update');
+        Route::delete('/{id}', 'ReceiptController@destroy')->name('master.receipt.delete');
+    });
+
+    Route::group([
         'prefix' => '/user' 
         // 'middleware' => 'auth'
     ], function () {
@@ -116,10 +127,14 @@ Route::group([
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'EmployerController@index')->name('master.employer.index');
+        Route::put('/{id}', 'EmployerController@update')->name('master.employer.update');
+        Route::put('/{id}/password', 'EmployerController@updatePassword')->name('master.employer.updatePassword');
         Route::delete('/{id}', 'EmployerController@destroy')->name('master.employer.delete');
         Route::post('/', 'Auth\EmployerRegisterController@register')->name('master.employer.store');
     });
 });
+
+Route::put('/password', 'UserController@updatePassword')->name('master.user.updatePassword');
 
 //route ajax livesearch
 Route::get('/floorsearch', 'FloorController@search')->name('master.floor.search');
@@ -129,6 +144,7 @@ Route::get('/electricitysearch', 'ElectricityController@search')->name('master.e
 Route::get('/stallsearch', 'StallController@search')->name('master.stall.search');
 Route::get('/usersearch', 'UserController@search')->name('master.user.search');
 Route::get('/employersearch', 'EmployerController@search')->name('master.employer.search');
+Route::get('/receiptsearch', 'ReceiptController@search')->name('master.receipt.search');
 Route::get('/invoicesearch', 'InvoiceController@search')->name('master.invoice.search');
 
 //route aax select2

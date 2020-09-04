@@ -85,9 +85,43 @@ class EmployerController extends Controller
      * @param  \App\Model\Employer  $employer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Employer $employer)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $request->validate([
+                'name'=>'required',
+                'email'=>['required', 'email', 'unique:employers'],
+                'phone_number'=>['required', 'max:13', 'unique:employers'],
+            ]);
+    
+            $response = $this->employerService->updateEmployerById($request);
+    
+            // return redirect('/master/employer')->with('success', 'Data Employer Berhasil Di Update.');       
+        } catch (Exception $e) {
+            // return redirect('/master/employer')->with('error', 'Data Employer Gagal Di Update.');       
+        }
+    }
+
+    public function updatePassword(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'old_password'=> ['required', 'string'],
+                'new_password' => ['required', 'string', 'min:8', 'confirmed'],
+            ]);
+
+            $employer = $this->employerService->getEmployerById($id);
+
+            if(Hash::make($employer->password) != Hash::make($request->old_password)){
+                // return redirect('/master/employer')->with('error', 'Password Employer Gagal Di Ubah.'); 
+            }
+    
+            $response = $this->employerService->updateEmployerPasswordById($request->new_password, $id);
+    
+            // return redirect('/master/employer')->with('success', 'Data Employer Berhasil Di Ubah.');       
+        } catch (Exception $e) {
+            // return redirect('/master/employer')->with('error', 'Data Employer Gagal Di Ubah.');       
+        }
     }
 
     /**

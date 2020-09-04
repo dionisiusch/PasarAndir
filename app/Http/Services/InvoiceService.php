@@ -68,4 +68,23 @@ class InvoiceService
 
         return $invoice;
     }
+
+    public function searchInvoice($query)
+    {
+        $stallId = DB::table('stalls')
+            ->where('name', 'like', '%'.$query.'%')
+            ->whereNull('deleted_at')
+            ->pluck('id');
+
+        return DB::table('invoices')
+            ->where('discount', 'like', '%'.$query.'%')
+            ->orWhere('minimal_payment', 'like', '%'.$query.'%')
+            ->orWhere('fine', 'like', '%'.$query.'%')
+            ->orWhere('month_bill', 'like', '%'.$query.'%')
+            ->orWhere('grace_date', 'like', '%'.$query.'%')
+            ->orWhere('status', 'like', '%'.$query.'%')
+            ->orWhereIn('stall_id', $stallId)
+            ->whereNull('deleted_at')
+            ->get();
+    }
 }
