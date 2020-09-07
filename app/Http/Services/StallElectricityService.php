@@ -19,11 +19,18 @@ class StallElectricityService
             'stall_id' => $data->get('stall_id'),
             'meter_before' => $data->get('meter_before'),
             'meter_after' => $data->get('meter_after'),
-            'kva_price' => $data->get('kva_price'), //HARUSNYA GA GINI, NANTI DIBENERIN KALO UDAH MAU JADI
-            'kwh_price' => $data->get('kva_price') //HARUSNYA GA GINI, NANTI DIBENERIN KALO UDAH MAU JADI
+            'kva_price' => $data->get('kva_price'),
+            'kwh_price' => $data->get('kva_price')
         ]);
         $stallElectricity->save();
 
+        return $stallElectricity;
+    }
+
+    public function getNewestStallElectricityById($id)
+    {
+        $stallElectricity = StallElectricity::where('stall_id', $id)->orderBy('created_at', 'DESC')->first();
+        
         return $stallElectricity;
     }
 

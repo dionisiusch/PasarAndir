@@ -93,15 +93,16 @@ class InvoiceController extends Controller
         //DISCOUNT AND FINE NOT REQUIRED
         $request->validate([
             'stall_id'=>'required',
-            'stall_electricity_id'=>'required',
-            'stall_water_id'=>'required',
             'minimal_payment'=>'required',
             'month_bill'=>'required',
             'grace_date'=>'required',
             'status'=>'required'
         ]);
 
-        $response = $this->invoiceService->createInvoice($request);
+        $stallElectricityId = $this->stallElectricityService->getNewestStallElectricityById($request->stall_id);
+        $stallWaterId = $this->stallWaterService->getNewestStallWaterById($request->stall_id);
+
+        $response = $this->invoiceService->createInvoice($request, $stallElectricityId, $stallWaterId);
 
         // return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Ditambahkan.');       
     }

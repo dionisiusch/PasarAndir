@@ -14,12 +14,12 @@ class InvoiceService
         return $invoices;
     }
 
-    public function createInvoice($stallElectricityId, $stallWaterId, $data)
+    public function createInvoice($data, $stallElectricityId, $stallWaterId)
     {
         $invoice = new Invoice([
             'stall_id' => $data->get('stall_id'),
-            'stall_electricity_id' => $data->get('stall_electricity_id'),
-            'stall_water_id' => $data->get('stall_water_id'),
+            'stall_electricity_id' => $stallElectricityId,
+            'stall_water_id' => $stallWaterId,
             'discount' => $data->get('discount') ?  $data->get('discount') : 0,
             'minimal_payment' => $data->get('minimal_payment'),
             'fine' => $data->get('fine') ? $data->get('fine') : 0,

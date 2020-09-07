@@ -15,41 +15,48 @@ class StallWaterService
 
     public function createStallWater($data)
     {
-        $stallWaters = new StallWater([
+        $stallWater = new StallWater([
             'stall_id' => $data->get('stall_id'),
             'meter_before' => $data->get('meter_before'),
             'meter_after' => $data->get('meter_after'),
-            'price' => $data->get('price'), //HARUSNYA GA GINI, NANTI DIBENERIN KALO UDAH MAU JADI
-            'fixed_price' => $data->get('price') //HARUSNYA GA GINI, NANTI DIBENERIN KALO UDAH MAU JADI
+            'price' => $data->get('price'),
+            'fixed_price' => $data->get('price')
         ]);
-        $stallWaters->save();
+        $stallWater->save();
 
-        return $stallWaters;
+        return $stallWater;
     }
 
     public function getStallWaterById($id)
     {
-        $stallWaters = StallWater::find($id);
+        $stallWater = StallWater::find($id);
         
-        return $stallWaters;
+        return $stallWater;
+    }
+
+    public function getNewestStallWaterById($id)
+    {
+        $stallWater = StallWater::where('stall_id', $id)->orderBy('created_at', 'DESC')->first();
+        
+        return $stallWater;
     }
 
     public function updateStallWaterById($data, $id)
     {
-        $stallWaters = StallWater::find($id);
-        $stallWaters->stall_id = $data->get('stall_id');
-        $stallWaters->meter_before = $data->get('meter_before');
-        $stallWaters->meter_after = $data->get('meter_after');
-        $stallWaters->save();
+        $stallWater = StallWater::find($id);
+        $stallWater->stall_id = $data->get('stall_id');
+        $stallWater->meter_before = $data->get('meter_before');
+        $stallWater->meter_after = $data->get('meter_after');
+        $stallWater->save();
 
-        return $stallWaters;
+        return $stallWater;
     }
 
     public function deleteStallWaterById($id)
     {
-        $stallWaters = StallWater::find($id);
-        $stallWaters->delete();
+        $stallWater = StallWater::find($id);
+        $stallWater->delete();
 
-        return $stallWaters;
+        return $stallWater;
     }
 }
