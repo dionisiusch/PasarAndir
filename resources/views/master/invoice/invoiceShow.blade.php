@@ -119,15 +119,15 @@
               </tr>
               <tr>
               <td style="font-weight:bold">NAMA</td>
-              <td colspan='3' id="name">Entis Sugeng</td>
+              <td colspan='3' id="name"></td>
               <td style="font-weight:bold">BULAN/TAHUN</td>
-              <td colspan='3'>Agustus 2020</td>
+              <td colspan='3' id="month_bill"></td>
               </tr>
               <tr>
               <td style="font-weight:bold">LOKASI/BLOK</td>
-              <td colspan='3'>Lantai 1.D.2</td>
-              <td style="font-weight:bold">TANGGAL BAYAR</td>
-              <td colspan='3'>21 Agustus 2020</td>
+              <td colspan='3' id="area"></td>
+              <td style="font-weight:bold">JATUH TEMPO</td>
+              <td colspan='3' id="grace_date"></td>
               </tr>
               <tr>
               <td colspan='8' style="background-color:#ffd2a6;text-align:center;font-weight:bold">RINCIAN PEMAKAIAN DAN TAGIHAN</td>
@@ -137,34 +137,34 @@
               <td style="font-weight:bold">TARIF/KWH</td>
               <td style="font-weight:bold">BIAYA PEMAKAIAN/KWH</td>
               <td style="font-weight:bold">TAGIHAN</td>
-              <td>Rp 89,400</td>
+              <td id="sub_total"></td>
               <td style="font-weight:bold">TOTAL TAGIHAN</td>
               </tr>
               <tr>
               <td style="font-weight:bold">DATA</td>
-              <td>450</td>
-              <td rowspan="4">Rp 24,300</td>
-              <td rowspan="4">Rp 2,100</td>
-              <td rowspan="4">Rp 65,300</td>
+              <td id="power_meter"></td>
+              <td rowspan="4" id="area_price"></td>
+              <td rowspan="4" id="kwh_price"></td>
+              <td rowspan="4" id="electricity_bill"></td>
               <td style="font-weight:bold">BIAYA ADMIN</td>
               <td></td>
-              <td rowspan="4">Rp 89,300</td>
+              <td rowspan="4" id="total"></td>
               </tr>
               <tr>
               <td style="font-weight:bold">STAND AWAL</td>
-              <td>2289</td>
+              <td id="electricity_meter_before">2289</td>
               <td style="font-weight:bold">BIAYA PERAWATAN</td>
               <td></td>
               </tr>
               <tr>
               <td style="font-weight:bold">STAND AKHIR</td>
-              <td>2320</td>
+              <td id="electricity_meter_after"></td>
               <td></td>
               <td></td>
               </tr>
               <tr>
               <td style="font-weight:bold">PEMAKAIAN/KWH</td>
-              <td>31</td>
+              <td id="electricity_meter_used"></td>
               <td></td>
               <td></td>
               <tr>
@@ -212,6 +212,24 @@ $.ajaxSetup({
   })
  }
 
+ function rupiah(angka){
+  var angka_str = angka.toString(); 
+  var number_string = angka_str.replace(/[^,\d]/g, ''),
+  split       = number_string.split('.'),
+  sisa        = split[0].length % 3,
+  rupiah        = split[0].substr(0, sisa),
+  ribuan        = split[0].substr(sisa).match(/\d{3}/gi);
+ 
+  // tambahkan titik jika yang di input sudah menjadi angka ribuan
+  if(ribuan){
+    separator = sisa ? '.' : '';
+    rupiah += separator + ribuan.join('.');
+  }
+ 
+  rupiah = split[1] != undefined ? rupiah + '' + split[1] + '' : rupiah;
+  return('Rp ' + rupiah);
+}
+
  $(document).on('keyup', '#search', function(){
   var query = $(this).val();
   fetch_customer_data(query);
@@ -222,10 +240,22 @@ $.ajaxSetup({
    $.ajax({
         url:'/master/invoice/'+id,
         type: 'get',
+        dataType:'json',
         data: {id:id},
     success: function(response) {
-      $('#name').html(response.name);
-      console.log(response);
+      $('#name').html(response.pic_name);
+      $('#month_bill').html(response.month_bill);
+      $('#area').html(response.area_name);
+      $('#power_meter').html(response.electricity_power_meter);
+      $('#sub_total').html(rupiah(response.sub_total));
+      $('#area_price').html(rupiah(response.area_price));
+      $('#electricity_bill').html(rupiah(response.electricity_bill));
+      $('#total').html(rupiah(response.grand_total));
+      $('#electricity_meter_before').html(response.electricity_meter_before);
+      $('#electricity_meter_after').html(response.electricity_meter_after);
+      $('#electricity_meter_used').html(response.electricity_meter_used);
+      $('#kwh_price').html(rupiah(response.kwh_price));
+      $('#grace_date').html(response.grace_date);
     },
     error: function(request,msg,error) {
        console.log(msg);

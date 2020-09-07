@@ -127,6 +127,8 @@ class InvoiceController extends Controller
             $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
             $billElectricityKva = $electricity->power_meter * $stallElectricity->kva_price;
             $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
+            $stallElectricity_used = $stallElectricity->meter_after -  $stallElectricity->meter_before;
+            $area_name = "[".$floor->name."]"." Blok ".$area->name." No. ".$area->no;
 
             $data = array(
                 'grand_total' => $billElectricityKwh + $billElectricityKva + $billWater + $invoice->fine - $invoice->discount,
@@ -136,6 +138,7 @@ class InvoiceController extends Controller
                 'kva_price' => $stallElectricity->kva_price,
                 'electricity_meter_after' => $stallElectricity->meter_after,
                 'electricity_meter_before' => $stallElectricity->meter_before,
+                'electricity_meter_used' => $stallElectricity_used,
                 'electricity_bill' => $billElectricityKwh + $billElectricityKva,
                 'electricity_power_meter' => $electricity->power_meter,
                 'electricity_name' => $electricity->name,
@@ -153,6 +156,7 @@ class InvoiceController extends Controller
                 'area_name' => $area_name,
                 'pic_phone_number' => $user->pic_phone_number,
                 'pic_name' => $user->pic_name,
+                'area_price' => $area->price,
                 'id'  => $id
             );
             

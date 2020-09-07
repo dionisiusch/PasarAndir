@@ -65,6 +65,18 @@
                 <a href="/meteran">
                   <i class="fas fa-tachometer-alt"></i>Meteran</a>
                 </li>
+                <li class="active has-sub">
+                <a class="js-arrow" href="#">
+                 <i class="fas fa-usd"></i></a><a href="#"> Accounting</a>
+                 <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{Request::routeIs('master/invoice/create*') ? 'block' : '' }}">
+                  <li class="{{Request::routeIs('master.stall*') ? 'active' : '' }}">
+                    <a href="/master/invoice/create">Tambah Invoice</a>
+                  </li>
+                   <li>
+                    <a href="/master/receipt">Pembayaran</a>
+                  </li>
+                </ul>
+              </li> 
               <li class="active has-sub">
                 <a class="js-arrow" href="#">
                  <i class="fas fa-table"></i></a><a href="/master"> Master Data</a>
@@ -121,7 +133,19 @@
                   <li class="{{Request::routeIs('meteran') ? 'active' : '' }}">
                 <a href="/meteran">
                   <i class="fas fa fa-book"></i>Meteran</a>
-                </li>  
+                </li>
+                <li class="active has-sub">
+                <a class="js-arrow" href="#">
+                 <i class="fas fa-usd"></i></a><a href="#"> Accounting</a>
+                 <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{Request::routeIs('master/invoice/create*') ? 'block' : '' }}">
+                  <li class="{{Request::routeIs('master.stall*') ? 'active' : '' }}">
+                    <a href="/master/invoice/create">Tambah Invoice</a>
+                  </li>
+                   <li>
+                    <a href="/master/receipt">Pembayaran</a>
+                  </li>
+                </ul>
+              </li>   
                   <li class="{{Request::routeIs('master*') ? 'active has-sub' : '' }}">
                     <a class="js-arrow" href="#">
                      <i class="fas fa-table"></i></a><a href="/master"> Master Data</a>
