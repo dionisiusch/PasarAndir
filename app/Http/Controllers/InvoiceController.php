@@ -19,6 +19,7 @@ use App\Http\Services\StallWaterService;
 use App\Http\Services\UserService;
 use App\Http\Services\AreaService;
 use App\Http\Services\FloorService;
+use App\Http\Helpers\Helper;
 use GuzzleHttp\Client;
 use DB;
 
@@ -48,6 +49,9 @@ class InvoiceController extends Controller
     /** @var AreaService */
     private $areaService;
 
+    /** @var Helper */
+    private $helper;
+
     public function __construct()
     {
         $this->invoiceService = app(InvoiceService::class);
@@ -58,6 +62,7 @@ class InvoiceController extends Controller
         $this->userService = app(UserService::class);
         $this->areaService = app(AreaService::class);
         $this->floorService = app(FloorService::class);
+        $this->helper = app(Helper::class);
     }
 
     /**
@@ -99,10 +104,12 @@ class InvoiceController extends Controller
             'status'=>'required'
         ]);
 
+        $minimalPayment = $this->helper->price_decoder($request->minimal_payment);
+
         $stallElectricityId = $this->stallElectricityService->getNewestStallElectricityById($request->stall_id);
         $stallWaterId = $this->stallWaterService->getNewestStallWaterById($request->stall_id);
 
-        $response = $this->invoiceService->createInvoice($request, $stallElectricityId->id, $stallWaterId->id);
+        $response = $this->invoiceService->createInvoice($request, $stallElectricityId->id, $stallWaterId->id, $minimalPayment);
 
         // return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Ditambahkan.');       
     }
@@ -189,7 +196,9 @@ class InvoiceController extends Controller
             'status'=>'required'
         ]);
 
-        $response = $this->invoiceService->updateInvoiceById($request, $id);
+        $minimalPayment = $this->helper->price_decoder($request->minimal_payment);
+
+        $response = $this->invoiceService->updateInvoiceById($request, $id, $minimalPayment);
 
         // return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Di Update.');   
     }

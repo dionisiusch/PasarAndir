@@ -13,5 +13,5 @@ class InvoiceReceipt extends Model
 
     protected $table = 'invoice_receipts';
 
-    protected $fillable = ['invoice_id', 'receipt_id'];
+    protected $fillable = ['invoice_id', 'receipt_id', 'payment'];
 }

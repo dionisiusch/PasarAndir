@@ -5,17 +5,22 @@ namespace App\Http\Controllers;
 use App\Model\Stall;
 use Illuminate\Http\Request;
 use App\Http\Services\StallService;
+use App\Http\Services\InvoiceService;
 use GuzzleHttp\Client;
 use DB;
 
 class ChartController extends Controller
 {
-    /** @var CategoryService */
+    /** @var StallService */
     private $stallService;
+
+    /** @var InvoiceService */
+    private $invoiceService;
 
     public function __construct()
     {
         $this->stallService = app(StallService::class);
+        $this->invoiceService = app(InvoiceService::class);
     }
 
     /**
@@ -38,5 +43,13 @@ class ChartController extends Controller
         return json_encode($data);
     }   
 
-  
+    public function unpaidInvoices()
+    {
+        return $this->invoiceService->totalUnpaidInvoices();
+    }
+
+    public function totalInvoice()
+    {
+        return $this->invoiceService->totalAllInvoices();
+    }
 }

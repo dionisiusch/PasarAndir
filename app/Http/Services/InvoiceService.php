@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Model\Invoice;
+use Carbon\Carbon;
 use DB;
 
 class InvoiceService
@@ -14,14 +15,37 @@ class InvoiceService
         return $invoices;
     }
 
-    public function createInvoice($data, $stallElectricityId, $stallWaterId)
+    public function totalAllInvoices()
+    {
+        $invoices = Invoice::count();
+
+        return $invoices;
+    }
+
+    public function totalUnpaidInvoices()
+    {
+        $invoices = Invoice::where('status', 'Belum Lunas')->count();
+
+        return $invoices;
+    }
+
+    public function getUnpaidInvoicesThatPassTheGraceDate()
+    {
+        return DB::table('invoices')
+            ->where('status', 'Belum Lunas')
+            ->whereDate('grace_date', '<', Carbon::now('Asia/Jakarta')->toDateString())
+            ->whereNull('deleted_at')
+            ->get();
+    }
+
+    public function createInvoice($data, $stallElectricityId, $stallWaterId, $minimalPayment)
     {
         $invoice = new Invoice([
             'stall_id' => $data->get('stall_id'),
             'stall_electricity_id' => $stallElectricityId,
             'stall_water_id' => $stallWaterId,
             'discount' => $data->get('discount') ?  $data->get('discount') : 0,
-            'minimal_payment' => $data->get('minimal_payment'),
+            'minimal_payment' => $minimalPayment,
             'fine' => $data->get('fine') ? $data->get('fine') : 0,
             'month_bill' => $data->get('month_bill'),
             'status' => $data->get('status')
@@ -38,12 +62,12 @@ class InvoiceService
         return $invoice;
     }
 
-    public function updateInvoiceById($data, $id)
+    public function updateInvoiceById($data, $id, $minimalPayment)
     {
         $invoice = Invoice::find($id);
         $invoice->stall_id = $data->get('stall_id');
         $invoice->discount = $data->get('discount') ? $data->get('discount') : 0;
-        $invoice->minimal_payment = $data->get('minimal_payment');
+        $invoice->minimal_payment = $minimalPayment;
         $invoice->fine = $data->get('fine') ? $data->get('fine') : 0;
         $invoice->month_bill = $data->get('month_bill');
         $invoice->grace_date = $data->get('grace_date');
@@ -56,6 +80,15 @@ class InvoiceService
     {
         $invoice = Invoice::find($id);
         $invoice->status = $data->get('status');
+        $invoice->save();
+
+        return $invoice;
+    }
+
+    public function updateInvoiceStatusPaidOffById($id)
+    {
+        $invoice = Invoice::find($id);
+        $invoice->status = "Belum Lunas";
         $invoice->save();
 
         return $invoice;
