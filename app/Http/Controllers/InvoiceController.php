@@ -102,7 +102,7 @@ class InvoiceController extends Controller
         $stallElectricityId = $this->stallElectricityService->getNewestStallElectricityById($request->stall_id);
         $stallWaterId = $this->stallWaterService->getNewestStallWaterById($request->stall_id);
 
-        $response = $this->invoiceService->createInvoice($request, $stallElectricityId, $stallWaterId);
+        $response = $this->invoiceService->createInvoice($request, $stallElectricityId->id, $stallWaterId->id);
 
         // return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Ditambahkan.');       
     }
