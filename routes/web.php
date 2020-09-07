@@ -93,6 +93,7 @@ Route::group([
         Route::get('/', 'InvoiceController@index')->name('master.invoice.index');
         Route::post('/', 'InvoiceController@store')->name('master.invoice.store');
         Route::get('/{id}', 'InvoiceController@show')->name('master.invoice.show');
+        Route::get('/{id}/remain', 'InvoiceController@remainCreditInvoice')->name('master.invoice.remain');
         Route::put('/{id}', 'InvoiceController@update')->name('master.invoice.update');
         Route::put('/{id}/status', 'InvoiceController@updateStatus')->name('master.invoice.updateStatus');
         Route::delete('/{id}', 'InvoiceController@destroy')->name('master.invoice.delete');
