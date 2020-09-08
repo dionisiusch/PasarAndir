@@ -28,7 +28,7 @@
 
                     <div class="form-group">
                         <label class="form-control-label">Pembayaran Minimum</label>
-                        <input type="text" name="minimal_payment" placeholder="Pembayaran Minimum.." class="form-control">
+                        <input type="text" name="minimal_payment" id="minimal_payment" placeholder="Pembayaran Minimum.." class="form-control">
                     </div>
 
                     <div class="form-group">
@@ -90,6 +90,30 @@
   }
 
 });
+
+function rupiah(angka){
+  var angka_str = angka.toString(); 
+  var number_string = angka_str.replace(/[^,\d]/g, ''),
+  split       = number_string.split('.'),
+  sisa        = split[0].length % 3,
+  rupiah        = split[0].substr(0, sisa),
+  ribuan        = split[0].substr(sisa).match(/\d{3}/gi);
+ 
+  // tambahkan titik jika yang di input sudah menjadi angka ribuan
+  if(ribuan){
+    separator = sisa ? '.' : '';
+    rupiah += separator + ribuan.join('.');
+  }
+ 
+  rupiah = split[1] != undefined ? rupiah + '' + split[1] + '' : rupiah;
+  return('Rp ' + rupiah);
+}
+
+ $(document).on('keyup', '#minimal_payment', function(){
+  var value = $(this).val();
+  var result = rupiah(value);
+  $(this).val(result);
+ });
 });
 </script>
 @endsection

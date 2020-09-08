@@ -19,7 +19,7 @@ Route::get('/home', 'HomeController@index')->middleware('role:generalmanager');
 Auth::routes();
 
 Route::group([
-    'prefix' => '/employer' 
+    'prefix' => '/employer'
 ], function () {
     Route::post('/login', 'Auth\EmployerLoginController@login')->name('employer.login');
     Route::get('/logout', 'Auth\EmployerLoginController@logout')->name('employer.logout');
@@ -32,7 +32,7 @@ Route::group([
 ], function () {
     Route::get('/', 'MasterController@index')->name('master');
     Route::group([
-        'prefix' => '/floor' 
+        'prefix' => '/floor'
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'FloorController@index')->name('master.floor.show');
@@ -41,9 +41,9 @@ Route::group([
         Route::put('/{id}', 'FloorController@update')->name('master.floor.update');
         Route::delete('/{id}', 'FloorController@destroy')->name('master.floor.delete');
     });
-    
+
     Route::group([
-        'prefix' => '/category' 
+        'prefix' => '/category'
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'CategoryController@index')->name('master.category.show');
@@ -54,7 +54,7 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => '/area' 
+        'prefix' => '/area'
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'AreaController@index')->name('master.area.index');
@@ -65,7 +65,7 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => '/stall' 
+        'prefix' => '/stall'
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'StallController@index')->name('master.stall.index');
@@ -76,7 +76,7 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => '/electricity' 
+        'prefix' => '/electricity'
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'ElectricityController@index')->name('master.electricity.index');
@@ -87,7 +87,7 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => '/invoice' 
+        'prefix' => '/invoice'
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'InvoiceController@index')->name('master.invoice.index');
@@ -100,7 +100,7 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => '/receipt' 
+        'prefix' => '/receipt'
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'ReceiptController@index')->name('master.receipt.index');
@@ -111,7 +111,7 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => '/user' 
+        'prefix' => '/user'
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'UserController@index')->name('master.user.index');
@@ -124,7 +124,7 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => '/employer' 
+        'prefix' => '/employer'
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'EmployerController@index')->name('master.employer.index');
@@ -138,7 +138,7 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => '/user', 
+    'prefix' => '/user',
     'middleware' => 'auth:web'
 ], function () {
     Route::get('/', 'HomeController@indexUser')->name('home.user');
@@ -157,6 +157,7 @@ Route::get('/usersearch', 'UserController@search')->name('master.user.search');
 Route::get('/employersearch', 'EmployerController@search')->name('master.employer.search');
 Route::get('/receiptsearch', 'ReceiptController@search')->name('master.receipt.search');
 Route::get('/invoicesearch', 'InvoiceController@search')->name('master.invoice.search');
+Route::get('/invoicereceiptsearch', 'InvoiceController@searchForReceipt')->name('master.invoice.searchforreceipt');
 
 //route aax select2
 Route::get('/floorselect2', 'floorController@select2')->name('master.floor.select2');

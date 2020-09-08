@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Receipt;
 use App\Model\Stall;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Services\ReceiptService;
 use App\Http\Services\InvoiceService;
@@ -14,6 +15,7 @@ use App\Http\Services\FloorService;
 use App\Http\Services\ElectricityService;
 use App\Http\Services\StallElectricityService;
 use App\Http\Services\StallWaterService;
+use App\Http\Services\UserService;
 use App\Http\Helpers\Helper;
 use GuzzleHttp\Client;
 use DB;
@@ -28,7 +30,7 @@ class ReceiptController extends Controller
 
     /** @var InvoiceReceiptService */
     private $invoiceReceiptService;
-    
+
     /** @var StallElectricityService */
     private $stallElectricityService;
 
@@ -47,6 +49,9 @@ class ReceiptController extends Controller
     /** @var FloorService */
     private $floorService;
 
+    /** @var UserService */
+    private $userService;
+
     /** @var Helper */
     private $helper;
 
@@ -61,6 +66,7 @@ class ReceiptController extends Controller
         $this->stallService = app(StallService::class);
         $this->areaService = app(AreaService::class);
         $this->floorService = app(FloorService::class);
+        $this->userService = app(UserService::class);
         $this->helper = app(Helper::class);
     }
 
@@ -96,17 +102,18 @@ class ReceiptController extends Controller
     {
         try {
             $request->validate([
-                'invoice_id'=>'required',
-                'stall_id'=>'required',
-                'payment'=>'required'
+                'invoice_id' => 'required',
+                'stall_id' => 'required',
+                'payment' => 'required'
             ]);
 
             $payment = $this->helper->price_decoder($request->payment);
-    
+
             $receipt = $this->receiptService->createReceipt($request, $payment);
             $invoiceReceipt = $this->invoiceReceiptService->createInvoiceReceipt($request->invoice_id, $receipt->id, $payment);
 
-            $invoice = $this->invoiceService->createInvoice($request->invoice_id);
+            $invoice = $this->invoiceService->getInvoiceById($request->invoice_id);
+            $stall = $this->stallService->getStallById($invoice->stall_id);
             $stallElectricity = $this->stallElectricityService->getStallElectricityById($invoice->stall_electricity_id);
             $stallWater = $this->stallWaterService->getStallWaterById($invoice->stall_water_id);
             $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
@@ -118,13 +125,13 @@ class ReceiptController extends Controller
 
             $totalPaidByInvoiceId = $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($request->invoice_id);
 
-            if($totalPaidByInvoiceId >= $total){
+            if ($totalPaidByInvoiceId >= $total) {
                 $invoiceUpdate = $this->invoiceService->updateInvoiceStatusPaidOffById($request->invoice_id);
             }
-    
-            return redirect('/master/receipt')->with('success', 'Data Receipt Kios Berhasil Ditambahkan.');       
+
+            return redirect('/master/receipt')->with('success', 'Data Receipt Kios Berhasil Ditambahkan.');
         } catch (Exception $e) {
-            return redirect('/master/receipt')->with('success', 'Data Receipt Kios Gagal Ditambahkan.'); 
+            return redirect('/master/receipt')->with('success', 'Data Receipt Kios Gagal Ditambahkan.');
         }
     }
 
@@ -136,20 +143,20 @@ class ReceiptController extends Controller
      */
     public function show(Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $id = $request->get('id');
             $receipt = $this->receiptService->getReceiptById($id);
             $invoiceIds = $this->invoiceReceiptService->showAllInvoicesByReceiptId($id);
             $invoices = $this->invoiceService->getInvoiceById($invoiceIds);
             $stall = $this->stallService->getStallById($receipt->stall_id);
-      
+
             $data = array(
                 'invoices' => $invoices,
                 'payment' => $receipt->stall,
                 'stall'  => $stall,
                 'id'  => $id
             );
-            
+
             return json_encode($data);
         }
     }
@@ -177,17 +184,17 @@ class ReceiptController extends Controller
         try {
             $request->validate([
                 'invoice_id' => 'required',
-                'stall_id'=>'required',
-                'payment'=>'required'
+                'stall_id' => 'required',
+                'payment' => 'required'
             ]);
             $payment = $this->helper->price_decoder($request->payment);
-    
+
             $response = $this->receiptService->updateReceiptById($request, $id, $payment);
             $responseInvoiceReceipt = $this->invoiceReceiptService->updateInvoiceReceiptByInvoiceIdAndReceiptId($request->invoice_id, $id, $payment);
-    
-            return redirect('/master/receipt')->with('success', 'Data Receipt Kios Berhasil Di Update.');       
+
+            return redirect('/master/receipt')->with('success', 'Data Receipt Kios Berhasil Di Update.');
         } catch (Exception $e) {
-            return redirect('/master/receipt')->with('success', 'Data Receipt Kios Gagal Di Update.'); 
+            return redirect('/master/receipt')->with('success', 'Data Receipt Kios Gagal Di Update.');
         }
     }
 
@@ -202,7 +209,7 @@ class ReceiptController extends Controller
         $msg = 'Data Receipt Kios Gagal Dihapus.';
         $response = $this->receiptService->deleteReceiptById($id);
 
-        if($response){
+        if ($response) {
             $msg = 'Data Receipt Kios Berhasil Dihapus.';
         }
 
@@ -211,32 +218,37 @@ class ReceiptController extends Controller
 
     public function search(Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $output = '';
             $query = $request->get('query');
-            if($query != '') {
+            if ($query != '') {
                 $data = $this->receiptService->searchReceipt($query);
             } else {
                 $data = $this->receiptService->showAllReceipts();
             }
-         
+
             $total_row = $data->count();
-			if($total_row > 0) {
-				foreach($data as $row) {
+            if ($total_row > 0) {
+                foreach ($data as $row) {
                     $stall = $this->stallService->getStallById($row->stall_id);
                     $invoiceId = $this->invoiceReceiptService->showAllInvoicesByReceiptId($row->id);
-                    $invoice = $this->invoiceService->getInvoiceById($invoiceId);
-                    $area = $this->areaService->getAreaById($invoice->area_id);
+                    $area = $this->areaService->getAreaById($stall->area_id);
                     $floor = $this->floorService->getFloorById($area->floor_id);
+                    $user = $this->userService->getUserById($stall->user_id);
+                    $area_name = "[" . $floor->name . "]" . " Blok " . $area->name . " No. " . $area->no;
+                    $invoice = $this->invoiceService->getInvoiceById($invoiceId[0]);
 
                     $output .= '
-					<tr class="tr-shadow" id="'.$row->id.'" data-toggle="modal" data-target="#largeModal">
-                        <td>'.$stall->name.'</td>
-                        <td>'.$row->created_at.'</td>
-                        <td>'.parent::rupiah($row->payment).'</td>
+					<tr class="tr-shadow invoice-row" id="' . $invoiceId[0] . '" data-toggle="modal" data-target="#largeModal">
+                        <td>' . $user->pic_name . '</td>
+                        <td>' . $area_name . '</td>
+                        <td>' . $stall->name . '</td>
+                        <td>' . $invoice->month_bill . '</td>
+                        <td>' . $row->created_at . '</td>
+                        <td>' . parent::rupiah($row->payment) . '</td>
 						<td>
 							<div class="table-data-feature">
-							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="' . $row->id . '">
 								<i class="zmdi zmdi-delete"></i>
 							</button>
 							</div>
@@ -244,21 +256,21 @@ class ReceiptController extends Controller
 					</tr>
 					<tr class="spacer"></tr> 
         	        ';
-      	        }
+                }
             } else {
-				$output = '
+                $output = '
 				<tr class="tr-shadow">
 				    <td align="center" colspan="2">Data not found.</td>
 				</tr>
 				';
-			}
-			
-			$data = array(
-				'table_data'  => $output,
-				'total_data'  => $total_row
-			);
-			
-   		    return json_encode($data);
- 		}
-	}
+            }
+
+            $data = array(
+                'table_data'  => $output,
+                'total_data'  => $total_row
+            );
+
+            return json_encode($data);
+        }
+    }
 }

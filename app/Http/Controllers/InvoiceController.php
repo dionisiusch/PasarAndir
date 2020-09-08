@@ -102,11 +102,11 @@ class InvoiceController extends Controller
     {
         //DISCOUNT AND FINE NOT REQUIRED
         $request->validate([
-            'stall_id'=>'required',
-            'minimal_payment'=>'required',
-            'month_bill'=>'required',
-            'grace_date'=>'required',
-            'status'=>'required'
+            'stall_id' => 'required',
+            'minimal_payment' => 'required',
+            'month_bill' => 'required',
+            'grace_date' => 'required',
+            'status' => 'required'
         ]);
 
         $minimalPayment = $this->helper->price_decoder($request->minimal_payment);
@@ -116,7 +116,7 @@ class InvoiceController extends Controller
 
         $response = $this->invoiceService->createInvoice($request, $stallElectricityId->id, $stallWaterId->id, $minimalPayment);
 
-        return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Ditambahkan.');       
+        return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Ditambahkan.');
     }
 
     /**
@@ -127,7 +127,7 @@ class InvoiceController extends Controller
      */
     public function show(Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $id = $request->get('id');
             $invoice = $this->invoiceService->getInvoiceById($id);
             $stall = $this->stallService->getStallById($invoice->stall_id);
@@ -141,9 +141,12 @@ class InvoiceController extends Controller
             $billElectricityKva = $electricity->power_meter * $stallElectricity->kva_price;
             $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
             $stallElectricity_used = $stallElectricity->meter_after -  $stallElectricity->meter_before;
-            $area_name = "[".$floor->name."]"." Blok ".$area->name." No. ".$area->no;
+            $area_name = "[" . $floor->name . "]" . " Blok " . $area->name . " No. " . $area->no;
+            $totalPayment = $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($id);
 
             $data = array(
+                'stall_id' => $stall->id,
+                'total_payment' => $totalPayment,
                 'grand_total' => $billElectricityKwh + $billElectricityKva + $billWater + $invoice->fine - $invoice->discount,
                 'sub_total' => $billElectricityKwh + $billElectricityKva + $billWater,
                 'water_bill' => $billWater,
@@ -172,7 +175,7 @@ class InvoiceController extends Controller
                 'area_price' => $area->price,
                 'id'  => $id
             );
-            
+
             return json_encode($data);
         }
     }
@@ -181,7 +184,7 @@ class InvoiceController extends Controller
     {
         $invoice = $this->invoiceService->getInvoiceById($id);
         $totalPayment = $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($id);
-
+        $stall = $this->stallService->getStallById($invoice->stall_id);
         $stallElectricity = $this->stallElectricityService->getStallElectricityById($invoice->stall_electricity_id);
         $stallWater = $this->stallWaterService->getStallWaterById($invoice->stall_water_id);
         $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
@@ -215,11 +218,11 @@ class InvoiceController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'stall_id'=>'required',
-            'minimal_payment'=>'required',
-            'month_bill'=>'required',
-            'grace_date'=>'required',
-            'status'=>'required'
+            'stall_id' => 'required',
+            'minimal_payment' => 'required',
+            'month_bill' => 'required',
+            'grace_date' => 'required',
+            'status' => 'required'
         ]);
 
         $minimalPayment = $this->helper->price_decoder($request->minimal_payment);
@@ -232,7 +235,7 @@ class InvoiceController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status'=>'required'
+            'status' => 'required'
         ]);
 
         $response = $this->invoiceService->updateInvoiceStatusById($request, $id);
@@ -251,7 +254,7 @@ class InvoiceController extends Controller
         $msg = 'Data Invoice Gagal Dihapus.';
         $response = $this->invoiceService->deleteInvoiceById($id);
 
-        if($response){
+        if ($response) {
             $msg = 'Data Invoice Berhasil Dihapus.';
         }
 
@@ -260,39 +263,39 @@ class InvoiceController extends Controller
 
     public function search(Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $output = '';
             $query = $request->get('query');
-            if($query != '') {
+            if ($query != '') {
                 $data = $this->invoiceService->searchInvoice($query);
             } else {
                 $data = $this->invoiceService->showAllInvoices();
             }
-         
+
             $total_row = $data->count();
-			if($total_row > 0) {
-				foreach($data as $row) {
+            if ($total_row > 0) {
+                foreach ($data as $row) {
                     $stall = $this->stallService->getStallById($row->stall_id);
                     $user = $this->userService->getUserById($stall->user_id);
                     $area = $this->areaService->getAreaById($stall->area_id);
                     $floor = $this->floorService->getFloorById($area->floor_id);
-                    $blok = "[".$floor->name ."] ". " Blok " . $area->name . " No. " . $area->no;
+                    $blok = "[" . $floor->name . "] " . " Blok " . $area->name . " No. " . $area->no;
                     $status = "";
-                    if($row->status=="Lunas"){
+                    if ($row->status == "Lunas") {
                         $status = "<span class='badge badge-success'>Lunas</span>";
-                    }else{
+                    } else {
                         $status = "<span class='badge badge-danger'>Belum Lunas</span>";
                     }
                     $output .= '
-                    <tr class="tr-shadow invoice-row" id="'.$row->id.'" data-toggle="modal" data-target="#largeModal">
-                        <td>'.$user->pic_name.'</td>
-                        <td>'.$blok.'</td>
-                        <td>'.$stall->name.'</td>
-                        <td>'.$row->month_bill.'</td>
-                        <td>'.$status.'</td>
+                    <tr class="tr-shadow invoice-row" id="' . $row->id . '" data-toggle="modal" data-target="#largeModal">
+                        <td>' . $user->pic_name . '</td>
+                        <td>' . $blok . '</td>
+                        <td>' . $stall->name . '</td>
+                        <td>' . $row->month_bill . '</td>
+                        <td>' . $status . '</td>
 						<td>
 							<div class="table-data-feature">
-							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="' . $row->id . '">
 								<i class="zmdi zmdi-delete"></i>
 							</button>
 							</div>
@@ -300,21 +303,81 @@ class InvoiceController extends Controller
 					</tr>
 					<tr class="spacer"></tr> 
         	        ';
-      	        }
+                }
             } else {
-				$output = '
+                $output = '
 				<tr class="tr-shadow">
 				    <td align="center" colspan="2">Data not found.</td>
 				</tr>
 				';
-			}
-			
-			$data = array(
-				'table_data'  => $output,
-				'total_data'  => $total_row
-			);
-			
-   		    return json_encode($data);
- 		}
-	}
+            }
+
+            $data = array(
+                'table_data'  => $output,
+                'total_data'  => $total_row
+            );
+
+            return json_encode($data);
+        }
+    }
+
+    public function searchForReceipt(Request $request)
+    {
+        if ($request->ajax()) {
+            $output = '';
+            $query = $request->get('query');
+            if ($query != '') {
+                $data = $this->invoiceService->searchInvoiceForReceipt($query);
+            } else {
+                $data = $this->invoiceService->showAllInvoicesForReceipt();
+            }
+
+            $total_row = $data->count();
+            if ($total_row > 0) {
+                foreach ($data as $row) {
+                    $stall = $this->stallService->getStallById($row->stall_id);
+                    $user = $this->userService->getUserById($stall->user_id);
+                    $area = $this->areaService->getAreaById($stall->area_id);
+                    $floor = $this->floorService->getFloorById($area->floor_id);
+                    $stallElectricity = $this->stallElectricityService->getStallElectricityById($row->stall_electricity_id);
+                    $stallWater = $this->stallWaterService->getStallWaterById($row->stall_water_id);
+                    $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+                    $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
+                    $billElectricityKva = $electricity->power_meter * $stallElectricity->kva_price;
+                    $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
+                    $total = $billElectricityKwh + $billElectricityKva + $billWater + $row->fine - $row->discount;
+                    $blok = "[" . $floor->name . "] " . " Blok " . $area->name . " No. " . $area->no;
+                    $status = "";
+                    if ($row->status == "Lunas") {
+                        $status = "<span class='badge badge-success'>Lunas</span>";
+                    } else {
+                        $status = "<span class='badge badge-danger'>Belum Lunas</span>";
+                    }
+                    $output .= '
+                    <tr class="tr-shadow invoice-row" id="' . $row->id . '" data-dismiss="modal">
+                        <td>' . $blok . '</td>
+                        <td>' . $stall->name . '</td>
+                        <td>' . parent::rupiah($total) . '</td>
+                        <td>' . $row->month_bill . '</td>
+                        <td>' . $status . '</td>
+					</tr>
+					<tr class="spacer"></tr> 
+        	        ';
+                }
+            } else {
+                $output = '
+				<tr class="tr-shadow">
+				    <td align="center" colspan="2">Data not found.</td>
+				</tr>
+				';
+            }
+
+            $data = array(
+                'table_data'  => $output,
+                'total_data'  => $total_row
+            );
+
+            return json_encode($data);
+        }
+    }
 }

@@ -17,6 +17,7 @@
                           <th>User</th>
                           <th>Blok</th>
                           <th>Nama Toko</th>
+                          <th>Periode</th>
                           <th>Tanggal Pembayaran</th>
                           <th>Jumlah Pembayaran</th>
                         </tr>
@@ -175,6 +176,7 @@ $.ajaxSetup({
         dataType:'json',
         data: {id:id},
     success: function(response) {
+      console.log(response);
       $('#name').html(response.pic_name);
       $('#month_bill').html(response.month_bill);
       $('#area').html(response.area_name);
@@ -201,7 +203,7 @@ $.ajaxSetup({
   if(confirm("Hapus data ini?"))
   {
    $.ajax({
-        url:'/master/invoice/'+id,
+        url:'/master/receipt/'+id,
         type: 'post',
         data: {_method: 'delete'},
     success: function(result) {
