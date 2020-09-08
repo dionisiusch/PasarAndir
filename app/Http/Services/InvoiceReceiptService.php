@@ -14,15 +14,33 @@ class InvoiceReceiptService
         return $invoiceReceipts;
     }
 
-    public function createInvoiceReceipt($invoice_id, $receipt_id)
+    public function createInvoiceReceipt($invoiceId, $receiptId, $payment)
     {
         $invoiceReceipt = new InvoiceReceipt([
-            'invoice_id' => $invoice_id,
-            'receipt_id' => $receipt_id
+            'invoice_id' => $invoiceId,
+            'receipt_id' => $receiptId,
+            'payment' => $payment
         ]);
         $invoiceReceipt->save();
 
         return $invoiceReceipt;
+    }
+
+    public function updateInvoiceReceiptByInvoiceIdAndReceiptId($invoiceId, $receiptId, $payment)
+    {
+        $invoiceReceipt = InvoiceReceipt::where('invoice_id', $invoiceId)->where('receipt_id', $receiptId)->first();
+        $invoiceReceipt->payment = $payment;
+        $invoiceReceipt->save();
+
+        return $invoiceReceipt;
+    }
+
+    public function sumTotalPaymentByInvoiceId($invoiceId)
+    {
+        return DB::table('invoice_receipts')
+            ->where('invoice_id', $invoiceId)
+            ->whereNull('deleted_at')
+            ->sum('payment');
     }
 
     public function showAllInvoicesByReceiptId($receiptId)

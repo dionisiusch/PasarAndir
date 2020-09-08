@@ -18,6 +18,7 @@ class InvoiceReceiptSeeder extends Seeder
         DB::table('invoice_receipts')->insert([
             'invoice_id' => 1,
             'receipt_id' => 1,
+            'payment' => 300000,
             'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
             'updated_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
         ]);
@@ -25,6 +26,7 @@ class InvoiceReceiptSeeder extends Seeder
         DB::table('invoice_receipts')->insert([
             'invoice_id' => 2,
             'receipt_id' => 2,
+            'payment' => 300000,
             'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
             'updated_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
         ]);

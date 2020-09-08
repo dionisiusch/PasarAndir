@@ -93,6 +93,7 @@ Route::group([
         Route::get('/', 'InvoiceController@index')->name('master.invoice.index');
         Route::post('/', 'InvoiceController@store')->name('master.invoice.store');
         Route::get('/{id}', 'InvoiceController@show')->name('master.invoice.show');
+        Route::get('/{id}/remain', 'InvoiceController@remainCreditInvoice')->name('master.invoice.remain');
         Route::put('/{id}', 'InvoiceController@update')->name('master.invoice.update');
         Route::put('/{id}/status', 'InvoiceController@updateStatus')->name('master.invoice.updateStatus');
         Route::delete('/{id}', 'InvoiceController@destroy')->name('master.invoice.delete');
@@ -166,7 +167,12 @@ Route::get('/employerselect2', 'employerController@select2')->name('master.emplo
 Route::get('/stallselect2', 'stallController@select2')->name('master.stall.select2');
 
 //route chart
-Route::get('/chartstall', 'chartController@stall')->name('chart.stall');
+Route::get('/chartstall', 'ChartController@stall')->name('chart.stall');
+Route::get('/chartunpaidinvoices', 'ChartController@unpaidInvoices')->name('chart.invoice.unpaid');
+Route::get('/chartinvoice', 'ChartController@totalInvoice')->name('chart.invoice.total');
+
+//route notification
+Route::get('/notification/invoices/unpaid/gracedate', 'NotificationController@getUnpaidInvoicesThatPassTheGraceDate');
 
 //route meteran
 Route::get('/meteran', 'meteranController@index')->name('meteran.index');

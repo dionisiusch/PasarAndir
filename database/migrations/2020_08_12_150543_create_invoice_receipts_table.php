@@ -16,6 +16,7 @@ class CreateInvoiceReceiptsTable extends Migration
         Schema::create('invoice_receipts', function (Blueprint $table) {
             $table->foreignId('invoice_id');
             $table->foreignId('receipt_id');
+            $table->bigInteger('payment');
             $table->timestamps();
             $table->softDeletes();
         });

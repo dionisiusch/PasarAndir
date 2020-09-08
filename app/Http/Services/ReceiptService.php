@@ -14,11 +14,11 @@ class ReceiptService
         return $receipts;
     }
 
-    public function createReceipt($data)
+    public function createReceipt($data, $payment)
     {
         $receipt = new Receipt([
             'stall_id' => $data->get('stall_id'),
-            'payment' => $data->get('payment')
+            'payment' => $payment
         ]);
         $receipt->save();
 
@@ -39,11 +39,11 @@ class ReceiptService
         return $receiptId;
     }
 
-    public function updateReceiptById($data, $id)
+    public function updateReceiptById($data, $id, $payment)
     {
         $receipt = Receipt::find($id);
         $receipt->stall_id = $data->get('stall_id');
-        $receipt->payment = $data->get('payment');
+        $receipt->payment = $payment;
         $receipt->save();
 
         return $receipt;

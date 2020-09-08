@@ -19,6 +19,8 @@ use App\Http\Services\StallWaterService;
 use App\Http\Services\UserService;
 use App\Http\Services\AreaService;
 use App\Http\Services\FloorService;
+use App\Http\Services\InvoiceReceiptService;
+use App\Http\Helpers\Helper;
 use GuzzleHttp\Client;
 use DB;
 
@@ -26,6 +28,9 @@ class InvoiceController extends Controller
 {
     /** @var InvoiceService */
     private $invoiceService;
+
+    /** @var InvoiceReceiptService */
+    private $invoiceReceiptService;
 
     /** @var StallElectricityService */
     private $stallElectricityService;
@@ -48,9 +53,13 @@ class InvoiceController extends Controller
     /** @var AreaService */
     private $areaService;
 
+    /** @var Helper */
+    private $helper;
+
     public function __construct()
     {
         $this->invoiceService = app(InvoiceService::class);
+        $this->invoiceReceiptService = app(InvoiceReceiptService::class);
         $this->stallElectricityService = app(StallElectricityService::class);
         $this->stallWaterService = app(StallWaterService::class);
         $this->electricityService = app(ElectricityService::class);
@@ -58,6 +67,7 @@ class InvoiceController extends Controller
         $this->userService = app(UserService::class);
         $this->areaService = app(AreaService::class);
         $this->floorService = app(FloorService::class);
+        $this->helper = app(Helper::class);
     }
 
     /**
@@ -99,10 +109,12 @@ class InvoiceController extends Controller
             'status'=>'required'
         ]);
 
+        $minimalPayment = $this->helper->price_decoder($request->minimal_payment);
+
         $stallElectricityId = $this->stallElectricityService->getNewestStallElectricityById($request->stall_id);
         $stallWaterId = $this->stallWaterService->getNewestStallWaterById($request->stall_id);
 
-        $response = $this->invoiceService->createInvoice($request, $stallElectricityId, $stallWaterId);
+        $response = $this->invoiceService->createInvoice($request, $stallElectricityId->id, $stallWaterId->id, $minimalPayment);
 
         return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Ditambahkan.');       
     }
@@ -165,6 +177,23 @@ class InvoiceController extends Controller
         }
     }
 
+    public function remainCreditInvoice($id)
+    {
+        $invoice = $this->invoiceService->getInvoiceById($id);
+        $totalPayment = $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($id);
+
+        $stallElectricity = $this->stallElectricityService->getStallElectricityById($invoice->stall_electricity_id);
+        $stallWater = $this->stallWaterService->getStallWaterById($invoice->stall_water_id);
+        $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+        $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
+        $billElectricityKva = $electricity->power_meter * $stallElectricity->kva_price;
+        $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
+
+        $totalThatMustBePaid = $billElectricityKwh + $billElectricityKva + $billWater + $invoice->fine - $invoice->discount;
+
+        return ($totalThatMustBePaid - $totalPayment);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -193,7 +222,9 @@ class InvoiceController extends Controller
             'status'=>'required'
         ]);
 
-        $response = $this->invoiceService->updateInvoiceById($request, $id);
+        $minimalPayment = $this->helper->price_decoder($request->minimal_payment);
+
+        $response = $this->invoiceService->updateInvoiceById($request, $id, $minimalPayment);
 
         // return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Di Update.');   
     }
