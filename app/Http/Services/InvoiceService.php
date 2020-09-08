@@ -19,6 +19,8 @@ class InvoiceService
     public function showAllInvoicesSortByStatus()
     {
         $invoices = Invoice::orderBy('status', 'asc')->get();
+
+        return $invoices;
     }
     
     public function showAllInvoicesForReceipt()
@@ -44,10 +46,8 @@ class InvoiceService
 
     public function getUnpaidInvoicesThatPassTheGraceDate()
     {
-        return DB::table('invoices')
-            ->where('status', 'Belum Lunas')
+        return Invoice::where('status', 'Belum Lunas')
             ->whereDate('grace_date', '<', Carbon::now('Asia/Jakarta')->toDateString())
-            ->whereNull('deleted_at')
             ->get();
     }
 
