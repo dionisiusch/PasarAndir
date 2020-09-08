@@ -148,6 +148,7 @@ Route::group([
     Route::get('/{id}', 'UserController@show')->name('master.user.show');
     Route::get('/{id}/stall', 'UserController@getStallByUserId')->name('master.user.stall');
     Route::get('/invoice/{id}', 'InvoiceController@show')->name('master.user.invoice');
+    Route::get('/invoice/{id}/stall', 'StallController@getInvoiceByStallId')->name('master.user.stall.invoice');
 });
 
 //route ajax livesearch
