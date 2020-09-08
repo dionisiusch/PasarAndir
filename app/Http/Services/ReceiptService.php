@@ -42,7 +42,7 @@ class ReceiptService
 
     public function getReceiptsByStallId($stallId)
     {
-        $receipts = Receipts::where('stall_id'. $stallId)->get();
+        $receipts = Receipt::where('stall_id'. $stallId)->get();
 
         return $receipts;
     }
