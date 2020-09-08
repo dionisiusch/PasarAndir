@@ -323,8 +323,9 @@
         if(response.length>0){
           $('#total-notif').html(response.length);
           $('.quantity').html(response.length);
+          console.log(response);
           for(var i=0;i<response.length;i++){ 
-            var item = '<div class="notifi__item"><div class="bg-c2 img-cir img-40"><i class="zmdi zmdi-file-text"></i></div><div class="content"><p>Invoice Jatuh Tempo</p><span id="date">'+'Lokasi/Nama Toko'+'<br>'+response[i].grace_date+'</span></div></div>';
+            var item = '<div class="notifi__item"><div class="bg-c2 img-cir img-40"><i class="zmdi zmdi-file-text"></i></div><div class="content"><p>Invoice Jatuh Tempo</p><span id="date">'+response[i].stall.name+'<br>['+response[i].stall.area.floor.name+'] Blok '+response[i].stall.area.name+' No. '+response[i].stall.area.no+'<br>'+response[i].grace_date+'</span></div></div>';
             $('#notif-wrap').append(item);
           }
 
