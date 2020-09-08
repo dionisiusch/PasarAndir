@@ -36,20 +36,23 @@ class ChartController extends Controller
         $total = count($total_arr);
         $inactive = $total - $active;
         $data = array(
-                'active'  => $active,
-                'inactive'=> $inactive,
-                'total' => $total
-            );
+            'active'  => $active,
+            'inactive' => $inactive,
+            'total' => $total
+        );
         return json_encode($data);
-    }   
-
-    public function unpaidInvoices()
-    {
-        return $this->invoiceService->totalUnpaidInvoices();
     }
 
-    public function totalInvoice()
+    public function invoice()
     {
-        return $this->invoiceService->totalAllInvoices();
+        $unpaid = $this->invoiceService->totalUnpaidInvoices();
+        $total = $this->invoiceService->totalAllInvoices();
+        $paid = $total - $unpaid;
+        $data = array(
+            'paid'  => $paid,
+            'unpaid' => $unpaid,
+            'total' => $total
+        );
+        return json_encode($data);
     }
 }

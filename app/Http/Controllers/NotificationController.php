@@ -41,5 +41,6 @@ class NotificationController extends Controller
             $response->stall->area = $this->areaService->getAreaById($response->stall->area_id);
             $response->stall->area->floor = $this->floorService->getFloorById($response->stall->area->floor_id);
         }
+        return $responses;
     }
 }

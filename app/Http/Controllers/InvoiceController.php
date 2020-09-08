@@ -327,7 +327,7 @@ class InvoiceController extends Controller
             $output = '';
             $query = $request->get('query');
             if ($query != '') {
-                $data = $this->invoiceService->searchInvoiceForReceipt($query);
+                $data = $this->invoiceService->searchInvoicesForReceipt($query);
             } else {
                 $data = $this->invoiceService->showAllInvoicesForReceipt();
             }
