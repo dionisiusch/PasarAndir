@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Model\Receipt;
+use App\Model\Stall;
 use DB;
 
 class ReceiptService
@@ -63,15 +64,11 @@ class ReceiptService
 
     public function searchReceipt($query)
     {
-        $stallId = DB::table('stalls')
-            ->where('name', 'like', '%'.$query.'%')
-            ->whereNull('deleted_at')
+        $stallId = Stall::where('name', 'like', '%'.$query.'%')
             ->pluck('id');
 
-        return DB::table('receipts')
-            ->where('payment', 'like', '%'.$query.'%')
+        return Receipt::where('payment', 'like', '%'.$query.'%')
             ->orWhereIn('stall_id', $stallId)
-            ->whereNull('deleted_at')
             ->get();
     }
 }

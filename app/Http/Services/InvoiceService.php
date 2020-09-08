@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Model\Invoice;
+use App\Model\Stall;
 use Carbon\Carbon;
 use DB;
 
@@ -11,6 +12,13 @@ class InvoiceService
     public function showAllInvoices()
     {
         $invoices = Invoice::all();
+
+        return $invoices;
+    }
+
+    public function showAllInvoicesSortByStatus()
+    {
+        $invoices = Invoice::orderBy('status', 'asc')->get();
 
         return $invoices;
     }
@@ -88,7 +96,7 @@ class InvoiceService
     public function updateInvoiceStatusPaidOffById($id)
     {
         $invoice = Invoice::find($id);
-        $invoice->status = "Belum Lunas";
+        $invoice->status = "Lunas";
         $invoice->save();
 
         return $invoice;
@@ -104,21 +112,19 @@ class InvoiceService
 
     public function searchInvoice($query)
     {
-        $stallId = DB::table('stalls')
-            ->where('name', 'like', '%'.$query.'%')
-            ->whereNull('deleted_at')
+        $stallId = Stall::where('name', 'like', '%'.$query.'%')
             ->pluck('id');
 
-        return DB::table('invoices')
-            ->where('discount', 'like', '%'.$query.'%')
+        return Invoice::where('discount', 'like', '%'.$query.'%')
             ->orWhere('minimal_payment', 'like', '%'.$query.'%')
             ->orWhere('fine', 'like', '%'.$query.'%')
             ->orWhere('month_bill', 'like', '%'.$query.'%')
             ->orWhere('grace_date', 'like', '%'.$query.'%')
             ->orWhere('status', 'like', '%'.$query.'%')
             ->orWhereIn('stall_id', $stallId)
-            ->whereNull('deleted_at')
             ->orderBy('status', 'asc')
             ->get();
+
+            
     }
 }

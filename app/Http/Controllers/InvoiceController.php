@@ -262,7 +262,7 @@ class InvoiceController extends Controller
             if($query != '') {
                 $data = $this->invoiceService->searchInvoice($query);
             } else {
-                $data = $this->invoiceService->showAllInvoices();
+                $data = $this->invoiceService->showAllInvoicesSortByStatus();
             }
          
             $total_row = $data->count();
