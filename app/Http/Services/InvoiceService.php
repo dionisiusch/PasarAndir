@@ -19,6 +19,11 @@ class InvoiceService
     public function showAllInvoicesSortByStatus()
     {
         $invoices = Invoice::orderBy('status', 'asc')->get();
+    }
+    
+    public function showAllInvoicesForReceipt()
+    {
+        $invoices = Invoice::where('status', 'Belum Lunas')->get();
 
         return $invoices;
     }
@@ -56,7 +61,8 @@ class InvoiceService
             'minimal_payment' => $minimalPayment,
             'fine' => $data->get('fine') ? $data->get('fine') : 0,
             'month_bill' => $data->get('month_bill'),
-            'status' => $data->get('status')
+            'status' => $data->get('status'),
+            'grace_date' => $data->get('grace_date')
         ]);
         $invoice->save();
 
@@ -124,7 +130,21 @@ class InvoiceService
             ->orWhereIn('stall_id', $stallId)
             ->orderBy('status', 'asc')
             ->get();
+    }
 
-            
+    public function searchInvoicesForReceipt($query)
+    {
+        $stallId = Stall::where('name', 'like', '%'.$query.'%')
+            ->pluck('id');
+
+        return Invoice::where('status', 'Belum Lunas')
+            ->orWwhere('discount', 'like', '%'.$query.'%')
+            ->orWhere('minimal_payment', 'like', '%'.$query.'%')
+            ->orWhere('fine', 'like', '%'.$query.'%')
+            ->orWhere('month_bill', 'like', '%'.$query.'%')
+            ->orWhere('grace_date', 'like', '%'.$query.'%')
+            ->orWhereIn('stall_id', $stallId)
+            ->orderBy('status', 'asc')
+            ->get();
     }
 }

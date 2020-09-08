@@ -23,7 +23,7 @@ class CreateInvoicesTable extends Migration
             $table->bigInteger('fine');
             $table->string('month_bill', 50);
             $table->date('grace_date');	
-            $table->string('status', 10);
+            $table->string('status', 15);
             $table->timestamps();
             $table->softDeletes();
         });

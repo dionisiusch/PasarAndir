@@ -207,9 +207,9 @@ $(document).on('click', '.edit', function(){
      $('#update').attr('action', '/master/area/'+id);
      $('#blok-update').val(response.name);
      $('#no-update').val(response.no);
-     $('#harga-update').val() ;
-     alert(rupiah(response.price));
-     var option = new Option(response.floor_name, response.floor,false, false);
+     $('#harga-update').val(rupiah(response.price));
+     console.log(response);
+     var option = new Option(response.floor_name, response.floor, false);
      option.selected = true;
      $("#selFloor-update" ).append(option);
      $("#selFloor-update" ).trigger("change");
@@ -270,8 +270,9 @@ $(document).on('click', '.edit', function(){
 
       });
 
- function rupiah(angka){
-  var number_string = angka.replace(/[^,\d]/g, '').toString(),
+  function rupiah(angka){
+  var angka_str = angka.toString(); 
+  var number_string = angka_str.replace(/[^,\d]/g, ''),
   split       = number_string.split('.'),
   sisa        = split[0].length % 3,
   rupiah        = split[0].substr(0, sisa),
@@ -287,8 +288,13 @@ $(document).on('click', '.edit', function(){
   return('Rp ' + rupiah);
 }
 
-
  $(document).on('keyup', '#price', function(){
+  var value = $(this).val();
+  var result = rupiah(value);
+  $(this).val(result);
+ });
+
+ $(document).on('keyup', '#harga-update', function(){
   var value = $(this).val();
   var result = rupiah(value);
   $(this).val(result);
