@@ -19,8 +19,9 @@ class InvoiceService
     public function showAllInvoicesSortByStatus()
     {
         $invoices = Invoice::orderBy('status', 'asc')->get();
+        return $invoices;
     }
-    
+
     public function showAllInvoicesForReceipt()
     {
         $invoices = Invoice::where('status', 'Belum Lunas')->get();
@@ -118,15 +119,15 @@ class InvoiceService
 
     public function searchInvoice($query)
     {
-        $stallId = Stall::where('name', 'like', '%'.$query.'%')
+        $stallId = Stall::where('name', 'like', '%' . $query . '%')
             ->pluck('id');
 
-        return Invoice::where('discount', 'like', '%'.$query.'%')
-            ->orWhere('minimal_payment', 'like', '%'.$query.'%')
-            ->orWhere('fine', 'like', '%'.$query.'%')
-            ->orWhere('month_bill', 'like', '%'.$query.'%')
-            ->orWhere('grace_date', 'like', '%'.$query.'%')
-            ->orWhere('status', 'like', '%'.$query.'%')
+        return Invoice::where('discount', 'like', '%' . $query . '%')
+            ->orWhere('minimal_payment', 'like', '%' . $query . '%')
+            ->orWhere('fine', 'like', '%' . $query . '%')
+            ->orWhere('month_bill', 'like', '%' . $query . '%')
+            ->orWhere('grace_date', 'like', '%' . $query . '%')
+            ->orWhere('status', 'like', '%' . $query . '%')
             ->orWhereIn('stall_id', $stallId)
             ->orderBy('status', 'asc')
             ->get();
@@ -134,15 +135,15 @@ class InvoiceService
 
     public function searchInvoicesForReceipt($query)
     {
-        $stallId = Stall::where('name', 'like', '%'.$query.'%')
+        $stallId = Stall::where('name', 'like', '%' . $query . '%')
             ->pluck('id');
 
         return Invoice::where('status', 'Belum Lunas')
-            ->orWwhere('discount', 'like', '%'.$query.'%')
-            ->orWhere('minimal_payment', 'like', '%'.$query.'%')
-            ->orWhere('fine', 'like', '%'.$query.'%')
-            ->orWhere('month_bill', 'like', '%'.$query.'%')
-            ->orWhere('grace_date', 'like', '%'.$query.'%')
+            ->orWwhere('discount', 'like', '%' . $query . '%')
+            ->orWhere('minimal_payment', 'like', '%' . $query . '%')
+            ->orWhere('fine', 'like', '%' . $query . '%')
+            ->orWhere('month_bill', 'like', '%' . $query . '%')
+            ->orWhere('grace_date', 'like', '%' . $query . '%')
             ->orWhereIn('stall_id', $stallId)
             ->orderBy('status', 'asc')
             ->get();

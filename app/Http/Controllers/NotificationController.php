@@ -19,6 +19,8 @@ class NotificationController extends Controller
 
     public function getUnpaidInvoicesThatPassTheGraceDate()
     {
-        $response = $this->invoiceService->getUnpaidInvoicesThatPassTheGraceDate();
+        $invoices = $this->invoiceService->getUnpaidInvoicesThatPassTheGraceDate();
+
+        return json_encode($invoices);
     }
 }

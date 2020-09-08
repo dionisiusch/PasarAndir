@@ -109,7 +109,6 @@ Route::group([
         Route::put('/{id}', 'ReceiptController@update')->name('master.receipt.update');
         Route::delete('/{id}', 'ReceiptController@destroy')->name('master.receipt.delete');
     });
-
     Route::group([
         'prefix' => '/user'
         // 'middleware' => 'auth'
@@ -142,9 +141,13 @@ Route::group([
     'middleware' => 'auth:web'
 ], function () {
     Route::get('/', 'HomeController@indexUser')->name('home.user');
-    Route::get('/index', 'HomeController@indexUser');
+    Route::get('/index', 'HomeController@indexUser')->name('user.index');
+    Route::get('/billing', 'UserController@billing')->name('user.billing');
     Route::get('/payment/history', 'InvoiceReceiptController@paymentHistory')->name('master.user.history');
     Route::put('/password', 'UserController@updatePassword')->name('master.user.updatePassword');
+    Route::get('/{id}', 'UserController@show')->name('master.user.show');
+    Route::get('/{id}/stall', 'UserController@getStallByUserId')->name('master.user.stall');
+    Route::get('/invoice/{id}', 'InvoiceController@show')->name('master.user.invoice');
 });
 
 //route ajax livesearch
@@ -169,8 +172,7 @@ Route::get('/stallselect2', 'stallController@select2')->name('master.stall.selec
 
 //route chart
 Route::get('/chartstall', 'ChartController@stall')->name('chart.stall');
-Route::get('/chartunpaidinvoices', 'ChartController@unpaidInvoices')->name('chart.invoice.unpaid');
-Route::get('/chartinvoice', 'ChartController@totalInvoice')->name('chart.invoice.total');
+Route::get('/chartinvoice', 'ChartController@invoice')->name('chart.invoice');
 
 //route notification
 Route::get('/notification/invoices/unpaid/gracedate', 'NotificationController@getUnpaidInvoicesThatPassTheGraceDate');
