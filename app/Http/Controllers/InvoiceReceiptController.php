@@ -55,6 +55,9 @@ class InvoiceReceiptController extends Controller
         $stallIds = $this->stallService->getStallByUserId(Auth::guard('web')->user()->id);
         $receiptIds = $this->receiptService->getReceiptIdByStallIds($stallIds);
         $invoiceReceipts = $this->invoiceReceiptService->showAllInvoiceReceiptsByReceiptIds($receiptsIds);
+
+        $receipts = $this->receiptService->getReceiptsByStallIds($stallIds);
+        $invoices = $this->invoiceService->getInvoicesByStallIds($stallIds);
     }
 
     /**
