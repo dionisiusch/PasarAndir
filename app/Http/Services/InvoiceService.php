@@ -76,6 +76,13 @@ class InvoiceService
         return $invoice;
     }
 
+    public function getInvoicesByStallId($stallId)
+    {
+        $invoices = Invoice::where('stall_id', $stallId)->get();
+
+        return $invoices;
+    }
+
     public function updateInvoiceById($data, $id, $minimalPayment)
     {
         $invoice = Invoice::find($id);
