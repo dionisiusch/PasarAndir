@@ -33,6 +33,13 @@ class ReceiptService
         return $receipt;
     }
 
+    public function getReceiptByIds($ids)
+    {
+        $receipts = Receipt::whereIn('id', $id)->get();
+
+        return $receipts;
+    }
+
     public function getReceiptIdByStallIds($stallIds)
     {
         $receiptId = Receipt::whereIn('stall_id', $stallIds)->pluck('id');
@@ -42,7 +49,7 @@ class ReceiptService
 
     public function getReceiptsByStallId($stallId)
     {
-        $receipts = Receipt::where('stall_id' . $stallId)->get();
+        $receipts = Receipt::where('stall_id', $stallId)->get();
 
         return $receipts;
     }

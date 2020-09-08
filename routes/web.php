@@ -150,6 +150,7 @@ Route::group([
     Route::get('/invoice/{id}', 'InvoiceController@show')->name('master.user.invoice');
     Route::get('/invoice/{id}/stall', 'InvoiceController@showInvoicesByStallId')->name('master.user.stall.invoice');
     Route::get('/receipt/{id}/stall', 'ReceiptController@showReceiptsByStallId')->name('master.user.stall.invoice');
+    Route::get('/invoice/{id}/receipt', 'ReceiptController@showReceiptsByInvoiceId')->name('master.user.stall.invoice.receipt');
 });
 
 //route ajax livesearch

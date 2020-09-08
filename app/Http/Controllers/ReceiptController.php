@@ -167,6 +167,7 @@ class ReceiptController extends Controller
             $text = "";
             $id = $request->get('id');
             $receipts = $this->receiptService->getReceiptsByStallId($id);
+            dd($receipts);
             foreach ($receipts as $receipt) {
                 $invoiceId = $this->invoiceReceiptService->getInvoiceByReceiptId($receipt->id);
                 $invoice = $this->invoiceService->getInvoiceById($invoiceId);
@@ -177,6 +178,21 @@ class ReceiptController extends Controller
             );
             return json_encode($output);
         }
+    }
+
+    public function showReceiptsByInvoiceId($id)
+    {
+        $receiptIds = $this->invoiceReceiptService->showAllReceiptsByInvoiceId($id);
+        $receipts = $this->receiptService->getReceiptByIds($receiptIds);
+
+        foreach ($receipts as $receipt)
+        {
+            $receipt->stall = $this->stallService->getStallById($receipt->stall_id);
+            $receipt->stall->area = $this->areaService->getAreaById($receipt->stall->area_id);
+            $receipt->stall->area->floor = $this->floorService->getFloorById($receipt->stall->area->floor_id);
+        }
+
+        return $receipts;
     }
 
     /**
