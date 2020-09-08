@@ -161,6 +161,13 @@ class ReceiptController extends Controller
         }
     }
 
+    public function showReceiptsByStallId($id)
+    {
+        $receipts = $this->receiptService->getReceiptsByStallId($id);
+
+        return $receipts;
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

@@ -180,6 +180,13 @@ class InvoiceController extends Controller
         }
     }
 
+    public function showInvoicesByStallId($id)
+    {
+        $invoices = $this->invoiceService->getInvoicesByStallId($id);
+
+        return $invoices;
+    }
+
     public function remainCreditInvoice($id)
     {
         $invoice = $this->invoiceService->getInvoiceById($id);
