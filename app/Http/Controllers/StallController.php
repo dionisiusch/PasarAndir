@@ -5,22 +5,27 @@ namespace App\Http\Controllers;
 use App\Model\Stall;
 use App\User;
 use App\Model\Area;
+use App\Model\Invoice;
 use App\Model\Category;
 use App\Model\Electricity;
 use Illuminate\Http\Request;
 use App\Http\Services\StallService;
 use App\Http\Services\AreaService;
 use App\Http\Services\CategoryService;
+use App\Http\Services\InvoiceService;
 use App\Http\Services\UserService;
 use App\Http\Services\FloorService;
 use App\Http\Services\ElectricityService;
 use GuzzleHttp\Client;
-Use DB;
+use DB;
 
 class StallController extends Controller
 {
     /** @var StallService */
     private $stallService;
+
+    /** @var InvoiceService */
+    private $invoiceService;
 
     /** @var AreaNoService */
     private $areaService;
@@ -45,7 +50,7 @@ class StallController extends Controller
         $this->userService = app(UserService::class);
         $this->floorService = app(FloorService::class);
         $this->electricityService = app(ElectricityService::class);
-
+        $this->invoiceService = app(InvoiceService::class);
     }
 
     /**
@@ -82,22 +87,22 @@ class StallController extends Controller
     {
         try {
             $request->validate([
-                'user_id'=>'required',
-                'area_id'=>'required',
-                'category_id'=>'required',
-                'electricity_id'=>'required',
-                'name'=>'required',
-                'length'=>'required',
-                'width'=>'required',
-                'height'=>'required',
-                'status'=>'required'
+                'user_id' => 'required',
+                'area_id' => 'required',
+                'category_id' => 'required',
+                'electricity_id' => 'required',
+                'name' => 'required',
+                'length' => 'required',
+                'width' => 'required',
+                'height' => 'required',
+                'status' => 'required'
             ]);
-    
+
             $response = $this->stallService->createStall($request);
-    
-            return redirect('/master/stall')->with('success', 'Data Kios Berhasil Ditambahkan.');       
+
+            return redirect('/master/stall')->with('success', 'Data Kios Berhasil Ditambahkan.');
         } catch (Exception $e) {
-            return redirect('/master/stall')->with('success', 'Data Kios Gagal Ditambahkan.');       
+            return redirect('/master/stall')->with('success', 'Data Kios Gagal Ditambahkan.');
         }
     }
 
@@ -109,7 +114,7 @@ class StallController extends Controller
      */
     public function show(Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $id = $request->get('id');
             $stall = $this->stallService->getStallById($id);
             $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
@@ -117,7 +122,7 @@ class StallController extends Controller
             $user = $this->userService->getUserById($stall->user_id);
             $area = $this->areaService->getAreaById($stall->area_id);
             $floor = $this->floorService->getFloorById($area->floor_id);
-      
+
             $data = array(
                 'floor_name'  => $floor->name,
                 'floor_id'  => $floor->id,
@@ -126,8 +131,8 @@ class StallController extends Controller
                 'area_name'  => $area->name,
                 'area_id'  => $area->id,
                 'area_no'  => $area->no,
-                'category_name'  =>$category->name,
-                'category_id'  =>$category->id,
+                'category_name'  => $category->name,
+                'category_id'  => $category->id,
                 'height'  => $stall->height,
                 'width'  => $stall->width,
                 'length'  => $stall->length,
@@ -135,7 +140,7 @@ class StallController extends Controller
                 'status'  => $stall->status,
                 'id'  => $id
             );
-            
+
             return json_encode($data);
         }
         // return view('stalls.show', compact('stall')); 
@@ -163,19 +168,19 @@ class StallController extends Controller
     {
         try {
             $request->validate([
-                'user_id'=>'required',
-                'area_id'=>'required',
-                'category_id'=>'required',
-                'electricity_id'=>'required',
-                'name'=>'required',
-                'length'=>'required',
-                'width'=>'required',
-                'height'=>'required',
-                'status'=>'required'
+                'user_id' => 'required',
+                'area_id' => 'required',
+                'category_id' => 'required',
+                'electricity_id' => 'required',
+                'name' => 'required',
+                'length' => 'required',
+                'width' => 'required',
+                'height' => 'required',
+                'status' => 'required'
             ]);
-    
+
             $response = $this->stallService->updateStallById($request, $id);
-    
+
             return redirect('/master/stall')->with('success', 'Data Kios Berhasil Di Update.');
         } catch (Exception $e) {
             return redirect('/master/stall')->with('success', 'Data Kios Gagal Di Update.');
@@ -193,57 +198,78 @@ class StallController extends Controller
         $msg = 'Data Kios Gagal Dihapus.';
         $response = $this->stallService->deleteStallById($id);
 
-        if($response){
+        if ($response) {
             $msg = 'Data Kios Berhasil Dihapus.';
         }
 
         return $msg;
     }
 
+    public function getInvoiceByStallId(Request $request)
+    {
+        if ($request->ajax()) {
+            $text = "";
+            $id = $request->get('id');
+            $invoices = $this->invoiceService->getInvoicesByStallId($id);
+            foreach ($invoices as $invoice) {
+                if ($invoice->status == "Lunas") {
+                    $status = "<h4><span class='badge badge-success'>Lunas</span></h4>";
+                } else {
+                    $status = "<h4><span class='badge badge-danger'>Belum Lunas</span></h4>";
+                }
+                $text .= "<tr class='tr-shadow invoice-row' id='" . $invoice->id . "' data-toggle='modal' data-target='#largeModal'><td style='font-weight: bold'>" . $invoice->month_bill . "</td><td style='font-weight: bold'>" . $status;
+            }
+            $output = array(
+                'text' => $text
+            );
+            return json_encode($output);
+        }
+    }
+
     public function search(Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $output = '';
             $query = $request->get('query');
-            if($query != '') {
+            if ($query != '') {
                 $data = $this->stallService->searchStall($query);
             } else {
                 $data = $this->stallService->showAllStalls();
             }
-         
+
             $total_row = $data->count();
-            if($total_row > 0) {
-                foreach($data as $row) {
+            if ($total_row > 0) {
+                foreach ($data as $row) {
                     $user = $this->userService->getUserById($row->user_id);
                     $area = $this->areaService->getAreaById($row->area_id);
                     $category = $this->categoryService->getCategoryById($row->category_id);
                     $floor = $this->floorService->getFloorById($area->floor_id);
                     // $user = $this->userService->getUserById($area->user_id);
-                    if($row->status=="Aktif"){
+                    if ($row->status == "Aktif") {
                         $status = "<h4><span class='badge badge-success'>Aktif</span></h4>";
-                    }else{
-                         $status = "<h4><span class='badge badge-danger'>Tidak Aktif</span></h4>";
+                    } else {
+                        $status = "<h4><span class='badge badge-danger'>Tidak Aktif</span></h4>";
                     }
                     $output .= '
                     <tr class="tr-shadow">
-                        <td>'.$user->pic_name.'</td>
+                        <td>' . $user->pic_name . '</td>
                         <td>
-                        '.$floor->name.' Blok
-                        '.$area->name.' No.
-                        '.$area->no.'
+                        ' . $floor->name . ' Blok
+                        ' . $area->name . ' No.
+                        ' . $area->no . '
                         </td>
-                        <td>'.$category->name.'</td>
-                        <td>'.$row->name.'</td>
-                        <td>'.$row->width.'</td>
-                        <td>'.$row->length.'</td>
-                        <td>'.$row->height.'</td>
-                        <td>'.$status.'</td>
+                        <td>' . $category->name . '</td>
+                        <td>' . $row->name . '</td>
+                        <td>' . $row->width . '</td>
+                        <td>' . $row->length . '</td>
+                        <td>' . $row->height . '</td>
+                        <td>' . $status . '</td>
                         <td>
                             <div class="table-data-feature">
-                            <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+                            <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="' . $row->id . '">
                                 <i class="zmdi zmdi-edit"></i>
                             </button>
-                            <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+                            <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="' . $row->id . '">
                                 <i class="zmdi zmdi-delete"></i>
                             </button>
                             </div>
@@ -259,40 +285,41 @@ class StallController extends Controller
                 </tr>
                 ';
             }
-            
+
             $data = array(
                 'table_data'  => $output,
                 'total_data'  => $total_row
             );
-            
+
             return json_encode($data);
         }
     }
 
-    public function select2(Request $request){
-     $search = $request->search;
+    public function select2(Request $request)
+    {
+        $search = $request->search;
 
-      if($search != ''){
-         $stalls = $this->stallService->searchStall($search);
-      }else{
-         $stalls = $this->stallService->showAllStalls();
-      }
+        if ($search != '') {
+            $stalls = $this->stallService->searchStall($search);
+        } else {
+            $stalls = $this->stallService->showAllStalls();
+        }
 
-      $response = array();
-      // $preselect = '';
-      foreach($stalls as $stall){
-        $area = $this->areaService->getAreaById($stall->area_id);
-        $floor = $this->floorService->getFloorById($area->floor_id);
+        $response = array();
+        // $preselect = '';
+        foreach ($stalls as $stall) {
+            $area = $this->areaService->getAreaById($stall->area_id);
+            $floor = $this->floorService->getFloorById($area->floor_id);
 
-        $output = $floor->name . " Blok " . $area->name . " No. " . $area->no . " | " . $stall->name;
+            $output = $floor->name . " Blok " . $area->name . " No. " . $area->no . " | " . $stall->name;
 
-         $response[] = array(
-              "id"=>$stall->id,
-              "text"=>$output
-         );
-         // $preselect.='<option value="'.$floor->id.'"> '.$floor->name.'</option>';
-      }
-       // $response['option'] = $preselect; 
-      echo json_encode($response);
-   }
+            $response[] = array(
+                "id" => $stall->id,
+                "text" => $output
+            );
+            // $preselect.='<option value="'.$floor->id.'"> '.$floor->name.'</option>';
+        }
+        // $response['option'] = $preselect; 
+        echo json_encode($response);
+    }
 }

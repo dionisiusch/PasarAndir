@@ -163,9 +163,20 @@ class ReceiptController extends Controller
 
     public function showReceiptsByStallId($id)
     {
-        $receipts = $this->receiptService->getReceiptsByStallId($id);
-
-        return $receipts;
+        if ($request->ajax()) {
+            $text = "";
+            $id = $request->get('id');
+            $receipts = $this->receiptService->getReceiptsByStallId($id);
+            foreach ($receipts as $receipt) {
+                $invoiceId = $this->invoiceReceiptService->getInvoiceByReceiptId($receipt->id);
+                $invoice = $this->invoiceService->getInvoiceById($invoiceId);
+                $text .= "<tr class='tr-shadow invoice-row' id='" . $receipt->id . "' data-toggle='modal' data-target='#largeModal'><td style='font-weight: bold'>" . $invoice->month_bill . "</td><td style='font-weight: bold'>" . $receipt->payment. "</td><td style='font-weight: bold'>" . $receipt->created_at . "</td>";
+            }
+            $output = array(
+                'text' => $text
+            );
+            return json_encode($output);
+        }
     }
 
     /**
