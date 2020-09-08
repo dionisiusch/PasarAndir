@@ -167,11 +167,10 @@ class ReceiptController extends Controller
             $text = "";
             $id = $request->get('id');
             $receipts = $this->receiptService->getReceiptsByStallId($id);
-            dd($receipts);
             foreach ($receipts as $receipt) {
                 $invoiceId = $this->invoiceReceiptService->getInvoiceByReceiptId($receipt->id);
                 $invoice = $this->invoiceService->getInvoiceById($invoiceId);
-                $text .= "<tr class='tr-shadow invoice-row' id='" . $receipt->id . "' data-toggle='modal' data-target='#largeModal'><td style='font-weight: bold'>" . $invoice->month_bill . "</td><td style='font-weight: bold'>" . $receipt->payment . "</td><td style='font-weight: bold'>" . $receipt->created_at . "</td>";
+                $text .= "<tr class='tr-shadow' id='" . $receipt->id . "'><td>" . $invoice->month_bill . "</td><td>" . parent::rupiah($receipt->payment) . "</td><td>" . $receipt->created_at . "</td>";
             }
             $output = array(
                 'text' => $text
@@ -180,19 +179,16 @@ class ReceiptController extends Controller
         }
     }
 
-    public function showReceiptsByInvoiceId($id)
+    public function showReceiptsByInvoiceId(Request $request)
     {
+        $id = $request->get('id');
         $receiptIds = $this->invoiceReceiptService->showAllReceiptsByInvoiceId($id);
         $receipts = $this->receiptService->getReceiptByIds($receiptIds);
 
-        foreach ($receipts as $receipt)
-        {
-            $receipt->stall = $this->stallService->getStallById($receipt->stall_id);
-            $receipt->stall->area = $this->areaService->getAreaById($receipt->stall->area_id);
-            $receipt->stall->area->floor = $this->floorService->getFloorById($receipt->stall->area->floor_id);
-        }
-
-        return $receipts;
+        $output = array(
+            'text' => $receipts
+        );
+        return json_encode($output);
     }
 
     /**

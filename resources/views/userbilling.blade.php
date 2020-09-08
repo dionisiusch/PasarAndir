@@ -34,7 +34,7 @@
 
             </div>
 
-            <div class="col-md-4 col-lg-6">
+            <div class="col-md-4 col-lg-7">
                 <div class="card">
                     <div class="card-header">
                         <strong>Histori Pembayaran</strong>
@@ -140,12 +140,12 @@
                             <td style="font-weight:bold" colspan="4">TANGGAL PEMBAYARAN</td>
                             <td style="font-weight:bold" colspan="4">JUMLAH PEMBAYARAN</td>
                         <tr>
-                        <tr id='rincian_pembayaran'></tr>
-                        <tr style="background-color:#f59d8c">
-                            <td style="font-weight:bold" colspan="4">SISA TAGIHAN</td>
-                            <td style="font-weight:bold" colspan="4" id='sisa_tagihan'></td>
-                        <tr>
-                    </tbody>
+                    <tbody id='rincian_pembayaran'></tbody>
+                    <tr style="background-color:#f59d8c">
+                        <td style="font-weight:bold" colspan="4">SISA TAGIHAN</td>
+                        <td style="font-weight:bold" colspan="4" id='sisa_tagihan'></td>
+                    <tr>
+                        </tbody>
                 </table>
             </div>
         </div>
@@ -196,6 +196,7 @@ return('Rp ' + rupiah);
 
     $(document).on('click', '.invoice-row', function(){
     var id = $(this).attr('id');
+    var invoice_id;
     $.ajax({
     url:'/user/invoice/'+id,
     type: 'get',
@@ -216,8 +217,29 @@ return('Rp ' + rupiah);
     $('#kwh_price').html(rupiah(response.kwh_price));
     $('#grace_date').html(response.grace_date);
     var sisa_tagihan = response.grand_total - response.total_payment;
-    console.log(sisa_tagihan);
+    invoice_id = response.id;
     if(sisa_tagihan<0){ $('#sisa_tagihan').html(rupiah(0)); }else{ $('#sisa_tagihan').html(rupiah(sisa_tagihan)); }
+    },async: false,
+    error: function(request,msg,error) {
+    console.log(msg);
+    console.log(error);
+    }
+    });
+    
+$.ajax({
+    url:'invoice/'+invoice_id+'/receipt',
+    type: 'get',
+    dataType:'json',
+    data: {id:invoice_id},
+    success: function(response) {
+    
+    var text = '';
+     for(var i=0;i<response.text.length;i++){
+         text += "<tr><td colspan='4'>"+response.text[i].created_at.substring(0,10)+"</td><td colspan='4'>"+rupiah(response.text[i].payment)+"</td></tr>";
+     }
+     console.log(text);
+     $('#rincian_pembayaran').html(text);
+   
     },
     error: function(request,msg,error) {
     console.log(msg);
@@ -236,7 +258,6 @@ return('Rp ' + rupiah);
     data: {id:id},
     success: function(result) {
 
-        console.log(result.text);
         $('#data-table-invoice').html(result.text);
 
     },
@@ -253,7 +274,6 @@ return('Rp ' + rupiah);
     data: {id:id},
     success: function(result) {
 
-        console.log(result.text);
         $('#data-table-receipt').html(result.text);
 
     },

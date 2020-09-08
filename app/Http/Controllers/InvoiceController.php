@@ -192,7 +192,7 @@ class InvoiceController extends Controller
                 } else {
                     $status = "<h4><span class='badge badge-danger'>Belum Lunas</span></h4>";
                 }
-                $text .= "<tr class='tr-shadow invoice-row' id='" . $invoice->id . "' data-toggle='modal' data-target='#largeModal'><td style='font-weight: bold'>" . $invoice->month_bill . "</td><td style='font-weight: bold'>" . $status;
+                $text .= "<tr class='tr-shadow invoice-row' id='" . $invoice->id . "' data-toggle='modal' data-target='#largeModal'><td>" . $invoice->month_bill . "</td><td>" . $status;
             }
             $output = array(
                 'text' => $text

@@ -35,7 +35,7 @@ class ReceiptService
 
     public function getReceiptByIds($ids)
     {
-        $receipts = Receipt::whereIn('id', $id)->get();
+        $receipts = Receipt::whereIn('id', $ids)->get();
 
         return $receipts;
     }
