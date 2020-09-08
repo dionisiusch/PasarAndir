@@ -51,6 +51,14 @@ class InvoiceReceiptService
             ->pluck('invoice_id');
     }
 
+    public function getInvoiceByReceiptId($receiptId)
+    {
+        return InvoiceReceipt::where('receipt_id', $receiptId)
+            ->whereNull('deleted_at')
+            ->pluck('invoice_id')
+            ->first();
+    }
+
     public function showAllReceiptsByInvoiceId($invoiceId)
     {
         return DB::table('invoice_receipts')

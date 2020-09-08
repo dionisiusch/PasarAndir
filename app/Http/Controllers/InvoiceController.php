@@ -180,6 +180,27 @@ class InvoiceController extends Controller
         }
     }
 
+    public function showInvoicesByStallId($id)
+    {
+        if ($request->ajax()) {
+            $text = "";
+            $id = $request->get('id');
+            $invoices = $this->invoiceService->getInvoicesByStallId($id);
+            foreach ($invoices as $invoice) {
+                if ($invoice->status == "Lunas") {
+                    $status = "<h4><span class='badge badge-success'>Lunas</span></h4>";
+                } else {
+                    $status = "<h4><span class='badge badge-danger'>Belum Lunas</span></h4>";
+                }
+                $text .= "<tr class='tr-shadow invoice-row' id='" . $invoice->id . "' data-toggle='modal' data-target='#largeModal'><td style='font-weight: bold'>" . $invoice->month_bill . "</td><td style='font-weight: bold'>" . $status;
+            }
+            $output = array(
+                'text' => $text
+            );
+            return json_encode($output);
+        }
+    }
+
     public function remainCreditInvoice($id)
     {
         $invoice = $this->invoiceService->getInvoiceById($id);
