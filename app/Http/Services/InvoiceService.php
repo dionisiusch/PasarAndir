@@ -24,7 +24,8 @@ class InvoiceService
             'minimal_payment' => $data->get('minimal_payment'),
             'fine' => $data->get('fine') ? $data->get('fine') : 0,
             'month_bill' => $data->get('month_bill'),
-            'status' => $data->get('status')
+            'status' => $data->get('status'),
+            'grace_date' => $data->get('grace_date')
         ]);
         $invoice->save();
 

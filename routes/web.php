@@ -172,3 +172,5 @@ Route::get('/chartstall', 'chartController@stall')->name('chart.stall');
 Route::get('/meteran', 'meteranController@index')->name('meteran.index');
 Route::get('/meteranelectricity', 'meteranController@getElectricityName')->name('meteran.electricity.name');
 Route::post('/', 'MeteranController@store')->name('meteran.store');
+Route::get('/invoicecreate', 'InvoiceController@create')->name('invoice.create');
+Route::get('/receiptcreate', 'ReceiptController@create')->name('receipt.create');

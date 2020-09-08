@@ -5,7 +5,7 @@ namespace App\Http\Services;
 use App\Model\InvoiceReceipt;
 use DB;
 
-class InvoiceService
+class InvoiceReceiptService
 {
     public function showAllInvoiceReceipts()
     {

@@ -79,7 +79,7 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        //
+        return view('master.invoice.invoiceCreate');
     }
 
     /**
@@ -104,7 +104,7 @@ class InvoiceController extends Controller
 
         $response = $this->invoiceService->createInvoice($request, $stallElectricityId, $stallWaterId);
 
-        // return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Ditambahkan.');       
+        return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Ditambahkan.');       
     }
 
     /**

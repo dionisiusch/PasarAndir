@@ -43,7 +43,7 @@ class ReceiptController extends Controller
     {
         $receipts = $this->receiptService->showAllReceipts();
 
-        return view('master.receipt.index');
+        return view('master.receipt.receiptShow');
     }
 
     /**
@@ -53,7 +53,7 @@ class ReceiptController extends Controller
      */
     public function create()
     {
-        //
+        return view('master.receipt.receiptCreate');
     }
 
     /**
@@ -174,13 +174,12 @@ class ReceiptController extends Controller
 				foreach($data as $row) {
                     $stall = $this->stallService->getStallById($row->stall_id);
                     $output .= '
-					<tr class="tr-shadow">
-						<td>'.$row->name.'</td>
+					<tr class="tr-shadow" id="'.$row->id.'" data-toggle="modal" data-target="#largeModal">
+                        <td>'.$stall->name.'</td>
+                        <td>'.$row->created_at.'</td>
+                        <td>'.parent::rupiah($row->payment).'</td>
 						<td>
 							<div class="table-data-feature">
-							<button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
-								<i class="zmdi zmdi-edit"></i>
-							</button>
 							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
 								<i class="zmdi zmdi-delete"></i>
 							</button>

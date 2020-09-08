@@ -69,11 +69,11 @@
                 <a class="js-arrow" href="#">
                  <i class="fas fa-usd"></i></a><a href="#"> Accounting</a>
                  <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{Request::routeIs('master/invoice/create*') ? 'block' : '' }}">
-                  <li class="{{Request::routeIs('master.stall*') ? 'active' : '' }}">
-                    <a href="/master/invoice/create">Tambah Invoice</a>
+                  <li class="{{Request::routeIs('invoice.create*') ? 'active' : '' }}">
+                    <a href="/invoicecreate">Tambah Invoice</a>
                   </li>
                    <li>
-                    <a href="/master/receipt">Pembayaran</a>
+                    <a href="/receiptcreate">Pembayaran</a>
                   </li>
                 </ul>
               </li> 
@@ -134,15 +134,15 @@
                 <a href="/meteran">
                   <i class="fas fa fa-book"></i>Meteran</a>
                 </li>
-                <li class="active has-sub">
+                <li class="{{Request::routeIs('invoicecreate*') ? 'active has-sub' : '' }}">
                 <a class="js-arrow" href="#">
                  <i class="fas fa-usd"></i></a><a href="#"> Accounting</a>
-                 <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{Request::routeIs('master/invoice/create*') ? 'block' : '' }}">
-                  <li class="{{Request::routeIs('master.stall*') ? 'active' : '' }}">
-                    <a href="/master/invoice/create">Tambah Invoice</a>
+                 <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:block">
+                  <li class="{{Request::routeIs('invoice.create') ? 'active' : '' }}">
+                    <a href="/invoicecreate">Tambah Invoice</a>
                   </li>
-                   <li>
-                    <a href="/master/receipt">Pembayaran</a>
+                   <li class="{{Request::routeIs('receipt.create') ? 'active' : '' }}">
+                    <a href="/receiptcreate">Pembayaran</a>
                   </li>
                 </ul>
               </li>   
@@ -153,6 +153,9 @@
                      <li class="{{Request::routeIs('master.invoice*') ? 'active' : '' }}">
                       <a href="/master/invoice">Invoice</a>
                      </li>
+                     <li class="{{Request::routeIs('master.receipt*') ? 'active' : '' }}">
+                        <a href="/master/receipt">Receipt</a>
+                      </li>
                       <li class="{{Request::routeIs('master.area*') ? 'active' : '' }}">
                         <a href="/master/area">Blok</a>
                       </li>

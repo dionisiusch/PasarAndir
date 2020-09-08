@@ -16,38 +16,32 @@
 						<select name="stall_id" id='selStall' class='form-control'></select>
 					</div>
 					
-					<div class="form-group">
-						<table class="table table-bordered">
-							<tr>
-								<td colspan="2">Meteran Listrik <span id="electricity_meter_code" style="font-weight: "></span></td>
-							</tr>
-							<tr>
-								<td>Stand Awal</td>
-								<td>Stand Akhir</td>
-							</tr>
-							<tr>
-								<td><input type="number" name="electricity_meter_before" placeholder="...."  class="form-control"></td>
-								<td><input type="number" name="electricity_meter_after" placeholder="...."  class="form-control"></td>
-							</tr>
-						</table>
-					</div>
+                    <div class="form-group">
+                        <label class="form-control-label">Periode (Bulan Tahun)</label>
+                        <input type="text" name="month_bill" placeholder="Periode.." class="form-control">
+                    </div>
 
+                    <div class="form-group">
+                        <label class="form-control-label">Tanggal Jatuh Tempo</label>
+                        <input type="date" name="grace_date" placeholder="Jatuh Tempo.." class="form-control">
+                    </div>
 
-					<div class="form-group">
-						<table class="table table-bordered">
-							<tr>
-								<td colspan="2">Meteran Air <span id="electricity_meter_code" style="font-weight: bold"></span></td>
-							</tr>
-							<tr>
-								<td>Stand Awal</td>
-								<td>Stand Akhir</td>
-							</tr>
-							<tr>
-								<td><input type="number" name="water_meter_before" placeholder="...." value="0" class="form-control"></td>
-								<td><input type="number" name="water_meter_after" placeholder="...."  value="0" class="form-control"></td>
-							</tr>
-						</table>
-					</div>
+                    <div class="form-group">
+                        <label class="form-control-label">Pembayaran Minimum</label>
+                        <input type="text" name="minimal_payment" placeholder="Pembayaran Minimum.." class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-control-label">Diskon</label>
+                        <input type="number" name="discount" placeholder="Diskon.." class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label">Status</label>
+                        <select name="status">
+                            <option value="Belum Lunas">Belum Lunas</option>
+                            <option value="Lunas">Lunas</option>
+                        </select>
+                    </div>
 
 
 				</div>
@@ -96,26 +90,6 @@
   }
 
 });
-
-		$('#selStall').change(function() {
-			var query = $('#selStall').val();
-
-			$.ajax({
-				url:"/meteranelectricity",
-				method:'GET',
-				dataType:'json',
-				data:{id:query},
-				success:function(response)
-				{
-					$('#electricity_meter_code').html(response.name);
-				}, error: function(request,msg,error) {
-					console.log(msg);
-					console.log(error);
-				}
-			})
-
-		});
-
-	});
+});
 </script>
 @endsection
