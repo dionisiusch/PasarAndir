@@ -180,7 +180,7 @@ class InvoiceController extends Controller
         }
     }
 
-    public function showInvoicesByStallId($id)
+    public function showInvoicesByStallId(Request $request)
     {
         if ($request->ajax()) {
             $text = "";

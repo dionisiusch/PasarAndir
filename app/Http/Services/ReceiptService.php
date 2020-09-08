@@ -42,14 +42,14 @@ class ReceiptService
 
     public function getReceiptsByStallId($stallId)
     {
-        $receipts = Receipt::where('stall_id'. $stallId)->get();
+        $receipts = Receipt::where('stall_id' . $stallId)->get();
 
         return $receipts;
     }
 
     public function getReceiptsByStallIds($stallIds)
     {
-        $receipts = Receipt::whereIn('stall_id'. $stallIds)->get();
+        $receipts = Receipt::whereIn('stall_id', $stallIds)->get();
 
         return $receipts;
     }
@@ -78,10 +78,10 @@ class ReceiptService
 
     public function searchReceipt($query)
     {
-        $stallId = Stall::where('name', 'like', '%'.$query.'%')
+        $stallId = Stall::where('name', 'like', '%' . $query . '%')
             ->pluck('id');
 
-        return Receipt::where('payment', 'like', '%'.$query.'%')
+        return Receipt::where('payment', 'like', '%' . $query . '%')
             ->orWhereIn('stall_id', $stallId)
             ->get();
     }

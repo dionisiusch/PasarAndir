@@ -246,6 +246,23 @@ return('Rp ' + rupiah);
     }
     });
 
+    $.ajax({
+    url:'/user/receipt/'+id+"/stall",
+    type: 'get',
+    dataType:'json',
+    data: {id:id},
+    success: function(result) {
+
+        console.log(result.text);
+        $('#data-table-receipt').html(result.text);
+
+    },
+    error: function(request,msg,error) {
+    console.log(msg);
+    console.log(error);
+    }
+    });
+
     });
 
 

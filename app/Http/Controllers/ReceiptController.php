@@ -161,7 +161,7 @@ class ReceiptController extends Controller
         }
     }
 
-    public function showReceiptsByStallId($id)
+    public function showReceiptsByStallId(Request $request)
     {
         if ($request->ajax()) {
             $text = "";
@@ -170,7 +170,7 @@ class ReceiptController extends Controller
             foreach ($receipts as $receipt) {
                 $invoiceId = $this->invoiceReceiptService->getInvoiceByReceiptId($receipt->id);
                 $invoice = $this->invoiceService->getInvoiceById($invoiceId);
-                $text .= "<tr class='tr-shadow invoice-row' id='" . $receipt->id . "' data-toggle='modal' data-target='#largeModal'><td style='font-weight: bold'>" . $invoice->month_bill . "</td><td style='font-weight: bold'>" . $receipt->payment. "</td><td style='font-weight: bold'>" . $receipt->created_at . "</td>";
+                $text .= "<tr class='tr-shadow invoice-row' id='" . $receipt->id . "' data-toggle='modal' data-target='#largeModal'><td style='font-weight: bold'>" . $invoice->month_bill . "</td><td style='font-weight: bold'>" . $receipt->payment . "</td><td style='font-weight: bold'>" . $receipt->created_at . "</td>";
             }
             $output = array(
                 'text' => $text
