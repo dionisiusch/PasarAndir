@@ -133,8 +133,18 @@
                             <td></td>
                             <td></td>
                         <tr>
-                            <td colspan='4'></td>
+                            <td colspan='8' style="background-color:#ffd2a6;text-align:center;font-weight:bold">RINCIAN
+                                PEMBAYARAN</td>
                         </tr>
+                        <tr>
+                            <td style="font-weight:bold" colspan="4">TANGGAL PEMBAYARAN</td>
+                            <td style="font-weight:bold" colspan="4">JUMLAH PEMBAYARAN</td>
+                        <tr>
+                        <tr id='rincian_pembayaran'></tr>
+                        <tr style="background-color:#f59d8c">
+                            <td style="font-weight:bold" colspan="4">SISA TAGIHAN</td>
+                            <td style="font-weight:bold" colspan="4" id='sisa_tagihan'></td>
+                        <tr>
                     </tbody>
                 </table>
             </div>
@@ -205,6 +215,9 @@ return('Rp ' + rupiah);
     $('#electricity_meter_used').html(response.electricity_meter_used);
     $('#kwh_price').html(rupiah(response.kwh_price));
     $('#grace_date').html(response.grace_date);
+    var sisa_tagihan = response.grand_total - response.total_payment;
+    console.log(sisa_tagihan);
+    if(sisa_tagihan<0){ $('#sisa_tagihan').html(rupiah(0)); }else{ $('#sisa_tagihan').html(rupiah(sisa_tagihan)); }
     },
     error: function(request,msg,error) {
     console.log(msg);
