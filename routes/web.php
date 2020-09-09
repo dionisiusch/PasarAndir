@@ -172,6 +172,8 @@ Route::get('/userselect2', 'UserController@select2')->name('master.user.select2'
 Route::get('/categoryselect2', 'CategoryController@select2')->name('master.category.select2');
 Route::get('/employerselect2', 'EmployerController@select2')->name('master.employer.select2');
 Route::get('/stallselect2', 'StallController@select2')->name('master.stall.select2');
+Route::get('/roleselect2', 'RoleController@select2')->name('master.role.select2');
+Route::get('/electricityselect2', 'ElectricityController@select2')->name('master.electricity.select2');
 
 //route chart
 Route::get('/chartstall', 'ChartController@stall')->name('chart.stall');

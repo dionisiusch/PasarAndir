@@ -1,89 +1,92 @@
 @extends('layouts.app')
 @section('content')
-             <div class="row"> 
-            <div class="col-md-12">
-                <!-- DATA TABLE -->
-                <h3 class="title-5 m-b-35">Master Data Karyawan</h3>
-                  <div class="table-data__tool-left">
-                    <div class="rs-select2--light rs-select2--md" style="display: contents">
-                       <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i style="font-size:150%" class="zmdi zmdi-search"></i>
-                       <button onclick="window.location.href='/master/employer/register'" style="float:right" type="button" class="au-btn au-btn-icon au-btn--green au-btn--small" >
-                       <i class="zmdi zmdi-plus"></i>Tambah Karyawan</button>
-                    </div>
-                  </div>
-                
-                <div class="table-responsive table-responsive-data2">
-                  <table class="table table-data2">
-                    <thead>
-                      <tr>
-                        <th>Username</th>
-                        <th>Nama PIC</th>
-                        <th>No. Telp</th>
-                        <th>E-mail</th>
-                        <th>Role</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
-                <!-- END DATA TABLE -->
-              </div>
-            </div>
-
-        </div>
+<div class="row">
+  <div class="col-md-12">
+    <!-- DATA TABLE -->
+    <h3 class="title-5 m-b-35">Master Data Karyawan</h3>
+    <div class="table-data__tool-left">
+      <div class="rs-select2--light rs-select2--md" style="display: contents">
+        <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i
+          style="font-size:150%" class="zmdi zmdi-search"></i>
+        <button onclick="window.location.href='/master/employer/registration'" style="float:right" type="button"
+          class="au-btn au-btn-icon au-btn--green au-btn--small">
+          <i class="zmdi zmdi-plus"></i>Tambah Karyawan</button>
+      </div>
     </div>
 
+    <div class="table-responsive table-responsive-data2">
+      <table class="table table-data2">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Nama PIC</th>
+            <th>No. Telp</th>
+            <th>E-mail</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <!-- END DATA TABLE -->
+    </div>
   </div>
 
-      
+</div>
+</div>
 
-         <!-- modal scroll update -->
-  <div class="modal fade" id="scrollmodal-update" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="card">
-                                    <div class="card-header">
-                                        <strong>Update Data</strong> Karyawan
-                                    </div>
-                                    <div class="card-body card-block">
-                                        <form id="update" action="" method="post">
-                                            @csrf
-                                            @method('PUT')
-                                             <div class="form-group">
-                                                <label class=" form-control-label">Username</label>
-                                                <input type="text" id="username" placeholder="Username.." class="form-control" readonly>
-                                                <label class=" form-control-label">Nama PIC</label>
-                                                <input type="text" id="name" name="name" placeholder="Nama PIC.." class="form-control">
-                                                <label class=" form-control-label">Nomor Telepon</label>
-                                                <input type="text" id="phone_number" name="phone_number" placeholder="Nomor Telepon.." class="form-control">
-                                                <label class=" form-control-label">Email</label>
-                                                <input type="email" id="email" name="email" placeholder="Email.." class="form-control">
-                                            </div>
-                                       
-                                    </div>
-                                    <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary btn-sm" style="float:right;">
-                                            <i class="fa fa-dot-circle-o"></i> Submit
-                                        </button>
-                                    </div>
-                                     </form>
-                                </div>
-            </div>      
+</div>
+
+
+
+<!-- modal scroll update -->
+<div class="modal fade" id="scrollmodal-update" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-header">
+            <strong>Update Data</strong> Karyawan
           </div>
+          <div class="card-body card-block">
+            <form id="update" action="" method="post">
+              @csrf
+              @method('PUT')
+              <div class="form-group">
+                <label class=" form-control-label">Username</label>
+                <input type="text" id="username" placeholder="Username.." class="form-control" readonly>
+                <label class=" form-control-label">Nama PIC</label>
+                <input type="text" id="name" name="name" placeholder="Nama PIC.." class="form-control">
+                <label class=" form-control-label">Nomor Telepon</label>
+                <input type="text" id="phone_number" name="phone_number" placeholder="Nomor Telepon.."
+                  class="form-control">
+                <label class=" form-control-label">Email</label>
+                <input type="email" id="email" name="email" placeholder="Email.." class="form-control">
+              </div>
+
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary btn-sm" style="float:right;">
+              <i class="fa fa-dot-circle-o"></i> Submit
+            </button>
+          </div>
+          </form>
         </div>
-      <!-- end modal scroll --> 
+      </div>
+    </div>
+  </div>
+  <!-- end modal scroll -->
 
 
-<script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
-<script>
-  
-$(document).ready(function(){
+  <script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
+  <script>
+    $(document).ready(function(){
 $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -163,6 +166,6 @@ $(document).on('click', '.edit', function(){
 });
 
 });
-</script>
+  </script>
 
-@endsection
+  @endsection

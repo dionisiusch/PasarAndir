@@ -55,19 +55,19 @@ class ElectricityController extends Controller
     {
         try {
             $request->validate([
-                'name'=>'required',
-                'power_meter'=>'required',
-                'kva_price'=>'required',
-                'kwh_price'=>'required'
+                'name' => 'required',
+                'power_meter' => 'required',
+                'kva_price' => 'required',
+                'kwh_price' => 'required'
             ]);
             $kvaPrice = $this->helper->price_decoder($request->kva_price);
             $kwhPrice = $this->helper->price_decoder($request->kwh_price);
-            
+
             $response = $this->electricityService->createElectricity($request, $kvaPrice, $kwhPrice);
-    
-            return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Ditambahkan.');    
+
+            return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Ditambahkan.');
         } catch (Exception $e) {
-            return redirect('/master/electricity')->with('error', 'Data Listrik PLN Gagal Ditambahkan.');    
+            return redirect('/master/electricity')->with('error', 'Data Listrik PLN Gagal Ditambahkan.');
         }
     }
 
@@ -79,18 +79,18 @@ class ElectricityController extends Controller
      */
     public function show(Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $id = $request->get('id');
             $electricity = $this->electricityService->getElectricityById($id);
-      
+
             $data = array(
-            'kwh_price'  => $electricity->kwh_price,
-            'kva_price'  => $electricity->kva_price,
-            'power_meter'  => $electricity->type,
-            'name'  => $electricity->name,
-            'id'  => $id
+                'kwh_price'  => $electricity->kwh_price,
+                'kva_price'  => $electricity->kva_price,
+                'power_meter'  => $electricity->type,
+                'name'  => $electricity->name,
+                'id'  => $id
             );
-            
+
             return json_encode($data);
         }
     }
@@ -117,16 +117,16 @@ class ElectricityController extends Controller
     {
         try {
             $request->validate([
-                'name'=>'required',
-                'power_meter'=>'required',
-                'kva_price'=>'required',
-                'kwh_price'=>'required'
+                'name' => 'required',
+                'power_meter' => 'required',
+                'kva_price' => 'required',
+                'kwh_price' => 'required'
             ]);
             $kvaPrice = $this->helper->price_decoder($request->kva_price);
             $kwhPrice = $this->helper->price_decoder($request->kwh_price);
-    
+
             $response = $this->electricityService->updateElectricityById($request, $id, $kvaPrice, $kwhPrice);
-    
+
             return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Di Update.');
         } catch (Exception $e) {
             return redirect('/master/electricity')->with('error', 'Data Listrik PLN Gagal Di Update.');
@@ -144,7 +144,7 @@ class ElectricityController extends Controller
         $msg = 'Data Listrik PLN Gagal Dihapus.';
         $response = $this->electricityService->deleteElectricityById($id);
 
-        if($response){
+        if ($response) {
             $msg = 'Data Listrik PLN Berhasil Dihapus.';
         }
 
@@ -153,36 +153,36 @@ class ElectricityController extends Controller
 
     public function search(Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $output = '';
             $query = $request->get('query');
-            if($query != '') {
+            if ($query != '') {
                 $data = $this->electricityService->searchElectricity($query);
             } else {
                 $data = $this->electricityService->showAllElectricities();
             }
-         
+
             $total_row = $data->count();
-            if($total_row > 0) {
-                foreach($data as $row) {
+            if ($total_row > 0) {
+                foreach ($data as $row) {
                     $output .= '
                     <tr class="tr-shadow">
-                        <td>'.$row->name.'</td>
+                        <td>' . $row->name . '</td>
                         <td>
-                        '.$row->power_meter.'
+                        ' . $row->power_meter . '
                         </td>
                         <td>
-                        '.parent::rupiah($row->kva_price).'
+                        ' . parent::rupiah($row->kva_price) . '
                         </td>
                         <td>
-                        '.parent::rupiah($row->kwh_price).'
+                        ' . parent::rupiah($row->kwh_price) . '
                         </td>
                         <td>
                             <div class="table-data-feature">
-                            <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+                            <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="' . $row->id . '">
                                 <i class="zmdi zmdi-edit"></i>
                             </button>
-                            <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+                            <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="' . $row->id . '">
                                 <i class="zmdi zmdi-delete"></i>
                             </button>
                             </div>
@@ -198,13 +198,36 @@ class ElectricityController extends Controller
                 </tr>
                 ';
             }
-            
+
             $data = array(
                 'table_data'  => $output,
                 'total_data'  => $total_row
             );
-            
+
             return json_encode($data);
         }
+    }
+
+    public function select2(Request $request)
+    {
+        $search = $request->search;
+
+        if ($search != '') {
+            $electricities = $this->electricityService->searchElectricity($search);
+        } else {
+            $electricities = $this->electricityService->showAllElectricities();
+        }
+
+        $response = array();
+
+        foreach ($electricities as $electricity) {
+            $name = $electricity->name . " | " . $electricity->power_meter;
+            $response[] = array(
+                "id" => $electricity->id,
+                "text" => $name
+            );
+        }
+
+        echo json_encode($response);
     }
 }
