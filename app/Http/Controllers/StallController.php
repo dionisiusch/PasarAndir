@@ -94,7 +94,6 @@ class StallController extends Controller
                 'name' => 'required',
                 'length' => 'required',
                 'width' => 'required',
-                'height' => 'required',
                 'status' => 'required'
             ]);
 
@@ -177,7 +176,6 @@ class StallController extends Controller
                 'name' => 'required',
                 'length' => 'required',
                 'width' => 'required',
-                'height' => 'required',
                 'status' => 'required'
             ]);
 
@@ -262,8 +260,8 @@ class StallController extends Controller
                         </td>
                         <td>' . $category->name . '</td>
                         <td>' . $row->name . '</td>
-                        <td>' . $row->width . '</td>
                         <td>' . $row->length . '</td>
+                        <td>' . $row->width . '</td>
                         <td>' . $row->height . '</td>
                         <td>' . $status . '</td>
                         <td>

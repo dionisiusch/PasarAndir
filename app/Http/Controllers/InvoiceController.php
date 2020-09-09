@@ -137,6 +137,7 @@ class InvoiceController extends Controller
             $stallElectricity = $this->stallElectricityService->getStallElectricityById($invoice->stall_electricity_id);
             $stallWater = $this->stallWaterService->getStallWaterById($invoice->stall_water_id);
             $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+            $billStall = $area->price * $stall->width * $stall->length;
             $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
             $billElectricityKva = $electricity->power_meter * $stallElectricity->kva_price;
             $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
@@ -147,8 +148,9 @@ class InvoiceController extends Controller
             $data = array(
                 'stall_id' => $stall->id,
                 'total_payment' => $totalPayment,
-                'grand_total' => $billElectricityKwh + $billElectricityKva + $billWater + $invoice->fine - $invoice->discount,
-                'sub_total' => $billElectricityKwh + $billElectricityKva + $billWater,
+                'grand_total' => $billStall + $billElectricityKwh + $billElectricityKva + $billWater + $invoice->fine - $invoice->discount,
+                'sub_total' => $billStall + $billElectricityKwh + $billElectricityKva + $billWater,
+                'stall_bill' => $billStall,
                 'water_bill' => $billWater,
                 'kwh_price' => $stallElectricity->kwh_price,
                 'kva_price' => $stallElectricity->kva_price,
@@ -206,14 +208,16 @@ class InvoiceController extends Controller
         $invoice = $this->invoiceService->getInvoiceById($id);
         $totalPayment = $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($id);
         $stall = $this->stallService->getStallById($invoice->stall_id);
+        $area = $this->areaService->getAreaById($stall->area_id);
         $stallElectricity = $this->stallElectricityService->getStallElectricityById($invoice->stall_electricity_id);
         $stallWater = $this->stallWaterService->getStallWaterById($invoice->stall_water_id);
         $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+        $billStall = $area->price * $stall->width * $stall->length;
         $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
         $billElectricityKva = $electricity->power_meter * $stallElectricity->kva_price;
         $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
 
-        $totalThatMustBePaid = $billElectricityKwh + $billElectricityKva + $billWater + $invoice->fine - $invoice->discount;
+        $totalThatMustBePaid = $billStall + $billElectricityKwh + $billElectricityKva + $billWater + $invoice->fine - $invoice->discount;
 
         return ($totalThatMustBePaid - $totalPayment);
     }
@@ -363,10 +367,11 @@ class InvoiceController extends Controller
                     $stallElectricity = $this->stallElectricityService->getStallElectricityById($row->stall_electricity_id);
                     $stallWater = $this->stallWaterService->getStallWaterById($row->stall_water_id);
                     $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+                    $billStall = $area->price * $stall->width * $stall->length;
                     $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
                     $billElectricityKva = $electricity->power_meter * $stallElectricity->kva_price;
                     $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
-                    $total = $billElectricityKwh + $billElectricityKva + $billWater + $row->fine - $row->discount;
+                    $total = $billStall + $billElectricityKwh + $billElectricityKva + $billWater + $row->fine - $row->discount;
                     $blok = "[" . $floor->name . "] " . " Blok " . $area->name . " No. " . $area->no;
                     $status = "";
                     if ($row->status == "Lunas") {
