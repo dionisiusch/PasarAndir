@@ -24,7 +24,7 @@ class StallService
             'name' => $data->get('name'),
             'length' => $data->get('length'),
             'width' => $data->get('width'),
-            'height' => $data->get('height'),
+            'height' => $data->get('height') ?? 0,
             'status' => $data->get('status')
         ]);
         $stall->save();
@@ -56,7 +56,7 @@ class StallService
         $stall->name = $data->get('name');
         $stall->length = $data->get('length');
         $stall->width = $data->get('width');
-        $stall->height = $data->get('height');
+        $stall->height = $data->get('height') ?? 0;
         $stall->status = $data->get('status');
         $stall->save();
 

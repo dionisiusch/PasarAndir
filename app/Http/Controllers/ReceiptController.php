@@ -114,14 +114,16 @@ class ReceiptController extends Controller
 
             $invoice = $this->invoiceService->getInvoiceById($request->invoice_id);
             $stall = $this->stallService->getStallById($invoice->stall_id);
+            $area = $this->areaService->getAreaById($stall->area_id);
             $stallElectricity = $this->stallElectricityService->getStallElectricityById($invoice->stall_electricity_id);
             $stallWater = $this->stallWaterService->getStallWaterById($invoice->stall_water_id);
             $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+            $billStall = $area->price * $stall->width * $stall->length;
             $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
             $billElectricityKva = $electricity->power_meter * $stallElectricity->kva_price;
             $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
 
-            $total = $billElectricityKwh + $billElectricityKva + $billWater + $invoice->fine - $invoice->discount;
+            $total = $billStall + $billElectricityKwh + $billElectricityKva + $billWater + $invoice->fine - $invoice->discount;
 
             $totalPaidByInvoiceId = $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($request->invoice_id);
 
