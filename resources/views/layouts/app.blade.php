@@ -34,6 +34,7 @@
 
     <!-- Main CSS-->
     <link href="{{ asset('css/theme.css') }}" rel="stylesheet" media="all">
+    <link href="{{ asset('css/jquery-ui.css') }}" rel="stylesheet" media="all">
 
   </head>
 
@@ -116,6 +117,11 @@
             </ul>
           </div>
         </nav>
+        <style>
+          .ui-datepicker-calendar {
+            display: none;
+          }
+        </style>
       </header>
       <!-- END HEADER MOBILE-->
 
@@ -282,6 +288,7 @@
 
     <!-- Jquery JS-->
     <script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ asset('assets/jquery-ui.min.js') }}"></script>
     <!-- Bootstrap JS-->
     <script src="{{ asset('assets/bootstrap-4.1/popper.min.js') }}"></script>
     <script src="{{ asset('assets/bootstrap-4.1/bootstrap.min.js') }}"></script>

@@ -2,23 +2,24 @@
 
 @section('content')
 
-<div class="row"> 
-	<div class="col-md-12">
-		<div class="card">
-			<div class="card-header">
-				<strong>Tambah</strong> Invoice
-			</div>
-			<div class="card-body card-block">
-				<form action="{{ route('master.invoice.store') }}" method="post">
-					@csrf
-					<div class="form-group">
-						<label class="form-control-label">Kios</label>
-						<select name="stall_id" id='selStall' class='form-control'></select>
-					</div>
-					
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Tambah</strong> Invoice
+            </div>
+            <div class="card-body card-block">
+                <form action="{{ route('master.invoice.store') }}" method="post">
+                    @csrf
+                    <div class="form-group">
+                        <label class="form-control-label">Kios</label>
+                        <select name="stall_id" id='selStall' class='form-control'></select>
+                    </div>
+
                     <div class="form-group">
                         <label class="form-control-label">Periode (Bulan Tahun)</label>
-                        <input type="text" name="month_bill" placeholder="Periode.." class="form-control">
+                        <input placeholder="Periode.." autocomplete="off" id="periode" class="form-control date-picker">
+                        <input type="hidden" name="month_bill" id="month_bill" value="">
                     </div>
 
                     <div class="form-group">
@@ -28,7 +29,8 @@
 
                     <div class="form-group">
                         <label class="form-control-label">Pembayaran Minimum</label>
-                        <input type="text" name="minimal_payment" id="minimal_payment" placeholder="Pembayaran Minimum.." class="form-control">
+                        <input type="text" name="minimal_payment" id="minimal_payment"
+                            placeholder="Pembayaran Minimum.." class="form-control">
                     </div>
 
                     <div class="form-group">
@@ -44,15 +46,15 @@
                     </div>
 
 
-				</div>
-				<div class="card-footer">
-					<button type="submit" class="btn btn-primary btn-sm" style="float:right;">
-						<i class="fa fa-dot-circle-o"></i> Submit
-					</button>
-				</div>
-			</form>
-		</div>
-	</div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary btn-sm" style="float:right;">
+                    <i class="fa fa-dot-circle-o"></i> Submit
+                </button>
+            </div>
+            </form>
+        </div>
+    </div>
 </div>
 </div>
 
@@ -64,8 +66,7 @@
 <script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
 
 <script>
-
-	$(document).ready(function(){
+    $(document).ready(function(){
 
 		$( "#selStall" ).select2({
 			maximumSelectionLength: 5,
@@ -90,6 +91,23 @@
   }
 
 });
+
+$(function() {
+        $('.date-picker').datepicker( {
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'MM yy',
+        onClose: function(dateText, inst) { 
+        $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+        changeField();
+        }
+        });
+        });
+
+function changeField(){
+    $('#month_bill').val($('#periode').val());
+}   
 
 function rupiah(angka){
   var angka_str = angka.toString(); 
