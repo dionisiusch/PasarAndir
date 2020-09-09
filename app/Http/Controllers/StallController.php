@@ -122,7 +122,7 @@ class StallController extends Controller
             $user = $this->userService->getUserById($stall->user_id);
             $area = $this->areaService->getAreaById($stall->area_id);
             $floor = $this->floorService->getFloorById($area->floor_id);
-            $electricity_name = $electricity->name . " | " . $electricity->power_meter;
+            $electricity_name = $electricity->name . " | " . $electricity->power_meter . "W";
             $data = array(
                 'electricity_id' => $electricity->id,
                 'electricity_name' => $electricity_name,

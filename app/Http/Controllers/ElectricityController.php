@@ -221,7 +221,7 @@ class ElectricityController extends Controller
         $response = array();
 
         foreach ($electricities as $electricity) {
-            $name = $electricity->name . " | " . $electricity->power_meter;
+            $name = $electricity->name . " | " . $electricity->power_meter . "W";
             $response[] = array(
                 "id" => $electricity->id,
                 "text" => $name
