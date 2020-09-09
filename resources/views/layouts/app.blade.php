@@ -219,7 +219,7 @@
                         </div>
                         <div id="notif-wrap"></div>
                         <div class="notifi__footer">
-                          <a href="master/invoice">Lihat List Invoice</a>
+                          <a href="{{ url('/master/invoice') }}">Lihat List Invoice</a>
                         </div>
                       </div>
                     </div>
@@ -303,8 +303,6 @@
 
     <!-- Main JS-->
     <script src="{{ asset('js/main.js') }}"></script>
-
-    <script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
     <script>
       $(document).ready(function(){
     

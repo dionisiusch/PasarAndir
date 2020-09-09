@@ -166,12 +166,12 @@ Route::get('/invoicesearch', 'InvoiceController@search')->name('master.invoice.s
 Route::get('/invoicereceiptsearch', 'InvoiceController@searchForReceipt')->name('master.invoice.searchforreceipt');
 
 //route aax select2
-Route::get('/floorselect2', 'floorController@select2')->name('master.floor.select2');
-Route::get('/areaselect2', 'areaController@select2')->name('master.area.select2');
-Route::get('/userselect2', 'userController@select2')->name('master.user.select2');
-Route::get('/categoryselect2', 'categoryController@select2')->name('master.category.select2');
-Route::get('/employerselect2', 'employerController@select2')->name('master.employer.select2');
-Route::get('/stallselect2', 'stallController@select2')->name('master.stall.select2');
+Route::get('/floorselect2', 'FloorController@select2')->name('master.floor.select2');
+Route::get('/areaselect2', 'AreaController@select2')->name('master.area.select2');
+Route::get('/userselect2', 'UserController@select2')->name('master.user.select2');
+Route::get('/categoryselect2', 'CategoryController@select2')->name('master.category.select2');
+Route::get('/employerselect2', 'EmployerController@select2')->name('master.employer.select2');
+Route::get('/stallselect2', 'StallController@select2')->name('master.stall.select2');
 
 //route chart
 Route::get('/chartstall', 'ChartController@stall')->name('chart.stall');
@@ -181,8 +181,8 @@ Route::get('/chartinvoice', 'ChartController@invoice')->name('chart.invoice');
 Route::get('/notification/invoices/unpaid/gracedate', 'NotificationController@getUnpaidInvoicesThatPassTheGraceDate');
 
 //route meteran
-Route::get('/meteran', 'meteranController@index')->name('meteran.index');
-Route::get('/meteranelectricity', 'meteranController@getElectricityName')->name('meteran.electricity.name');
+Route::get('/meteran', 'MeteranController@index')->name('meteran.index');
+Route::get('/meteranelectricity', 'MeteranController@getElectricityName')->name('meteran.electricity.name');
 Route::post('/', 'MeteranController@store')->name('meteran.store');
 Route::get('/invoicecreate', 'InvoiceController@create')->name('invoice.create');
 Route::get('/receiptcreate', 'ReceiptController@create')->name('receipt.create');
