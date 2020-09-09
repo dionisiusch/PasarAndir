@@ -116,7 +116,7 @@ class InvoiceController extends Controller
 
         $response = $this->invoiceService->createInvoice($request, $stallElectricityId->id, $stallWaterId->id, $minimalPayment);
 
-        return redirect('/master/invoice')->with('success', 'Data Invoice Berhasil Ditambahkan.');
+        return redirect('invoicecreate')->with('success', 'Data Invoice Berhasil Ditambahkan.');
     }
 
     /**
