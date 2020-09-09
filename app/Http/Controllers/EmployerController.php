@@ -157,7 +157,7 @@ class EmployerController extends Controller
         return $msg;
     }
 
-    public function register()
+    public function registration()
     {
         return view('auth.registeremployer');
     }

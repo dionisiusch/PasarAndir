@@ -7,7 +7,7 @@
                   <div class="table-data__tool-left">
                     <div class="rs-select2--light rs-select2--md" style="display: contents">
                        <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i style="font-size:150%" class="zmdi zmdi-search"></i>
-                       <button  onclick="window.location.href='/master/employer/register'" style="float:right" type="button" class="au-btn au-btn-icon au-btn--green au-btn--small" >
+                       <button onclick="window.location.href='/master/employer/register'" style="float:right" type="button" class="au-btn au-btn-icon au-btn--green au-btn--small" >
                        <i class="zmdi zmdi-plus"></i>Tambah Karyawan</button>
                     </div>
                   </div>

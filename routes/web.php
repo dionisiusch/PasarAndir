@@ -127,9 +127,9 @@ Route::group([
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'EmployerController@index')->name('master.employer.index');
+        Route::get('/registration', 'EmployerController@registration')->name('master.employer.registration');
         Route::get('/{id}', 'EmployerController@show')->name('master.employer.show');
         Route::put('/{id}', 'EmployerController@update')->name('master.employer.update');
-        Route::get('/register', 'EmployerController@register')->name('master.employer.register');
         Route::put('/{id}/password', 'EmployerController@updatePassword')->name('master.employer.updatePassword');
         Route::delete('/{id}', 'EmployerController@destroy')->name('master.employer.delete');
         Route::post('/', 'Auth\EmployerRegisterController@register')->name('master.employer.store');
