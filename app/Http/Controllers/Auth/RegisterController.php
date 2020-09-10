@@ -39,7 +39,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        
     }
 
     /**
@@ -52,9 +52,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'username' => ['required', 'string', 'max:50', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'pic_name' => ['required', 'string'],
-            'pic_phone_number' => ['required', 'string'],
+            'password' => ['required', 'string', 'confirmed']
         ]);
     }
 
@@ -69,9 +67,9 @@ class RegisterController extends Controller
         return User::create([
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
-            'pic_name' => $data['pic_name'],
-            'pic_phone_number' => $data['pic_phone_number'],
-            'joined_date' => Carbon::now()->toDateString(),
+            'pic_name' => $data['pic_name'] ?? null,
+            'pic_phone_number' => $data['pic_phone_number'] ?? null,
+            'joined_date' => Carbon::now('Asia/Jakarta')->toDateString() ?? null,
         ]);
     }
 }

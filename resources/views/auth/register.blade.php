@@ -85,7 +85,7 @@
                                         <label>PIC Name</label>
                                         <input id="pic_name" type="text"
                                             class="form-control @error('pic_name') is-invalid @enderror" name="pic_name"
-                                            value="{{ old('pic_name') }}" required autocomplete="pic_name">
+                                            value="{{ old('pic_name') }}" autocomplete="pic_name">
 
                                         @error('pic_name')
                                         <span class="invalid-feedback" role="alert">
@@ -97,8 +97,7 @@
                                         <label>PIC Phone Number</label>
                                         <input id="pic_phone_number" type="text"
                                             class="form-control @error('pic_phone_number') is-invalid @enderror"
-                                            name="pic_phone_number" value="{{ old('pic_phone_number') }}" required
-                                            autocomplete="pic_phone_number">
+                                            name="pic_phone_number" value="{{ old('pic_phone_number') }}" autocomplete="pic_phone_number">
 
                                         @error('pic_phone_number')
                                         <span class="invalid-feedback" role="alert">
