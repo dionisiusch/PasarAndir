@@ -13,6 +13,7 @@ use App\Http\Services\StallService;
 use App\Http\Services\AreaService;
 use App\Http\Services\FloorService;
 use App\Http\Services\ElectricityService;
+use App\Http\Services\PowerMeterService;
 use App\Http\Services\StallElectricityService;
 use App\Http\Services\StallWaterService;
 use App\Http\Services\UserService;
@@ -40,6 +41,9 @@ class ReceiptController extends Controller
     /** @var ElectricityService */
     private $electricityService;
 
+    /** @var PowerMeterService */
+    private $powerMeterService;
+
     /** @var StallService */
     private $stallService;
 
@@ -63,6 +67,7 @@ class ReceiptController extends Controller
         $this->stallElectricityService = app(StallElectricityService::class);
         $this->stallWaterService = app(StallWaterService::class);
         $this->electricityService = app(ElectricityService::class);
+        $this->powerMeterService = app(PowerMeterService::class);
         $this->stallService = app(StallService::class);
         $this->areaService = app(AreaService::class);
         $this->floorService = app(FloorService::class);
@@ -118,9 +123,10 @@ class ReceiptController extends Controller
             $stallElectricity = $this->stallElectricityService->getStallElectricityById($invoice->stall_electricity_id);
             $stallWater = $this->stallWaterService->getStallWaterById($invoice->stall_water_id);
             $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+            $powerMeter = $this->powerMeterService->getPowerMeterById($electricity->power_meter_id);
             $billStall = $area->price * $stall->width * $stall->length;
             $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
-            $billElectricityKva = $electricity->power_meter * $stallElectricity->kva_price;
+            $billElectricityKva = $powerMeter->power_meter * $stallElectricity->kva_price;
             $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
 
             $total = $billStall + $billElectricityKwh + $billElectricityKva + $billWater + $invoice->fine - $invoice->discount;

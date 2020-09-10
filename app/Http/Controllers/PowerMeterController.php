@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Electricity;
+use App\Model\PowerMeter;
 use Illuminate\Http\Request;
-use App\Http\Services\ElectricityService;
 use App\Http\Services\PowerMeterService;
 use GuzzleHttp\Client;
 use DB;
 use App\Http\Helpers\Helper;
 
-class ElectricityController extends Controller
+class PowerMeterController extends Controller
 {
-    /** @var ElectricityService */
-    private $electricityService;
-
     /** @var PowerMeterService */
     private $powerMeterService;
 
@@ -23,7 +19,6 @@ class ElectricityController extends Controller
 
     public function __construct()
     {
-        $this->electricityService = app(ElectricityService::class);
         $this->powerMeterService = app(PowerMeterService::class);
         $this->helper = app(Helper::class);
     }
@@ -35,9 +30,9 @@ class ElectricityController extends Controller
      */
     public function index()
     {
-        $electricities = $this->electricityService->showAllElectricities();
+        $powerMeters = $this->powerMeterService->showAllPowerMeters();
 
-        return view('master.electricity.electricityShow');
+        return view('master.powermeter.powermeterShow');
     }
 
     /**
@@ -47,7 +42,21 @@ class ElectricityController extends Controller
      */
     public function create()
     {
-        //
+        try {
+            $request->validate([
+                'power_meter' => 'required',
+                'kva_price' => 'required',
+                'kwh_price' => 'required'
+            ]);
+            $kvaPrice = $this->helper->price_decoder($request->kva_price);
+            $kwhPrice = $this->helper->price_decoder($request->kwh_price);
+
+            $response = $this->powerMeterService->createPowerMeter($request, $kvaPrice, $kwhPrice);
+
+            return redirect('/master/powermeter')->with('success', 'Data Watt PLN Berhasil Ditambahkan.');
+        } catch (Exception $e) {
+            return redirect('/master/powermeter')->with('error', 'Data Watt PLN Gagal Ditambahkan.');
+        }
     }
 
     /**
@@ -58,38 +67,25 @@ class ElectricityController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $request->validate([
-                'power_meter_id' => 'required',
-                'name' => 'required'
-            ]);
-
-            $response = $this->electricityService->createElectricity($request);
-
-            return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Ditambahkan.');
-        } catch (Exception $e) {
-            return redirect('/master/electricity')->with('error', 'Data Listrik PLN Gagal Ditambahkan.');
-        }
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\Electricity  $electricity
+     * @param  \App\Model\PowerMeter  $powerMeter
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
     {
         if ($request->ajax()) {
             $id = $request->get('id');
-            $electricity = $this->electricityService->getElectricityById($id);
-            $powerMeter = $this->powerMeterService->getPowerMeterById($electricity->power_meter_id);
+            $powerMeter = $this->powerMeterService->getPowerMeterById($id);
 
             $data = array(
                 'kwh_price'  => $powerMeter->kwh_price,
                 'kva_price'  => $powerMeter->kva_price,
                 'power_meter'  => $powerMeter->power_meter,
-                'name'  => $electricity->name,
                 'id'  => $id
             );
 
@@ -100,10 +96,10 @@ class ElectricityController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Model\Electricity  $electricity
+     * @param  \App\Model\PowerMeter  $powerMeter
      * @return \Illuminate\Http\Response
      */
-    public function edit(Electricity $electricity)
+    public function edit(PowerMeter $powerMeter)
     {
         //
     }
@@ -112,38 +108,41 @@ class ElectricityController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Electricity  $electricity
+     * @param  \App\Model\PowerMeter  $powerMeter
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         try {
             $request->validate([
-                'power_meter_id' => 'required',
-                'name' => 'required'
+                'power_meter' => 'required',
+                'kva_price' => 'required',
+                'kwh_price' => 'required'
             ]);
+            $kvaPrice = $this->helper->price_decoder($request->kva_price);
+            $kwhPrice = $this->helper->price_decoder($request->kwh_price);
 
-            $response = $this->electricityService->updateElectricityById($request, $id);
+            $response = $this->powerMeterService->updatePowerMeterById($request, $id, $kvaPrice, $kwhPrice);
 
-            return redirect('/master/electricity')->with('success', 'Data Listrik PLN Berhasil Di Update.');
+            return redirect('/master/powermeter')->with('success', 'Data Watt PLN Berhasil Di Update.');
         } catch (Exception $e) {
-            return redirect('/master/electricity')->with('error', 'Data Listrik PLN Gagal Di Update.');
+            return redirect('/master/powermeter')->with('error', 'Data Watt PLN Gagal Di Update.');
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\Electricity  $electricity
+     * @param  \App\Model\PowerMeter  $powerMeter
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $msg = 'Data Listrik PLN Gagal Dihapus.';
-        $response = $this->electricityService->deleteElectricityById($id);
+        $msg = 'Data Watt PLN Gagal Dihapus.';
+        $response = $this->powerMeterService->deletePowerMeterById($id);
 
         if ($response) {
-            $msg = 'Data Listrik PLN Berhasil Dihapus.';
+            $msg = 'Data Watt PLN Berhasil Dihapus.';
         }
 
         return $msg;
@@ -155,26 +154,24 @@ class ElectricityController extends Controller
             $output = '';
             $query = $request->get('query');
             if ($query != '') {
-                $data = $this->electricityService->searchElectricity($query);
+                $data = $this->powerMeterService->searchPowerMeter($query);
             } else {
-                $data = $this->electricityService->showAllElectricities();
+                $data = $this->powerMeterService->showAllPowerMeters();
             }
 
             $total_row = $data->count();
             if ($total_row > 0) {
                 foreach ($data as $row) {
-                    $powerMeter = $this->powerMeterService->getPowerMeterById($row->power_meter_id);
                     $output .= '
                     <tr class="tr-shadow">
-                        <td>' . $row->name . '</td>
                         <td>
-                        ' . $powerMeter->power_meter . '
+                        ' . $row->power_meter . '
                         </td>
                         <td>
-                        ' . parent::rupiah($powerMeter->kva_price) . '
+                        ' . parent::rupiah($row->kva_price) . '
                         </td>
                         <td>
-                        ' . parent::rupiah($powerMeter->kwh_price) . '
+                        ' . parent::rupiah($row->kwh_price) . '
                         </td>
                         <td>
                             <div class="table-data-feature">
@@ -212,19 +209,17 @@ class ElectricityController extends Controller
         $search = $request->search;
 
         if ($search != '') {
-            $electricities = $this->electricityService->searchElectricity($search);
+            $powerMeters = $this->powerMeterService->searchPowerMeter($search);
         } else {
-            $electricities = $this->electricityService->showAllElectricities();
+            $powerMeters = $this->powerMeterService->showAllPowerMeters();
         }
 
         $response = array();
 
-        foreach ($electricities as $electricity) {
-            $powerMeter = $this->powerMeterService->getPowerMeterById($electricity->power_meter_id);
-            $name = $electricity->name . " | " . $powerMeter->power_meter . "W";
+        foreach ($powerMeters as $powerMeter) {
             $response[] = array(
-                "id" => $electricity->id,
-                "text" => $name
+                "id" => $powerMeter->id,
+                "text" => $powerMeter->power_meter
             );
         }
 

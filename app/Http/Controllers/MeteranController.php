@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Services\ElectricityService;
+use App\Http\Services\PowerMeterService;
 use App\Http\Services\StallElectricityService;
 use App\Http\Services\StallWaterService;
 use App\Http\Services\StallService;
@@ -11,18 +12,14 @@ use App\Model\Stall;
 use App\Model\stallElectricity;
 use App\Model\StallWater;
 use App\Model\Electricity;
-
+use App\Model\PowerMeter;
 use DB;
 
 
 class MeteranController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     private $electricityService;
+    private $powerMeterService;
     private $stallService;
     private $stallWaterService;
     private $stallElectricityService;
@@ -30,6 +27,7 @@ class MeteranController extends Controller
     public function __construct()
     {
         $this->electricityService = app(ElectricityService::class);
+        $this->powerMeterService = app(PowerMeterService::class);
         $this->stallElectricityService = app(StallElectricityService::class);
         $this->stallService = app(StallService::class); 
         $this->stallWaterService = app(StallWaterService::class); 
@@ -57,6 +55,7 @@ class MeteranController extends Controller
         
         $stall = $this->stallService->getStallById($request->stall_id);
         $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+        $powerMeter = $this->powerMeterService->getPowerMeterById($electricity->power_meter_id);
 
         $requestStallElectricity = new Request();
         $requestStallWater = new Request();
@@ -65,8 +64,8 @@ class MeteranController extends Controller
             'stall_id' => $request->stall_id,
             'meter_before'=> $request->electricity_meter_before,
             'meter_after'=> $request->electricity_meter_after,
-            'kva_price' => $electricity->kva_price,
-            'kwh_price' => $electricity->kwh_price
+            'kva_price' => $powerMeter->kva_price,
+            'kwh_price' => $powerMeter->kwh_price
         ]);
 
         $requestStallWater->replace([

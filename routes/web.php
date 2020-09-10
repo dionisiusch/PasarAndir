@@ -76,6 +76,17 @@ Route::group([
     });
 
     Route::group([
+        'prefix' => '/powermeter'
+        // 'middleware' => 'auth'
+    ], function () {
+        Route::get('/', 'PowerMeterController@index')->name('master.powermeter.index');
+        Route::post('/', 'PowerMeterController@store')->name('master.powermeter.store');
+        Route::get('/{id}', 'PowerMeterController@show')->name('master.powermeter.show');
+        Route::put('/{id}', 'PowerMeterController@update')->name('master.powermeter.update');
+        Route::delete('/{id}', 'PowerMeterController@destroy')->name('master.powermeter.delete');
+    });
+
+    Route::group([
         'prefix' => '/electricity'
         // 'middleware' => 'auth'
     ], function () {
@@ -157,6 +168,7 @@ Route::group([
 Route::get('/floorsearch', 'FloorController@search')->name('master.floor.search');
 Route::get('/areasearch', 'AreaController@search')->name('master.area.search');
 Route::get('/categorysearch', 'CategoryController@search')->name('master.category.search');
+Route::get('/powermetersearch', 'PowerMeterController@search')->name('master.powermeter.search');
 Route::get('/electricitysearch', 'ElectricityController@search')->name('master.electricity.search');
 Route::get('/stallsearch', 'StallController@search')->name('master.stall.search');
 Route::get('/usersearch', 'UserController@search')->name('master.user.search');
@@ -173,6 +185,7 @@ Route::get('/categoryselect2', 'CategoryController@select2')->name('master.categ
 Route::get('/employerselect2', 'EmployerController@select2')->name('master.employer.select2');
 Route::get('/stallselect2', 'StallController@select2')->name('master.stall.select2');
 Route::get('/roleselect2', 'RoleController@select2')->name('master.role.select2');
+Route::get('/powermeterselect2', 'PowerMeterController@select2')->name('master.powermeter.select2');
 Route::get('/electricityselect2', 'ElectricityController@select2')->name('master.electricity.select2');
 
 //route chart
@@ -185,6 +198,6 @@ Route::get('/notification/invoices/unpaid/gracedate', 'NotificationController@ge
 //route meteran
 Route::get('/meteran', 'MeteranController@index')->name('meteran.index');
 Route::get('/meteranelectricity', 'MeteranController@getElectricityName')->name('meteran.electricity.name');
-Route::post('/', 'MeteranController@store')->name('meteran.store');
 Route::get('/invoicecreate', 'InvoiceController@create')->name('invoice.create');
 Route::get('/receiptcreate', 'ReceiptController@create')->name('receipt.create');
+Route::post('/', 'MeteranController@store')->name('meteran.store');

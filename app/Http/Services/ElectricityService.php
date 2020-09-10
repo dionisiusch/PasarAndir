@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Model\Electricity;
+use App\Model\PowerMeter;
 use DB;
 
 class ElectricityService
@@ -14,13 +15,11 @@ class ElectricityService
         return $electricities;
     }
 
-    public function createElectricity($data, $kvaPrice, $kwhPrice)
+    public function createElectricity($data)
     {
         $electricity = new Electricity([
-            'name' => $data->get('name'),
-            'power_meter' => $data->get('power_meter'),
-            'kva_price' => $kvaPrice,
-            'kwh_price' => $kwhPrice
+            'power_meter_id' => $data->get('power_meter_id'),
+            'name' => $data->get('name')
         ]);
         $electricity->save();
 
@@ -34,13 +33,11 @@ class ElectricityService
         return $electricity;
     }
 
-    public function updateElectricityById($data, $id, $kvaPrice, $kwhPrice)
+    public function updateElectricityById($data, $id)
     {
         $electricity = Electricity::find($id);
+        $electricity->power_meter_id = $data->get('power_meter_id');
         $electricity->name = $data->get('name');
-        $electricity->power_meter = $data->get('power_meter');
-        $electricity->kva_price = $kvaPrice;
-        $electricity->kwh_price = $kwhPrice;
         $electricity->save();
 
         return $electricity;
@@ -61,12 +58,13 @@ class ElectricityService
 
     public function searchElectricity($query)
     {
-        return DB::table('electricities')
-            ->where('name', 'like', '%'.$query.'%')
-            ->orWhere('power_meter', 'like', '%'.$query.'%')
+        $powerMeterId = PowerMeter::where('power_meter', 'like', '%'.$query.'%')
             ->orWhere('kva_price', 'like', '%'.$query.'%')
             ->orWhere('kwh_price', 'like', '%'.$query.'%')
-            ->whereNull('deleted_at')
+            ->pluck('id');
+
+        return Electricity::where('name', 'like', '%'.$query.'%')
+            ->orWhereIn('power_meter_id', $powerMeterId)
             ->get();
     }
 }

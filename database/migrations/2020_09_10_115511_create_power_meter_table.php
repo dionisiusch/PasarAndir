@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateElectricitiesTable extends Migration
+class CreatePowerMeterTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateElectricitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('electricities', function (Blueprint $table) {
+        Schema::create('power_meters', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('power_meter_id');
-            $table->string('name', 50);
+            $table->integer('power_meter');
+            $table->bigInteger('kva_price');
+            $table->bigInteger('kwh_price');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +30,6 @@ class CreateElectricitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('electricities');
+        Schema::dropIfExists('power_meters');
     }
 }

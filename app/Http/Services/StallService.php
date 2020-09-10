@@ -112,8 +112,7 @@ class StallService
 
     public function getActive()
     {
-        return DB::table('stalls')
-            ->where('status', 'Aktif')
+        return Stall::where('status', 'Aktif')
             ->get();
     }
 }

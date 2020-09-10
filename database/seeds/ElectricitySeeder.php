@@ -16,10 +16,8 @@ class ElectricitySeeder extends Seeder
     public function run()
     {
         DB::table('electricities')->insert([
+            'power_meter_id' => 1,
             'name' => 'B10001',
-            'power_meter' => 450,
-            'kva_price' => 54,
-            'kwh_price' => 2100,
             'created_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
             'updated_at' => Carbon::now('Asia/Jakarta')->toDateTimeString(),
         ]);

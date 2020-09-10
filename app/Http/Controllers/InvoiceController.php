@@ -20,6 +20,7 @@ use App\Http\Services\UserService;
 use App\Http\Services\AreaService;
 use App\Http\Services\FloorService;
 use App\Http\Services\InvoiceReceiptService;
+use App\Http\Services\PowerMeterService;
 use App\Http\Helpers\Helper;
 use GuzzleHttp\Client;
 use DB;
@@ -37,9 +38,12 @@ class InvoiceController extends Controller
 
     /** @var StallWaterService */
     private $stallWaterService;
-
+    
     /** @var ElectricityService */
     private $electricityService;
+
+    /** @var PowerMeterService */
+    private $powerMeterService;
 
     /** @var StallService */
     private $stallService;
@@ -63,6 +67,7 @@ class InvoiceController extends Controller
         $this->stallElectricityService = app(StallElectricityService::class);
         $this->stallWaterService = app(StallWaterService::class);
         $this->electricityService = app(ElectricityService::class);
+        $this->powerMeterService = app(PowerMeterService::class);
         $this->stallService = app(StallService::class);
         $this->userService = app(UserService::class);
         $this->areaService = app(AreaService::class);
@@ -137,9 +142,10 @@ class InvoiceController extends Controller
             $stallElectricity = $this->stallElectricityService->getStallElectricityById($invoice->stall_electricity_id);
             $stallWater = $this->stallWaterService->getStallWaterById($invoice->stall_water_id);
             $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+            $powerMeter = $this->powerMeterService->getPowerMeterById($electricity->power_meter_id);
             $billStall = $area->price * $stall->width * $stall->length;
             $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
-            $billElectricityKva = $electricity->power_meter * $stallElectricity->kva_price;
+            $billElectricityKva = $powerMeter->power_meter * $stallElectricity->kva_price;
             $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
             $stallElectricity_used = $stallElectricity->meter_after -  $stallElectricity->meter_before;
             $area_name = "[" . $floor->name . "]" . " Blok " . $area->name . " No. " . $area->no;
@@ -154,11 +160,11 @@ class InvoiceController extends Controller
                 'water_bill' => $billWater,
                 'kwh_price' => $stallElectricity->kwh_price,
                 'kva_price' => $stallElectricity->kva_price,
+                'electricity_power_meter' => $powerMeter->power_meter,
                 'electricity_meter_after' => $stallElectricity->meter_after,
                 'electricity_meter_before' => $stallElectricity->meter_before,
                 'electricity_meter_used' => $stallElectricity_used,
                 'electricity_bill' => $billElectricityKwh + $billElectricityKva,
-                'electricity_power_meter' => $electricity->power_meter,
                 'electricity_name' => $electricity->name,
                 'updated_at' => $invoice->updated_at,
                 'created_at' => $invoice->created_at,
@@ -212,9 +218,10 @@ class InvoiceController extends Controller
         $stallElectricity = $this->stallElectricityService->getStallElectricityById($invoice->stall_electricity_id);
         $stallWater = $this->stallWaterService->getStallWaterById($invoice->stall_water_id);
         $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+        $powerMeter = $this->powerMeterService->getPowerMeterById($electricity->power_meter_id);
         $billStall = $area->price * $stall->width * $stall->length;
         $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
-        $billElectricityKva = $electricity->power_meter * $stallElectricity->kva_price;
+        $billElectricityKva = $powerMeter->power_meter * $stallElectricity->kva_price;
         $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
 
         $totalThatMustBePaid = $billStall + $billElectricityKwh + $billElectricityKva + $billWater + $invoice->fine - $invoice->discount;
@@ -367,9 +374,10 @@ class InvoiceController extends Controller
                     $stallElectricity = $this->stallElectricityService->getStallElectricityById($row->stall_electricity_id);
                     $stallWater = $this->stallWaterService->getStallWaterById($row->stall_water_id);
                     $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+                    $powerMeter = $this->powerMeterService->getPowerMeterById($electricity->power_meter_id);
                     $billStall = $area->price * $stall->width * $stall->length;
                     $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
-                    $billElectricityKva = $electricity->power_meter * $stallElectricity->kva_price;
+                    $billElectricityKva = $powerMeter->power_meter * $stallElectricity->kva_price;
                     $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
                     $total = $billStall + $billElectricityKwh + $billElectricityKva + $billWater + $row->fine - $row->discount;
                     $blok = "[" . $floor->name . "] " . " Blok " . $area->name . " No. " . $area->no;

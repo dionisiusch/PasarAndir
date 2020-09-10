@@ -16,6 +16,7 @@ use App\Http\Services\InvoiceService;
 use App\Http\Services\UserService;
 use App\Http\Services\FloorService;
 use App\Http\Services\ElectricityService;
+use App\Http\Services\PowerMeterService;
 use GuzzleHttp\Client;
 use DB;
 
@@ -42,6 +43,9 @@ class StallController extends Controller
     /** @var ElectricityService */
     private $electricityService;
 
+    /** @var PowerMeterService */
+    private $powerMeterService;
+
     public function __construct()
     {
         $this->stallService = app(StallService::class);
@@ -50,6 +54,7 @@ class StallController extends Controller
         $this->userService = app(UserService::class);
         $this->floorService = app(FloorService::class);
         $this->electricityService = app(ElectricityService::class);
+        $this->powerMeterService = app(PowerMeterService::class);
         $this->invoiceService = app(InvoiceService::class);
     }
 
@@ -117,11 +122,12 @@ class StallController extends Controller
             $id = $request->get('id');
             $stall = $this->stallService->getStallById($id);
             $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+            $powerMeter = $this->powerMeterService->getPowerMeterById($electricity->power_meter_id);
             $category = $this->categoryService->getCategoryById($stall->category_id);
             $user = $this->userService->getUserById($stall->user_id);
             $area = $this->areaService->getAreaById($stall->area_id);
             $floor = $this->floorService->getFloorById($area->floor_id);
-            $electricity_name = $electricity->name . " | " . $electricity->power_meter . "W";
+            $electricity_name = $electricity->name . " | " . $powerMeter->power_meter . "W";
             $data = array(
                 'electricity_id' => $electricity->id,
                 'electricity_name' => $electricity_name,
