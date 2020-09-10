@@ -20,7 +20,7 @@ class StallElectricityService
             'meter_before' => $data->get('meter_before'),
             'meter_after' => $data->get('meter_after'),
             'kva_price' => $data->get('kva_price'),
-            'kwh_price' => $data->get('kva_price')
+            'kwh_price' => $data->get('kwh_price')
         ]);
         $stallElectricity->save();
 
