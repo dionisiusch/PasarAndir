@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="row">
+<div class="row not-print">
   <div class="col-md-12">
     <!-- DATA TABLE -->
     <h3 class="title-5 m-b-35">Master Data Invoice</h3>
@@ -35,6 +35,7 @@
 
 
 <!-- modal large -->
+
 <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-lg" style="max-width:1200px" role="document">
@@ -45,72 +46,81 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <table class="table table-bordered">
-          <tbody id="modal-invoice">
-            <tr>
-              <td colspan='8' style="background-color:#ffd2a6"></td>
-            </tr>
-            <tr>
-              <td style="font-weight:bold">NAMA</td>
-              <td colspan='3' id="name"></td>
-              <td style="font-weight:bold">BULAN/TAHUN</td>
-              <td colspan='3' id="month_bill"></td>
-            </tr>
-            <tr>
-              <td style="font-weight:bold">LOKASI/BLOK</td>
-              <td colspan='3' id="area"></td>
-              <td style="font-weight:bold">JATUH TEMPO</td>
-              <td colspan='3' id="grace_date"></td>
-            </tr>
-            <tr>
-              <td colspan='8' style="background-color:#ffd2a6;text-align:center;font-weight:bold">RINCIAN PEMAKAIAN DAN
-                TAGIHAN</td>
-            </tr>
-            <td colspan="2" style="font-weight:bold">SATUAN</td>
-            <td style="font-weight:bold">BEBAN</td>
-            <td style="font-weight:bold">TARIF/KWH</td>
-            <td style="font-weight:bold">BIAYA PEMAKAIAN/KWH</td>
-            <td style="font-weight:bold">TAGIHAN</td>
-            <td id="sub_total"></td>
-            <td style="font-weight:bold">TOTAL TAGIHAN</td>
-            </tr>
-            <tr>
-              <td style="font-weight:bold">DATA</td>
-              <td id="power_meter"></td>
-              <td rowspan="4" id="area_price"></td>
-              <td rowspan="4" id="kwh_price"></td>
-              <td rowspan="4" id="electricity_bill"></td>
-              <td style="font-weight:bold">BIAYA ADMIN</td>
-              <td></td>
-              <td rowspan="4" id="total"></td>
-            </tr>
-            <tr>
-              <td style="font-weight:bold">STAND AWAL</td>
-              <td id="electricity_meter_before"></td>
-              <td style="font-weight:bold">BIAYA PERAWATAN</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td style="font-weight:bold">STAND AKHIR</td>
-              <td id="electricity_meter_after"></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td style="font-weight:bold">PEMAKAIAN/KWH</td>
-              <td id="electricity_meter_used"></td>
-              <td></td>
-              <td></td>
-            <tr>
-              <td colspan='4'></td>
-            </tr>
-          </tbody>
-        </table>
+      <div id="section-to-print">
+        <div class="modal-body">
+          <table class="table table-bordered">
+            <tbody id="modal-invoice">
+              <tr>
+                <td colspan='8' style="background-color:#ffd2a6"></td>
+              </tr>
+              <tr>
+                <td style="font-weight:bold">NAMA</td>
+                <td colspan='3' id="name"></td>
+                <td style="font-weight:bold">BULAN/TAHUN</td>
+                <td colspan='3' id="month_bill"></td>
+              </tr>
+              <tr>
+                <td style="font-weight:bold">LOKASI/BLOK</td>
+                <td colspan='3' id="area"></td>
+                <td style="font-weight:bold">JATUH TEMPO</td>
+                <td colspan='3' id="grace_date"></td>
+              </tr>
+              <tr>
+                <td colspan='8' style="background-color:#ffd2a6;text-align:center;font-weight:bold">RINCIAN PEMAKAIAN
+                  DAN
+                  TAGIHAN</td>
+              </tr>
+              <td colspan="2" style="font-weight:bold">SATUAN</td>
+              <td style="font-weight:bold">BEBAN</td>
+              <td style="font-weight:bold">TARIF/KWH</td>
+              <td style="font-weight:bold">BIAYA PEMAKAIAN/KWH</td>
+              <td style="font-weight:bold">TAGIHAN</td>
+              <td id="sub_total"></td>
+              <td style="font-weight:bold">TOTAL TAGIHAN</td>
+              </tr>
+              <tr>
+                <td style="font-weight:bold">DATA</td>
+                <td id="power_meter"></td>
+                <td rowspan="4" id="area_price"></td>
+                <td rowspan="4" id="kwh_price"></td>
+                <td rowspan="4" id="electricity_bill"></td>
+                <td style="font-weight:bold">BIAYA ADMIN</td>
+                <td></td>
+                <td rowspan="4" id="total"></td>
+              </tr>
+              <tr>
+                <td style="font-weight:bold">STAND AWAL</td>
+                <td id="electricity_meter_before"></td>
+                <td style="font-weight:bold">BIAYA PERAWATAN</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td style="font-weight:bold">STAND AKHIR</td>
+                <td id="electricity_meter_after"></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td style="font-weight:bold">PEMAKAIAN/KWH</td>
+                <td id="electricity_meter_used"></td>
+                <td></td>
+                <td></td>
+              <tr>
+                <td colspan='8'></td>
+              </tr>
+              <tr id="not-print">
+                <td colspan='8'><button onclick='window.print()' style="margin: auto;display:block" type="button"
+                    class="au-btn au-btn-icon au-btn--green au-btn--small">
+                    <i class="zmdi zmdi-print"></i>Print Invoice</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
 <!-- end modal large -->
 
 
