@@ -80,7 +80,7 @@ Route::group([
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'PowerMeterController@index')->name('master.powermeter.index');
-        Route::post('/', 'PowerMeterController@store')->name('master.powermeter.store');
+        Route::post('/', 'PowerMeterController@create')->name('master.powermeter.store');
         Route::get('/{id}', 'PowerMeterController@show')->name('master.powermeter.show');
         Route::put('/{id}', 'PowerMeterController@update')->name('master.powermeter.update');
         Route::delete('/{id}', 'PowerMeterController@destroy')->name('master.powermeter.delete');
@@ -201,3 +201,6 @@ Route::get('/meteranelectricity', 'MeteranController@getElectricityName')->name(
 Route::get('/invoicecreate', 'InvoiceController@create')->name('invoice.create');
 Route::get('/receiptcreate', 'ReceiptController@create')->name('receipt.create');
 Route::post('/', 'MeteranController@store')->name('meteran.store');
+
+//route print
+Route::post('/printinvoice', 'InvoiceController@print')->name('print.invoice');

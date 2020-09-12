@@ -71,7 +71,7 @@
 </div>
 </div>
 
-<script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
+
 
 <script>
     var id = "{{ Auth::guard('web')->user()->id }}";

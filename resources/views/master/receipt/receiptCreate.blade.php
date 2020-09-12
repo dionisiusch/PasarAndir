@@ -127,7 +127,7 @@
             <td style="font-weight:bold">TOTAL TAGIHAN</td>
             </tr>
             <tr>
-              <td style="font-weight:bold">DATA</td>
+              <td style="font-weight:bold">DAYA</td>
               <td id="power_meter"></td>
               <td rowspan="4" id="area_price"></td>
               <td rowspan="4" id="kwh_price"></td>
@@ -218,7 +218,7 @@
   <!-- end modal scroll -->
 
 
-  <script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
+
 
   <script>
     $(document).ready(function(){

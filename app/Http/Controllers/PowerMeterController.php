@@ -40,7 +40,7 @@ class PowerMeterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         try {
             $request->validate([
@@ -86,6 +86,7 @@ class PowerMeterController extends Controller
                 'kwh_price'  => $powerMeter->kwh_price,
                 'kva_price'  => $powerMeter->kva_price,
                 'power_meter'  => $powerMeter->power_meter,
+                'power_meter_id'  => $powerMeter->power_meter_id,
                 'id'  => $id
             );
 
@@ -219,7 +220,7 @@ class PowerMeterController extends Controller
         foreach ($powerMeters as $powerMeter) {
             $response[] = array(
                 "id" => $powerMeter->id,
-                "text" => $powerMeter->power_meter
+                "text" => $powerMeter->power_meter . " W"
             );
         }
 

@@ -171,12 +171,6 @@ class ElectricityController extends Controller
                         ' . $powerMeter->power_meter . '
                         </td>
                         <td>
-                        ' . parent::rupiah($powerMeter->kva_price) . '
-                        </td>
-                        <td>
-                        ' . parent::rupiah($powerMeter->kwh_price) . '
-                        </td>
-                        <td>
                             <div class="table-data-feature">
                             <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="' . $row->id . '">
                                 <i class="zmdi zmdi-edit"></i>

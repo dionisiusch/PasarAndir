@@ -38,7 +38,7 @@ class InvoiceController extends Controller
 
     /** @var StallWaterService */
     private $stallWaterService;
-    
+
     /** @var ElectricityService */
     private $electricityService;
 
@@ -95,6 +95,15 @@ class InvoiceController extends Controller
     public function create()
     {
         return view('master.invoice.invoiceCreate');
+    }
+
+    public function print(Request $request)
+    {
+        $request->validate([
+            'invoice_id_print' => 'required',
+            'option_print' => 'required'
+        ]);
+        return view('master.print.printInvoice', compact('request'));
     }
 
     /**

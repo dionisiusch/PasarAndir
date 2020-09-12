@@ -1,80 +1,83 @@
 @extends('layouts.app')
-  @section('content')
-               <div class="row"> 
-              <div class="col-md-12">
-                  <!-- DATA TABLE -->
-                  <h3 class="title-5 m-b-35">Master Data Receipt</h3>
-                    <div class="table-data__tool-left">
-                      <div class="rs-select2--light rs-select2--md" style="display: contents">
-                         <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i style="font-size:150%" class="zmdi zmdi-search"></i>
-                      </div>
-                    </div>
-                  
-                  <div class="table-responsive table-responsive-data2">
-                    <table class="table table-data2">
-                      <thead>
-                       <tr>
-                          <th>User</th>
-                          <th>Blok</th>
-                          <th>Nama Toko</th>
-                          <th>Periode</th>
-                          <th>Tanggal Pembayaran</th>
-                          <th>Jumlah Pembayaran</th>
-                        </tr>
-                      </thead>
-                      <tbody id="ajax">
-                      </tbody>
-                    </table>
-                  <!-- END DATA TABLE -->
-                </div>
-              </div>
+@section('content')
+<div class="row">
+  <div class="col-md-12">
+    <!-- DATA TABLE -->
+    <h3 class="title-5 m-b-35">Master Data Receipt</h3>
+    <div class="table-data__tool-left">
+      <div class="rs-select2--light rs-select2--md" style="display: contents">
+        <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i
+          style="font-size:150%" class="zmdi zmdi-search"></i>
+      </div>
+    </div>
 
-          </div>
+    <div class="table-responsive table-responsive-data2">
+      <table class="table table-data2">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Blok</th>
+            <th>Nama Toko</th>
+            <th>Periode</th>
+            <th>Tanggal Pembayaran</th>
+            <th>Jumlah Pembayaran</th>
+          </tr>
+        </thead>
+        <tbody id="ajax">
+        </tbody>
+      </table>
+      <!-- END DATA TABLE -->
+    </div>
   </div>
+
+</div>
+</div>
 </div>
 
-   
-      <!-- modal large -->
-			<div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg" style="max-width:1200px"role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="largeModalLabel">Detail Invoice</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<table class="table table-bordered">
-              <tbody id="modal-invoice">
-              <tr>
+
+<!-- modal large -->
+<div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" style="max-width:1200px" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="largeModalLabel">Detail Invoice</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <tbody id="modal-invoice">
+            <tr>
               <td colspan='8' style="background-color:#ffd2a6"></td>
-              </tr>
-              <tr>
+            </tr>
+            <tr>
               <td style="font-weight:bold">NAMA</td>
               <td colspan='3' id="name"></td>
               <td style="font-weight:bold">BULAN/TAHUN</td>
               <td colspan='3' id="month_bill"></td>
-              </tr>
-              <tr>
+            </tr>
+            <tr>
               <td style="font-weight:bold">LOKASI/BLOK</td>
               <td colspan='3' id="area"></td>
               <td style="font-weight:bold">JATUH TEMPO</td>
               <td colspan='3' id="grace_date"></td>
-              </tr>
-              <tr>
-              <td colspan='8' style="background-color:#ffd2a6;text-align:center;font-weight:bold">RINCIAN PEMAKAIAN DAN TAGIHAN</td>
-              </tr>
-              <td colspan="2" style="font-weight:bold">SATUAN</td>
-              <td style="font-weight:bold">BEBAN</td>
-              <td style="font-weight:bold">TARIF/KWH</td>
-              <td style="font-weight:bold">BIAYA PEMAKAIAN/KWH</td>
-              <td style="font-weight:bold">TAGIHAN</td>
-              <td id="sub_total"></td>
-              <td style="font-weight:bold">TOTAL TAGIHAN</td>
-              </tr>
-              <tr>
-              <td style="font-weight:bold">DATA</td>
+            </tr>
+            <tr>
+              <td colspan='8' style="background-color:#ffd2a6;text-align:center;font-weight:bold">RINCIAN PEMAKAIAN DAN
+                TAGIHAN</td>
+            </tr>
+            <td colspan="2" style="font-weight:bold">SATUAN</td>
+            <td style="font-weight:bold">BEBAN</td>
+            <td style="font-weight:bold">TARIF/KWH</td>
+            <td style="font-weight:bold">BIAYA PEMAKAIAN/KWH</td>
+            <td style="font-weight:bold">TAGIHAN</td>
+            <td id="sub_total"></td>
+            <td style="font-weight:bold">TOTAL TAGIHAN</td>
+            </tr>
+            <tr>
+              <td style="font-weight:bold">DAYA</td>
               <td id="power_meter"></td>
               <td rowspan="4" id="area_price"></td>
               <td rowspan="4" id="kwh_price"></td>
@@ -82,42 +85,41 @@
               <td style="font-weight:bold">BIAYA ADMIN</td>
               <td></td>
               <td rowspan="4" id="total"></td>
-              </tr>
-              <tr>
+            </tr>
+            <tr>
               <td style="font-weight:bold">STAND AWAL</td>
               <td id="electricity_meter_before"></td>
               <td style="font-weight:bold">BIAYA PERAWATAN</td>
               <td></td>
-              </tr>
-              <tr>
+            </tr>
+            <tr>
               <td style="font-weight:bold">STAND AKHIR</td>
               <td id="electricity_meter_after"></td>
               <td></td>
               <td></td>
-              </tr>
-              <tr>
+            </tr>
+            <tr>
               <td style="font-weight:bold">PEMAKAIAN/KWH</td>
               <td id="electricity_meter_used"></td>
               <td></td>
               <td></td>
-              <tr>
+            <tr>
               <td colspan='4'></td>
-              </tr>
-              </tbody>
-              </table>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- end modal large -->
-
-       
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modal large -->
 
 
 
-  <script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
-  <script>
-    
+
+
+
+<script>
   $(document).ready(function(){
 
 $.ajaxSetup({
@@ -226,4 +228,4 @@ $.ajaxSetup({
 
 </script>
 
-  @endsection
+@endsection

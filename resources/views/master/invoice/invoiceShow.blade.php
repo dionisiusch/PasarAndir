@@ -12,7 +12,7 @@
     </div>
 
     <div class="table-responsive table-responsive-data2">
-      <table class="table table-data2">
+      <table class="table table-data2" id="example">
         <thead>
           <tr>
             <th>User</th>
@@ -20,6 +20,7 @@
             <th>Nama Toko</th>
             <th>Periode</th>
             <th>Status</th>
+            <th></th>
           </tr>
         </thead>
         <tbody id="ajax">
@@ -46,76 +47,81 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div id="section-to-print">
-        <div class="modal-body">
-          <table class="table table-bordered">
-            <tbody id="modal-invoice">
-              <tr>
-                <td colspan='8' style="background-color:#ffd2a6"></td>
-              </tr>
-              <tr>
-                <td style="font-weight:bold">NAMA</td>
-                <td colspan='3' id="name"></td>
-                <td style="font-weight:bold">BULAN/TAHUN</td>
-                <td colspan='3' id="month_bill"></td>
-              </tr>
-              <tr>
-                <td style="font-weight:bold">LOKASI/BLOK</td>
-                <td colspan='3' id="area"></td>
-                <td style="font-weight:bold">JATUH TEMPO</td>
-                <td colspan='3' id="grace_date"></td>
-              </tr>
-              <tr>
-                <td colspan='8' style="background-color:#ffd2a6;text-align:center;font-weight:bold">RINCIAN PEMAKAIAN
-                  DAN
-                  TAGIHAN</td>
-              </tr>
-              <td colspan="2" style="font-weight:bold">SATUAN</td>
-              <td style="font-weight:bold">BEBAN</td>
-              <td style="font-weight:bold">TARIF/KWH</td>
-              <td style="font-weight:bold">BIAYA PEMAKAIAN/KWH</td>
-              <td style="font-weight:bold">TAGIHAN</td>
-              <td id="sub_total"></td>
-              <td style="font-weight:bold">TOTAL TAGIHAN</td>
-              </tr>
-              <tr>
-                <td style="font-weight:bold">DATA</td>
-                <td id="power_meter"></td>
-                <td rowspan="4" id="area_price"></td>
-                <td rowspan="4" id="kwh_price"></td>
-                <td rowspan="4" id="electricity_bill"></td>
-                <td style="font-weight:bold">BIAYA ADMIN</td>
-                <td></td>
-                <td rowspan="4" id="total"></td>
-              </tr>
-              <tr>
-                <td style="font-weight:bold">STAND AWAL</td>
-                <td id="electricity_meter_before"></td>
-                <td style="font-weight:bold">BIAYA PERAWATAN</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td style="font-weight:bold">STAND AKHIR</td>
-                <td id="electricity_meter_after"></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td style="font-weight:bold">PEMAKAIAN/KWH</td>
-                <td id="electricity_meter_used"></td>
-                <td></td>
-                <td></td>
-              <tr>
-                <td colspan='8'></td>
-              </tr>
-              <tr id="not-print">
-                <td colspan='8'><button onclick='window.print()' style="margin: auto;display:block" type="button"
-                    class="au-btn au-btn-icon au-btn--green au-btn--small">
-                    <i class="zmdi zmdi-print"></i>Print Invoice</button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <tbody id="modal-invoice">
+            <tr>
+              <td colspan='8' style="background-color:#ffd2a6"></td>
+            </tr>
+            <tr>
+              <td style="font-weight:bold">NAMA</td>
+              <td colspan='3' id="name"></td>
+              <td style="font-weight:bold">BULAN/TAHUN</td>
+              <td colspan='3' id="month_bill"></td>
+            </tr>
+            <tr>
+              <td style="font-weight:bold">LOKASI/BLOK</td>
+              <td colspan='3' id="area"></td>
+              <td style="font-weight:bold">JATUH TEMPO</td>
+              <td colspan='3' id="grace_date"></td>
+            </tr>
+            <tr>
+              <td colspan='8' style="background-color:#ffd2a6;text-align:center;font-weight:bold">RINCIAN PEMAKAIAN
+                DAN
+                TAGIHAN</td>
+            </tr>
+            <td colspan="2" style="font-weight:bold">SATUAN</td>
+            <td style="font-weight:bold">BEBAN</td>
+            <td style="font-weight:bold">TARIF/KWH</td>
+            <td style="font-weight:bold">BIAYA PEMAKAIAN/KWH</td>
+            <td style="font-weight:bold">TAGIHAN</td>
+            <td id="sub_total"></td>
+            <td style="font-weight:bold">TOTAL TAGIHAN</td>
+            </tr>
+            <tr>
+              <td style="font-weight:bold">DAYA</td>
+              <td id="power_meter"></td>
+              <td rowspan="4" id="area_price"></td>
+              <td rowspan="4" id="kwh_price"></td>
+              <td rowspan="4" id="electricity_bill"></td>
+              <td style="font-weight:bold">BIAYA ADMIN</td>
+              <td></td>
+              <td rowspan="4" id="total"></td>
+            </tr>
+            <tr>
+              <td style="font-weight:bold">STAND AWAL</td>
+              <td id="electricity_meter_before"></td>
+              <td style="font-weight:bold">BIAYA PERAWATAN</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td style="font-weight:bold">STAND AKHIR</td>
+              <td id="electricity_meter_after"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td style="font-weight:bold">PEMAKAIAN/KWH</td>
+              <td id="electricity_meter_used"></td>
+              <td></td>
+              <td></td>
+            <tr>
+              <td colspan='8'></td>
+            </tr>
+            <tr>
+              <td colspan='8'>
+                <form method="post" action="{{ route('print.invoice') }}">
+                  @csrf
+                  <input type="hidden" id="invoice_id_print" name="invoice_id_print">
+                  <input type="hidden" id="option_print" value="single" name="option_print">
+                  <button style="margin: auto;display:block" type="submit"
+                    class="au-btn au-btn-icon au-btn--green au-btn--small print">
+                    <i class="zmdi zmdi-print"></i>Print Invoice</button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -123,11 +129,6 @@
 
 <!-- end modal large -->
 
-
-
-
-
-<script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
 <script>
   $(document).ready(function(){
 
@@ -182,6 +183,7 @@ $.ajaxSetup({
 
  $(document).on('click', '.invoice-row', function(){
   var id = $(this).attr('id');
+  
    $.ajax({
         url:'/master/invoice/'+id,
         type: 'get',
@@ -201,6 +203,7 @@ $.ajaxSetup({
       $('#electricity_meter_used').html(response.electricity_meter_used);
       $('#kwh_price').html(rupiah(response.kwh_price));
       $('#grace_date').html(response.grace_date);
+      $('#invoice_id_print').val(response.id);
     },
     error: function(request,msg,error) {
        console.log(msg);

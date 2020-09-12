@@ -22,7 +22,7 @@
 	</div>
 </div>
 
-<script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
+
 <script src="{{ asset('js/Chart.min.js') }}"></script>
 <script>
 	var stall_active;

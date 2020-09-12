@@ -97,7 +97,8 @@
                                         <label>PIC Phone Number</label>
                                         <input id="pic_phone_number" type="text"
                                             class="form-control @error('pic_phone_number') is-invalid @enderror"
-                                            name="pic_phone_number" value="{{ old('pic_phone_number') }}" autocomplete="pic_phone_number">
+                                            name="pic_phone_number" value="{{ old('pic_phone_number') }}"
+                                            autocomplete="pic_phone_number">
 
                                         @error('pic_phone_number')
                                         <span class="invalid-feedback" role="alert">
@@ -119,7 +120,7 @@
         </div>
 
         <!-- Jquery JS-->
-        <script src="{{ asset('assets/jquery-3.2.1.min.js') }}"></script>
+
         <!-- Bootstrap JS-->
         <script src="{{ asset('assets/bootstrap-4.1/popper.min.js') }}"></script>
         <script src="{{ asset('assets/bootstrap-4.1/bootstrap.min.js') }}"></script>
