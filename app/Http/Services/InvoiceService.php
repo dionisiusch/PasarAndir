@@ -16,6 +16,13 @@ class InvoiceService
         return $invoices;
     }
 
+    public function showAllInvoiceIds()
+    {
+        $invoiceIds = Invoice::where('id' ,'>' ,0)->pluck('id');
+
+        return $invoiceIds;
+    }
+
     public function showAllInvoicesSortByStatus()
     {
         $invoices = Invoice::orderBy('status', 'asc')->get();

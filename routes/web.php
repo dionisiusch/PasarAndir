@@ -102,6 +102,7 @@ Route::group([
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'InvoiceController@index')->name('master.invoice.index');
+        Route::get('/id', 'InvoiceController@showIds')->name('master.invoice.showIds');
         Route::post('/', 'InvoiceController@store')->name('master.invoice.store');
         Route::get('/{id}', 'InvoiceController@show')->name('master.invoice.show');
         Route::get('/{id}/remain', 'InvoiceController@remainCreditInvoice')->name('master.invoice.remain');

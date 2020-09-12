@@ -87,6 +87,13 @@ class InvoiceController extends Controller
         return view('master.invoice.invoiceShow');
     }
 
+    public function showIds()
+    {
+        $invoiceIds = $this->invoiceService->showAllInvoiceIds();
+
+        return $invoiceIds;
+    }
+
     /**
      * Show the form for creating a new resource.
      *
