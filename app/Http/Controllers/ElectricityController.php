@@ -89,6 +89,7 @@ class ElectricityController extends Controller
                 'kwh_price'  => $powerMeter->kwh_price,
                 'kva_price'  => $powerMeter->kva_price,
                 'power_meter'  => $powerMeter->power_meter,
+                'power_meter_id'  => $powerMeter->id,
                 'name'  => $electricity->name,
                 'id'  => $id
             );
