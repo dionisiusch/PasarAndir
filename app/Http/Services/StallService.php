@@ -35,14 +35,14 @@ class StallService
     public function getStallById($id)
     {
         $stall = Stall::find($id);
-        
+
         return $stall;
     }
 
     public function getStallIdByUserId($id)
     {
         $stallId = Stall::where('user_id', $id)->pluck('id');
-        
+
         return $stallId;
     }
 
@@ -74,35 +74,36 @@ class StallService
     public function searchStall($query)
     {
         $userId = DB::table('users')
-            ->where('pic_name', 'like', '%'.$query.'%')
-            ->orWhere('pic_phone_number', 'like', '%'.$query.'%')
+            ->where('pic_name', 'like', '%' . $query . '%')
+            ->orWhere('pic_phone_number', 'like', '%' . $query . '%')
+            ->orWhere('username', 'like', '%' . $query . '%')
             ->pluck('id');
 
         $categoryId = DB::table('categories')
-            ->where('name', 'like', '%'.$query.'%')
+            ->where('name', 'like', '%' . $query . '%')
             ->whereNull('deleted_at')
             ->pluck('id');
-        
+
         $floorId = DB::table('floors')
-            ->where('code', 'like', '%'.$query.'%')
-            ->orWhere('name', 'like', '%'.$query.'%')
+            ->where('code', 'like', '%' . $query . '%')
+            ->orWhere('name', 'like', '%' . $query . '%')
             ->whereNull('deleted_at')
             ->pluck('id');
 
         $areaId = DB::table('areas')
-            ->where('name', 'like', '%'.$query.'%')
-            ->orWhere('no', 'like', '%'.$query.'%')
-            ->orWhere('price', 'like', '%'.$query.'%')
+            ->where('name', 'like', '%' . $query . '%')
+            ->orWhere('no', 'like', '%' . $query . '%')
+            ->orWhere('price', 'like', '%' . $query . '%')
             ->orWhereIn('floor_id', $floorId)
             ->whereNull('deleted_at')
             ->pluck('id');
 
         return DB::table('stalls')
-            ->where('name', 'like', '%'.$query.'%')
-            ->orWhere('length', 'like', '%'.$query.'%')
-            ->orWhere('width', 'like', '%'.$query.'%')
-            ->orWhere('height', 'like', '%'.$query.'%')
-            ->orWhere('status', 'like', '%'.$query.'%')
+            ->where('name', 'like', '%' . $query . '%')
+            ->orWhere('length', 'like', '%' . $query . '%')
+            ->orWhere('width', 'like', '%' . $query . '%')
+            ->orWhere('height', 'like', '%' . $query . '%')
+            ->orWhere('status', 'like', '%' . $query . '%')
             ->orWhereIn('user_id', $userId)
             ->orWhereIn('category_id', $categoryId)
             ->orWhereIn('area_id', $areaId)
