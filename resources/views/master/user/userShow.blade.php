@@ -111,59 +111,60 @@
       </div>
     </div>
   </div>
+</div>
+<!-- end modal scroll -->
+
+
+
+<!-- modal scroll update -->
+<div class="modal fade" id="scrollmodal-update" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-header">
+            <strong>Update Data</strong> User
+          </div>
+          <div class="card-body card-block">
+            <form id="update" action="" method="post">
+              @csrf
+              @method('PUT')
+              <div class="form-group">
+                <label class=" form-control-label">Username</label>
+                <input type="text" id="username-update" placeholder="Username.." class="form-control" readonly>
+                <label class=" form-control-label">Nama PIC</label>
+                <input type="text" id="pic_name-update" name="pic_name" placeholder="Nama PIC.." class="form-control">
+                <label class=" form-control-label">Nomor Telepon</label>
+                <input type="number" id="pic_phone_number-update" name="pic_phone_number" placeholder="Nomor Telepon.."
+                  class="form-control">
+                <label class=" form-control-label">Tanggal Gabung</label>
+                <input type="date" id="joined_date-update" name="joined_date" placeholder="Tanggal Gabung.."
+                  class="form-control">
+              </div>
+
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary btn-sm" style="float:right;">
+              <i class="fa fa-dot-circle-o"></i> Submit
+            </button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- end modal scroll -->
 
 
 
-  <!-- modal scroll update -->
-  <div class="modal fade" id="scrollmodal-update" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="card">
-            <div class="card-header">
-              <strong>Update Data</strong> User
-            </div>
-            <div class="card-body card-block">
-              <form id="update" action="" method="post">
-                @csrf
-                @method('PUT')
-                <div class="form-group">
-                  <label class=" form-control-label">Username</label>
-                  <input type="text" id="username" placeholder="Username.." class="form-control" readonly>
-                  <label class=" form-control-label">Nama PIC</label>
-                  <input type="text" id="pic_name" name="pic_name" placeholder="Nama PIC.." class="form-control">
-                  <label class=" form-control-label">Nomor Telepon</label>
-                  <input type="number" id="pic_phone_number" name="pic_phone_number" placeholder="Nomor Telepon.."
-                    class="form-control">
-                  <label class=" form-control-label">Tanggal Gabung</label>
-                  <input type="date" id="joined_date" name="joined_date" placeholder="Tanggal Gabung.."
-                    class="form-control">
-                </div>
-
-            </div>
-            <div class="card-footer">
-              <button type="submit" class="btn btn-primary btn-sm" style="float:right;">
-                <i class="fa fa-dot-circle-o"></i> Submit
-              </button>
-            </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- end modal scroll -->
-
-
-
-    <script>
-      $(document).ready(function(){
+  <script>
+    $(document).ready(function(){
 $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -227,10 +228,10 @@ $(document).on('click', '.edit', function(){
    success:function(response)
    {
    	 $('#update').attr('action', '/master/user/'+id+"/pic");
-     $('#username').val(response.username);
-   	 $('#pic_name').val(response.pic_name);
-     $('#pic_phone_number').val(response.pic_phone_number);
-     $('#joined_date').val(response.joined_date);
+     $('#username-update').val(response.username);
+   	 $('#pic_name-update').val(response.pic_name);
+     $('#pic_phone_number-update').val(response.pic_phone_number);
+     $('#joined_date-update').val(response.joined_date);
    console.log(response);
    }, error: function(request,msg,error) {
        console.log(msg);
@@ -243,6 +244,6 @@ $(document).on('click', '.edit', function(){
 });
 
 });
-    </script>
+  </script>
 
-    @endsection
+  @endsection
