@@ -11,7 +11,7 @@ class UserService
 {
     public function showAllUsers()
     {
-        $users = User::all()->except(Auth::guard('employer')->id());
+        $users = User::all();
 
         return $users;
     }
