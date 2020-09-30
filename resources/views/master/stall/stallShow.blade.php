@@ -83,15 +83,15 @@
               </div>
               <div class="form-group">
                 <label class=" form-control-label">Panjang(m)</label>
-                <input type="number" name="length" id='length' placeholder="Panjang.." class="form-control">
+                <input type="number" step=any name="length" id='length' placeholder="Panjang.." class="form-control">
               </div>
               <div class="form-group">
                 <label class=" form-control-label">Lebar(m)</label>
-                <input type="number" name="width" id='width' placeholder="Lebar.." class="form-control">
+                <input type="number" step=any name="width" id='width' placeholder="Lebar.." class="form-control">
               </div>
               <div class="form-group">
                 <label class=" form-control-label">Tinggi(m)</label>
-                <input type="number" name="height" id='height' placeholder="Tinggi.." class="form-control">
+                <input type="number" step=any name="height" id='height' placeholder="Tinggi.." class="form-control">
               </div>
               <div class="form-group">
                 <label class=" form-control-label">Status</label>
@@ -158,15 +158,18 @@
                   </div>
                   <div class="form-group">
                     <label class=" form-control-label">Panjang(m)</label>
-                    <input type="number" name="length" id='length-update' placeholder="Panjang.." class="form-control">
+                    <input type="number" step=any name="length" id='length-update' placeholder="Panjang.."
+                      class="form-control">
                   </div>
                   <div class="form-group">
                     <label class=" form-control-label">Lebar(m)</label>
-                    <input type="number" name="width" id='width-update' placeholder="Lebar.." class="form-control">
+                    <input type="number" step=any name="width" id='width-update' placeholder="Lebar.."
+                      class="form-control">
                   </div>
                   <div class="form-group">
                     <label class=" form-control-label">Tinggi(m)</label>
-                    <input type="number" name="height" id='height-update' placeholder="Tinggi.." class="form-control">
+                    <input type="number" step=any name="height" id='height-update' placeholder="Tinggi.."
+                      class="form-control">
                   </div>
                   <div class="form-group">
                     <label class=" form-control-label">Status</label>

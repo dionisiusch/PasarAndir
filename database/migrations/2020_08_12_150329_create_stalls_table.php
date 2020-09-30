@@ -20,9 +20,9 @@ class CreateStallsTable extends Migration
             $table->foreignId('category_id');
             $table->foreignId('electricity_id');
             $table->string('name');
-            $table->bigInteger('length');
-            $table->bigInteger('width');
-            $table->bigInteger('height');
+            $table->float('length');
+            $table->float('width');
+            $table->float('height');
             $table->string('status');
             $table->timestamps();
             $table->softDeletes();

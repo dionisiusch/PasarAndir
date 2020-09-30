@@ -64,11 +64,11 @@ class EmployerController extends Controller
      */
     public function show(Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $id = $request->get('id');
             $employer = $this->employerService->getEmployerById($id);
-            $role = $this->roleService->getRoleById($user->role_id);
-      
+            $role = $this->roleService->getRoleById($employer->role_id);
+
             $data = array(
                 'email'  => $employer->email,
                 'phone_number'  => $employer->phone_number,
@@ -77,7 +77,7 @@ class EmployerController extends Controller
                 'role_name' => $role->name,
                 'id'  => $id
             );
-            
+
             return json_encode($data);
         }
     }
@@ -104,13 +104,13 @@ class EmployerController extends Controller
     {
         try {
             $request->validate([
-                'name'=>'required',
-                'email'=>['required', 'email', 'unique:employers'],
-                'phone_number'=>['required', 'max:13', 'unique:employers'],
+                'name' => 'required',
+                'email' => ['required', 'email', 'unique:employers'],
+                'phone_number' => ['required', 'max:13', 'unique:employers'],
             ]);
-    
+
             $response = $this->employerService->updateEmployerById($request);
-    
+
             // return redirect('/master/employer')->with('success', 'Data Employer Berhasil Di Update.');       
         } catch (Exception $e) {
             // return redirect('/master/employer')->with('error', 'Data Employer Gagal Di Update.');       
@@ -121,18 +121,18 @@ class EmployerController extends Controller
     {
         try {
             $request->validate([
-                'old_password'=> ['required', 'string'],
+                'old_password' => ['required', 'string'],
                 'new_password' => ['required', 'string', 'min:8', 'confirmed'],
             ]);
 
             $employer = $this->employerService->getEmployerById($id);
 
-            if(Hash::make($employer->password) != Hash::make($request->old_password)){
+            if (Hash::make($employer->password) != Hash::make($request->old_password)) {
                 // return redirect('/master/employer')->with('error', 'Password Employer Gagal Di Ubah.'); 
             }
-    
+
             $response = $this->employerService->updateEmployerPasswordById($request->new_password, $id);
-    
+
             // return redirect('/master/employer')->with('success', 'Data Employer Berhasil Di Ubah.');       
         } catch (Exception $e) {
             // return redirect('/master/employer')->with('error', 'Data Employer Gagal Di Ubah.');       
@@ -150,7 +150,7 @@ class EmployerController extends Controller
         $msg = 'Data Employer Gagal Dihapus.';
         $response = $this->employerService->deleteEmployerById($id);
 
-        if($response){
+        if ($response) {
             $msg = 'Data Employer Berhasil Dihapus.';
         }
 
@@ -164,47 +164,47 @@ class EmployerController extends Controller
 
     public function search(Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $output = '';
             $query = $request->get('query');
-            if($query != '') {
+            if ($query != '') {
                 $data = $this->employerService->searchEmployer($query);
             } else {
                 $data = $this->employerService->showAllEmployers();
             }
-         
+
             $total_row = $data->count();
-            if($total_row > 0) {
-                foreach($data as $row) {
+            if ($total_row > 0) {
+                foreach ($data as $row) {
                     $role = $this->roleService->getRoleById($row->role_id);
-                    if($role->id==1){
-                        $role_text = "<span class='badge badge-success'>".$role->name."</span>";
-                    }else if($role->id==2){
-                        $role_text = "<span class='badge badge-warning'>".$role->name."</span>";
-                    }else{
-                        $role_text = "<span class='badge badge-danger'>".$role->name."</span>";
+                    if ($role->id == 1) {
+                        $role_text = "<span class='badge badge-success'>" . $role->name . "</span>";
+                    } else if ($role->id == 2) {
+                        $role_text = "<span class='badge badge-warning'>" . $role->name . "</span>";
+                    } else {
+                        $role_text = "<span class='badge badge-danger'>" . $role->name . "</span>";
                     }
                     $output .= '
                     <tr class="tr-shadow">
-                        <td>'.$row->username.'</td>
+                        <td>' . $row->username . '</td>
                         <td>
-                        '.$row->name.'
+                        ' . $row->name . '
                         </td>
                          <td>
-                        '.$row->phone_number.'
+                        ' . $row->phone_number . '
                         </td>
                          <td>
-                        '.$row->email.'
+                        ' . $row->email . '
                         </td>
                          <td>
-                        '.$role_text.'
+                        ' . $role_text . '
                         </td>
                         <td>
                             <div class="table-data-feature">
-                            <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="'.$row->id.'">
+                            <button class="item edit" data-toggle="modal" data-target="#scrollmodal-update" title="Edit" id="' . $row->id . '">
                                 <i class="zmdi zmdi-edit"></i>
                             </button>
-                            <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="'.$row->id.'">
+                            <button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="' . $row->id . '">
                                 <i class="zmdi zmdi-delete"></i>
                             </button>
                             </div>
@@ -220,34 +220,35 @@ class EmployerController extends Controller
                 </tr>
                 ';
             }
-            
+
             $data = array(
                 'table_data'  => $output,
                 'total_data'  => $total_row
             );
-            
+
             return json_encode($data);
         }
     }
 
-    public function select2(Request $request){
+    public function select2(Request $request)
+    {
         $search = $request->search;
-   
-        if($search != ''){
+
+        if ($search != '') {
             $employers = $this->employerService->searchEmployer($search);
-        }else{
+        } else {
             $employers = $this->employerService->showAllEmployers();
         }
 
         $response = array();
 
-        foreach($employers as $employer){
+        foreach ($employers as $employer) {
             $response[] = array(
-                "id"=>$employer->id,
-                "text"=>$employer->name
+                "id" => $employer->id,
+                "text" => $employer->name
             );
         }
-           
+
         echo json_encode($response);
     }
 }
