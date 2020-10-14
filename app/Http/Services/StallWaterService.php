@@ -34,9 +34,9 @@ class StallWaterService
         return $stallWater;
     }
 
-    public function getNewestStallWaterById($id)
+    public function getNewestStallWaterById($id, $month)
     {
-        $stallWater = StallWater::where('stall_id', $id)->orderBy('created_at', 'DESC')->first();
+        $stallWater = StallWater::where('stall_id', $id)->whereMonth('created_at', $month)->orderBy('created_at', 'DESC')->first();
         
         return $stallWater;
     }

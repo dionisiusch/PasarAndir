@@ -27,9 +27,9 @@ class StallElectricityService
         return $stallElectricity;
     }
 
-    public function getNewestStallElectricityById($id)
+    public function getNewestStallElectricityById($id, $month)
     {
-        $stallElectricity = StallElectricity::where('stall_id', $id)->orderBy('created_at', 'DESC')->first();
+        $stallElectricity = StallElectricity::where('stall_id', $id)->whereMonth('created_at', $month)->orderBy('created_at', 'DESC')->first();
         
         return $stallElectricity;
     }

@@ -23,6 +23,7 @@ use App\Http\Services\InvoiceReceiptService;
 use App\Http\Services\PowerMeterService;
 use App\Http\Helpers\Helper;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
 use DB;
 
 class InvoiceController extends Controller
@@ -131,9 +132,15 @@ class InvoiceController extends Controller
         ]);
 
         $minimalPayment = $this->helper->price_decoder($request->minimal_payment);
+        $monthExplode = explode(" ", $request->month_bill);
+        $month = Carbon::parse($monthExplode[0])->month;
 
-        $stallElectricityId = $this->stallElectricityService->getNewestStallElectricityById($request->stall_id);
-        $stallWaterId = $this->stallWaterService->getNewestStallWaterById($request->stall_id);
+        $stallElectricityId = $this->stallElectricityService->getNewestStallElectricityById($request->stall_id, $month);
+        $stallWaterId = $this->stallWaterService->getNewestStallWaterById($request->stall_id, $month);
+        
+        if($stallElectricityId == null || $stallWaterId == null) {
+            return redirect('invoicecreate')->with('error', 'Input Meteran Terlebih Dahulu.'); 
+        }
 
         $response = $this->invoiceService->createInvoice($request, $stallElectricityId->id, $stallWaterId->id, $minimalPayment);
 
