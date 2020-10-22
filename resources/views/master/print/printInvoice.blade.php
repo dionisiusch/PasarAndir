@@ -33,70 +33,86 @@
 <link href="{{ asset('css/jquery-ui.css') }}" rel="stylesheet" media="all">
 <script src="{{ asset('js/jquery-3.5.1.js') }}"></script>
 
-<div class="print">
-    <table class="table table-bordered">
-        <tbody id="modal-invoice">
-            <tr>
-                <td colspan='8' style="background-color:#ffd2a6"></td>
-            </tr>
-            <tr>
-                <td style="font-weight:bold">NAMA</td>
-                <td colspan='3' id="name"></td>
-                <td style="font-weight:bold">BULAN/TAHUN</td>
-                <td colspan='3' id="month_bill"></td>
-            </tr>
-            <tr>
-                <td style="font-weight:bold">LOKASI/BLOK</td>
-                <td colspan='3' id="area"></td>
-                <td style="font-weight:bold">JATUH TEMPO</td>
-                <td colspan='3' id="grace_date"></td>
-            </tr>
-            <tr>
-                <td colspan='8' style="background-color:#ffd2a6;text-align:center;font-weight:bold">RINCIAN PEMAKAIAN
-                    DAN
-                    TAGIHAN</td>
-            </tr>
-            <td colspan="2" style="font-weight:bold">SATUAN</td>
-            <td style="font-weight:bold">BEBAN</td>
-            <td style="font-weight:bold">TARIF/KWH</td>
-            <td style="font-weight:bold">BIAYA PEMAKAIAN/KWH</td>
-            <td style="font-weight:bold">TAGIHAN</td>
-            <td id="sub_total"></td>
-            <td style="font-weight:bold">TOTAL TAGIHAN</td>
-            </tr>
-            <tr>
-                <td style="font-weight:bold">DAYA</td>
-                <td id="power_meter"></td>
-                <td rowspan="4" id="area_price"></td>
-                <td rowspan="4" id="kwh_price"></td>
-                <td rowspan="4" id="electricity_bill"></td>
-                <td style="font-weight:bold">BIAYA ADMIN</td>
-                <td></td>
-                <td rowspan="4" id="total"></td>
-            </tr>
-            <tr>
-                <td style="font-weight:bold">STAND AWAL</td>
-                <td id="electricity_meter_before"></td>
-                <td style="font-weight:bold">BIAYA PERAWATAN</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td style="font-weight:bold">STAND AKHIR</td>
-                <td id="electricity_meter_after"></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td style="font-weight:bold">PEMAKAIAN/KWH</td>
-                <td id="electricity_meter_used"></td>
-                <td></td>
-                <td></td>
-        </tbody>
-    </table>
-</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6" style="max-width: 27%">
+            <div class="au-card m-b-10">
+                <div class="au-card-inner">
+                    <div class="print">
+                        <table class="table table-bordered" style="font-size: 10px;width:200px;height:400px">
+                            <tbody id="modal-invoice">
+                                <tr>
+                                    <td colspan='4' style="background-color:#ffd2a6"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">NAMA</td>
+                                    <td colspan='3' id="name"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">BULAN/TAHUN</td>
+                                    <td colspan='3' id="month_bill"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">LOKASI/BLOK</td>
+                                    <td colspan='3' id="area"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">JATUH TEMPO</td>
+                                    <td colspan='3' id="grace_date"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan='4' style="background-color:#ffd2a6;text-align:center;font-weight:bold">
+                                        RINCIAN PEMAKAIAN
+                                        DAN
+                                        TAGIHAN</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">BEBAN</td>
+                                    <td id="area_price"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">SERVICE CHARGE</td>
+                                    <td id="stall_bill"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">TARIF/KWH</td>
+                                    <td id="kwh_price"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">BIAYA PEMAKAIAN/KWH</td>
+                                    <td id="electricity_bill"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">TAGIHAN</td>
+                                    <td id="sub_total"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">BIAYA ADMIN</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">BIAYA PERAWATAN</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold">TOTAL TAGIHAN</td>
+                                    <td id="total"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="font-size: 9px">*ini hanya penagihan,
+                                        bukan bukti pembayaran
+                                    </td>
+                                </tr>
 
-<script>
-    function rupiah(angka){
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function rupiah(angka){
     var angka_str = angka.toString();
     var number_string = angka_str.replace(/[^,\d]/g, ''),
     split = number_string.split('.'),
@@ -125,19 +141,21 @@
     dataType:'json',
     data: {id:id},
     success: function(response) {
-    $('#name').html(response.pic_name);
-    $('#month_bill').html(response.month_bill);
-    $('#area').html(response.area_name);
-    $('#power_meter').html(response.electricity_power_meter);
-    $('#sub_total').html(rupiah(response.sub_total));
-    $('#area_price').html(rupiah(response.area_price));
-    $('#electricity_bill').html(rupiah(response.electricity_bill));
-    $('#total').html(rupiah(response.grand_total));
-    $('#electricity_meter_before').html(response.electricity_meter_before);
-    $('#electricity_meter_after').html(response.electricity_meter_after);
-    $('#electricity_meter_used').html(response.electricity_meter_used);
-    $('#kwh_price').html(rupiah(response.kwh_price));
-    $('#grace_date').html(response.grace_date);
+ $('#name').html(response.pic_name);
+$('#month_bill').html(response.month_bill);
+$('#area').html(response.area_name);
+$('#power_meter').html(response.electricity_power_meter);
+$('#sub_total').html(rupiah(response.sub_total));
+$('#area_price').html(rupiah(response.electricity_bill_beban));
+$('#stall_bill').html(rupiah(response.stall_bill));
+$('#electricity_bill').html(rupiah(response.electricity_bill));
+$('#total').html(rupiah(response.grand_total));
+$('#electricity_meter_before').html(response.electricity_meter_before);
+$('#electricity_meter_after').html(response.electricity_meter_after);
+$('#electricity_meter_used').html(response.electricity_meter_used);
+$('#kwh_price').html(rupiah(response.kwh_price));
+$('#grace_date').html(response.grace_date);
+$('#invoice_id_print').val(response.id);
     window.print();
     },
     error: function(request,msg,error) {
@@ -150,4 +168,4 @@
 function multiple(){
 
 }
-</script>
+        </script>

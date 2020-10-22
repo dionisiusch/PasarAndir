@@ -137,9 +137,9 @@ class InvoiceController extends Controller
 
         $stallElectricityId = $this->stallElectricityService->getNewestStallElectricityById($request->stall_id, $month);
         $stallWaterId = $this->stallWaterService->getNewestStallWaterById($request->stall_id, $month);
-        
-        if($stallElectricityId == null || $stallWaterId == null) {
-            return redirect('invoicecreate')->with('error', 'Input Meteran Terlebih Dahulu.'); 
+
+        if ($stallElectricityId == null || $stallWaterId == null) {
+            return redirect('invoicecreate')->with('error', 'Input Meteran Terlebih Dahulu.');
         }
 
         $response = $this->invoiceService->createInvoice($request, $stallElectricityId->id, $stallWaterId->id, $minimalPayment);
@@ -166,7 +166,7 @@ class InvoiceController extends Controller
             $stallWater = $this->stallWaterService->getStallWaterById($invoice->stall_water_id);
             $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
             $powerMeter = $this->powerMeterService->getPowerMeterById($electricity->power_meter_id);
-            $billStall = $area->price * $stall->width * $stall->length;
+            $billStall = bcmul(($stall->width * $stall->length), $area->price, 0);
             $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
             $billElectricityKva = $powerMeter->power_meter * $stallElectricity->kva_price;
             $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
@@ -187,7 +187,8 @@ class InvoiceController extends Controller
                 'electricity_meter_after' => $stallElectricity->meter_after,
                 'electricity_meter_before' => $stallElectricity->meter_before,
                 'electricity_meter_used' => $stallElectricity_used,
-                'electricity_bill' => $billElectricityKwh + $billElectricityKva,
+                'electricity_bill' => $billElectricityKwh,
+                'electricity_bill_beban' => $billElectricityKva,
                 'electricity_name' => $electricity->name,
                 'updated_at' => $invoice->updated_at,
                 'created_at' => $invoice->created_at,

@@ -51,29 +51,30 @@
         <table class="table table-bordered">
           <tbody id="modal-invoice">
             <tr>
-              <td colspan='8' style="background-color:#ffd2a6"></td>
+              <td colspan='9' style="background-color:#ffd2a6"></td>
             </tr>
             <tr>
               <td style="font-weight:bold">NAMA</td>
               <td colspan='3' id="name"></td>
               <td style="font-weight:bold">BULAN/TAHUN</td>
-              <td colspan='3' id="month_bill"></td>
+              <td colspan='4' id="month_bill"></td>
             </tr>
             <tr>
               <td style="font-weight:bold">LOKASI/BLOK</td>
               <td colspan='3' id="area"></td>
               <td style="font-weight:bold">JATUH TEMPO</td>
-              <td colspan='3' id="grace_date"></td>
+              <td colspan='4' id="grace_date"></td>
             </tr>
             <tr>
-              <td colspan='8' style="background-color:#ffd2a6;text-align:center;font-weight:bold">RINCIAN PEMAKAIAN
+              <td colspan='9' style="background-color:#ffd2a6;text-align:center;font-weight:bold">RINCIAN PEMAKAIAN
                 DAN
                 TAGIHAN</td>
             </tr>
             <td colspan="2" style="font-weight:bold">SATUAN</td>
             <td style="font-weight:bold">BEBAN</td>
+            <td style="font-weight:bold">SERVICE CHARGE</td>
             <td style="font-weight:bold">TARIF/KWH</td>
-            <td style="font-weight:bold">BIAYA PEMAKAIAN/KWH</td>
+            <td style="font-weight:bold">BIAYA LISTRIK</td>
             <td style="font-weight:bold">TAGIHAN</td>
             <td id="sub_total"></td>
             <td style="font-weight:bold">TOTAL TAGIHAN</td>
@@ -82,6 +83,7 @@
               <td style="font-weight:bold">DAYA</td>
               <td id="power_meter"></td>
               <td rowspan="4" id="area_price"></td>
+              <td rowspan="4" id="stall_bill"></td>
               <td rowspan="4" id="kwh_price"></td>
               <td rowspan="4" id="electricity_bill"></td>
               <td style="font-weight:bold">BIAYA ADMIN</td>
@@ -195,7 +197,8 @@ $.ajaxSetup({
       $('#area').html(response.area_name);
       $('#power_meter').html(response.electricity_power_meter);
       $('#sub_total').html(rupiah(response.sub_total));
-      $('#area_price').html(rupiah(response.area_price));
+      $('#area_price').html(rupiah(response.electricity_bill_beban));
+      $('#stall_bill').html(rupiah(response.stall_bill));
       $('#electricity_bill').html(rupiah(response.electricity_bill));
       $('#total').html(rupiah(response.grand_total));
       $('#electricity_meter_before').html(response.electricity_meter_before);
