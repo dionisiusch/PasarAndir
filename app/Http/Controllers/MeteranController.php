@@ -98,6 +98,18 @@ class MeteranController extends Controller
         }
         // $response['option'] = $preselect; 
         echo json_encode($response);
-   }
+    }
+
+    public function getMeterBefore(Request $request){
+        $search = $request->get('id');
+
+        $a = $this->stallElectricityService->getLatestStallElectricityById($search);
+        
+        $response = array(
+            "meter_after"=>$a->meter_after
+        );
+        
+        echo json_encode($response);
+    }
 
 }

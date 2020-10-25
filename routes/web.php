@@ -198,6 +198,7 @@ Route::get('/notification/invoices/unpaid/gracedate', 'NotificationController@ge
 
 //route meteran
 Route::get('/meteran', 'MeteranController@index')->name('meteran.index');
+Route::get('/meteranlatest', 'MeteranController@getMeterBefore')->name('meteran.latest');
 Route::get('/meteranelectricity', 'MeteranController@getElectricityName')->name('meteran.electricity.name');
 Route::get('/invoicecreate', 'InvoiceController@create')->name('invoice.create');
 Route::get('/receiptcreate', 'ReceiptController@create')->name('receipt.create');

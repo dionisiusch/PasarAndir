@@ -27,9 +27,9 @@
 								<td>Stand Akhir</td>
 							</tr>
 							<tr>
-								<td><input type="number" name="electricity_meter_before" placeholder="...."
+								<td><input type="number" id="electricity_meter_before" name="electricity_meter_before" placeholder="...."
 										class="form-control"></td>
-								<td><input type="number" name="electricity_meter_after" placeholder="...."
+								<td><input type="number" id="electricity_meter_before" name="electricity_meter_after" placeholder="...."
 										class="form-control"></td>
 							</tr>
 						</table>
@@ -112,6 +112,25 @@
 				success:function(response)
 				{
 					$('#electricity_meter_code').html(response.name);
+				}, error: function(request,msg,error) {
+					console.log(msg);
+					console.log(error);
+				}
+			})
+
+		});
+
+		$('#selStall').change(function() {
+			var query = $('#selStall').val();
+
+			$.ajax({
+				url:"/meteranlatest",
+				method:'GET',
+				dataType:'json',
+				data:{id:query},
+				success:function(response)
+				{
+					$('#electricity_meter_before').val(response.meter_after);
 				}, error: function(request,msg,error) {
 					console.log(msg);
 					console.log(error);

@@ -41,6 +41,13 @@ class StallElectricityService
         return $stallElectricity;
     }
 
+    public function getLatestStallElectricityById($id)
+    {
+        $stallElectricity = StallElectricity::where('stall_id', $id)->orderBy('created_at', 'DESC')->first();
+        
+        return $stallElectricity;
+    }
+
     public function updateStallElectricityById($data, $id)
     {
         $stallElectricity = StallElectricity::find($id);
