@@ -104,10 +104,15 @@ class MeteranController extends Controller
         $search = $request->get('id');
 
         $a = $this->stallElectricityService->getLatestStallElectricityById($search);
-        
-        $response = array(
-            "meter_after"=>$a->meter_after
-        );
+        if ($a == null){
+            $response = array(
+                "meter_after"=>0
+            );
+        } else {
+            $response = array(
+                "meter_after"=>$a->meter_after
+            );
+        }
         
         echo json_encode($response);
     }
