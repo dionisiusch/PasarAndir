@@ -149,24 +149,18 @@ class ReceiptController extends Controller
      * @param  \App\Model\Receipt  $receipt
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show($id)
     {
-        if ($request->ajax()) {
-            $id = $request->get('id');
-            $receipt = $this->receiptService->getReceiptById($id);
-            $invoiceIds = $this->invoiceReceiptService->showAllInvoicesByReceiptId($id);
-            $invoices = $this->invoiceService->getInvoiceById($invoiceIds);
-            $stall = $this->stallService->getStallById($receipt->stall_id);
+        $receipt = $this->receiptService->getReceiptById($id);
 
-            $data = array(
-                'invoices' => $invoices,
-                'payment' => $receipt->stall,
-                'stall'  => $stall,
-                'id'  => $id
-            );
+        $data = array(
+            'payment' => $receipt->payment,
+            'stall'  => $receipt->stall,
+            'created_at' => $receipt->created_at,
+            'id'  => $id
+        );
 
-            return json_encode($data);
-        }
+        return json_encode($data);
     }
 
     public function showReceiptsByStallId(Request $request)
@@ -185,6 +179,61 @@ class ReceiptController extends Controller
             );
             return json_encode($output);
         }
+    }
+
+    public function addPrint($id)
+    {
+        //DISCOUNT AND FINE NOT REQUIRED
+        $invoiceId = $this->invoiceReceiptService->getInvoiceByReceiptId($id);
+        $response = $this->receiptService->addToPrint($id, $invoiceId);
+        //log di bawah sedikit ambigu ! artinya true
+        if (!$response) {
+            $data = array(
+                'msg'  =>  "success add to print"
+            );
+        }
+        return json_encode($data);
+    }
+
+    public function showAllPrintlist()
+    {
+        //DISCOUNT AND FINE NOT REQUIRED
+
+        $response = $this->receiptService->showAllPrintInvoices();
+
+        return json_encode($response);
+    }
+
+    public function listPrint()
+    {
+        return view('master.print.printlistReceipt');
+    }
+
+    public function removePrint($id)
+    {
+        //DISCOUNT AND FINE NOT REQUIRED
+
+        $response = $this->receiptService->removePrint($id);
+        //log di bawah sedikit ambigu ! artinya true
+        if (!$response) {
+            $data = array(
+                'msg'  =>  "success remove print"
+            );
+        }
+        return json_encode($data);
+    }
+    public function truncatePrint()
+    {
+        //DISCOUNT AND FINE NOT REQUIRED
+
+        $response = $this->receiptService->truncatePrint();
+        //log di bawah sedikit ambigu ! artinya true
+        if (!$response) {
+            $data = array(
+                'msg'  =>  "success remove print"
+            );
+        }
+        return json_encode($data);
     }
 
     public function showReceiptsByInvoiceId(Request $request)
@@ -284,6 +333,14 @@ class ReceiptController extends Controller
                         <td>' . $invoice->month_bill . '</td>
                         <td>' . $row->created_at . '</td>
                         <td>' . parent::rupiah($row->payment) . '</td>
+                         <td>
+                            <div class="table-data-feature">
+                            <input type="checkbox" class="check-print" id="' . $row->id . '">
+							<button class="item" data-placement="top" title="Print" id="' . $row->id . '">
+								<i class="zmdi zmdi-print"></i>
+							</button>
+							</div>
+						</td>
 						<td>
 							<div class="table-data-feature">
 							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="' . $row->id . '">

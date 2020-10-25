@@ -8,6 +8,8 @@
       <div class="rs-select2--light rs-select2--md" style="display: contents">
         <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i
           style="font-size:150%" class="zmdi zmdi-search"></i>
+        <button style="float:right" type="button" class="au-btn au-btn-icon au-btn--blue au-btn--small printlist">
+          <i class="zmdi zmdi-print"></i>Print List</button>
       </div>
     </div>
 
@@ -20,7 +22,7 @@
             <th>Nama Toko</th>
             <th>Periode</th>
             <th>Status</th>
-            <th></th>
+            <th>Print</th>
           </tr>
         </thead>
         <tbody id="ajax">
@@ -103,7 +105,7 @@
               <td></td>
             </tr>
             <tr>
-              <td style="font-weight:bold">PEMAKAIAN/KWH</td>
+              <td style="font-weight:bold"> PEMAKAIAN(KWH)</td>
               <td id="electricity_meter_used"></td>
               <td></td>
               <td></td>
@@ -215,7 +217,49 @@ $.ajaxSetup({
 });
  });
 
- $(document).on('click', '.delete', function(){
+ $(document).on('click', '.printlist', function(){
+  window.location.href = "/printlistinvoice";
+  });
+
+ $(document).on('click', '.check-print', function(ev){
+  ev.stopPropagation();
+  var id = $(this).attr('id');
+  if(this.checked) {
+    ev.stopPropagation();
+  $.ajax({
+    url:'/addtoprintinvoice/'+id,
+    type: 'get',
+    dataType:'json',
+    data: {id:id},
+    success: function(result) {
+    console.log(result);
+    },
+    error: function(request,msg,error) {
+    console.log(msg);
+    console.log(error);
+    }
+    });
+  }
+  else{
+    ev.stopPropagation();
+    $.ajax({
+    url:'/removeprintinvoice/'+id,
+    type: 'get',
+    dataType:'json',
+    data: {id:id},
+    success: function(result) {
+    console.log(result);
+    },
+    error: function(request,msg,error) {
+    console.log(msg);
+    console.log(error);
+    }
+    });
+  }
+  });
+
+ $(document).on('click', '.delete', function(ev){
+  ev.stopPropagation();
   var id = $(this).attr('id');
   if(confirm("Hapus data ini?"))
   {

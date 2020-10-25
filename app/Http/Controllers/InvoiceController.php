@@ -9,6 +9,7 @@ use App\Model\StallElectricity;
 use App\Model\StallWater;
 use App\Model\Floor;
 use App\Model\Area;
+use App\Model\InvoicePrint;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Services\InvoiceService;
@@ -317,6 +318,61 @@ class InvoiceController extends Controller
         return $msg;
     }
 
+    public function addPrint($id)
+    {
+        //DISCOUNT AND FINE NOT REQUIRED
+
+        $response = $this->invoiceService->addToPrint($id);
+        //log di bawah sedikit ambigu ! artinya true
+        if (!$response) {
+            $data = array(
+                'msg'  =>  "success add to print"
+            );
+        }
+        return json_encode($data);
+    }
+
+    public function showAllPrintlist()
+    {
+        //DISCOUNT AND FINE NOT REQUIRED
+
+        $response = $this->invoiceService->showAllPrintInvoices();
+
+        return json_encode($response);
+    }
+
+    public function listPrint()
+    {
+        return view('master.print.printlistInvoice');
+    }
+
+    public function removePrint($id)
+    {
+        //DISCOUNT AND FINE NOT REQUIRED
+
+        $response = $this->invoiceService->removePrint($id);
+        //log di bawah sedikit ambigu ! artinya true
+        if (!$response) {
+            $data = array(
+                'msg'  =>  "success remove print"
+            );
+        }
+        return json_encode($data);
+    }
+    public function truncatePrint()
+    {
+        //DISCOUNT AND FINE NOT REQUIRED
+
+        $response = $this->invoiceService->truncatePrint();
+        //log di bawah sedikit ambigu ! artinya true
+        if (!$response) {
+            $data = array(
+                'msg'  =>  "success remove print"
+            );
+        }
+        return json_encode($data);
+    }
+
     public function search(Request $request)
     {
         if ($request->ajax()) {
@@ -349,6 +405,14 @@ class InvoiceController extends Controller
                         <td>' . $stall->name . '</td>
                         <td>' . $row->month_bill . '</td>
                         <td>' . $status . '</td>
+                        <td>
+                            <div class="table-data-feature">
+                            <input type="checkbox" class="check-print" id="' . $row->id . '">
+							<button class="item" data-placement="top" title="Print" id="' . $row->id . '">
+								<i class="zmdi zmdi-print"></i>
+							</button>
+							</div>
+						</td>
 						<td>
 							<div class="table-data-feature">
 							<button class="item delete" type="submit" data-toggle="tooltip" data-placement="top" title="Delete" id="' . $row->id . '">

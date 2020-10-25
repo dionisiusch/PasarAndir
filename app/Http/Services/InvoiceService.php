@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Model\Invoice;
+use App\Model\InvoicePrint;
 use App\Model\Stall;
 use Carbon\Carbon;
 use DB;
@@ -18,7 +19,7 @@ class InvoiceService
 
     public function showAllInvoiceIds()
     {
-        $invoiceIds = Invoice::where('id' ,'>' ,0)->pluck('id');
+        $invoiceIds = Invoice::where('id', '>', 0)->pluck('id');
 
         return $invoiceIds;
     }
@@ -166,5 +167,30 @@ class InvoiceService
             ->orWhereIn('stall_id', $stallId)
             ->orderBy('status', 'asc')
             ->get();
+    }
+
+    public function addToPrint($data)
+    {
+        DB::table('print_invoice')->insert([
+            'invoice_id'     => $data
+        ]);
+    }
+
+    public function showAllPrintInvoices()
+    {
+        $invoices = InvoicePrint::select('invoice_id')->distinct()->get();
+
+        return $invoices;
+    }
+
+    public function removePrint($id)
+    {
+        InvoicePrint::where('invoice_id', $id)
+            ->delete();
+    }
+
+    public function truncatePrint()
+    {
+        InvoicePrint::truncate();
     }
 }

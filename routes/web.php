@@ -116,8 +116,8 @@ Route::group([
         // 'middleware' => 'auth'
     ], function () {
         Route::get('/', 'ReceiptController@index')->name('master.receipt.index');
-        Route::post('/', 'ReceiptController@store')->name('master.receipt.store');
         Route::get('/{id}', 'ReceiptController@show')->name('master.receipt.show');
+        Route::post('/', 'ReceiptController@store')->name('master.receipt.store');
         Route::put('/{id}', 'ReceiptController@update')->name('master.receipt.update');
         Route::delete('/{id}', 'ReceiptController@destroy')->name('master.receipt.delete');
     });
@@ -205,4 +205,15 @@ Route::get('/receiptcreate', 'ReceiptController@create')->name('receipt.create')
 Route::post('/', 'MeteranController@store')->name('meteran.store');
 
 //route print
+Route::get('/addtoprintinvoice/{id}', 'InvoiceController@addPrint')->name('print.addinvoice');
+Route::get('/removeprintinvoice/{id}', 'InvoiceController@removePrint')->name('print.removeinvoice');
+Route::get('/truncateprintinvoice', 'InvoiceController@truncatePrint')->name('print.truncateinvoice');
+Route::get('/printlistinvoice', 'InvoiceController@listPrint')->name('print.printlistinvoice');
+Route::get('/showprintlistinvoice', 'InvoiceController@showAllPrintlist')->name('print.showprintlistinvoice');
+
+Route::get('/addtoprintreceipt/{id}', 'ReceiptController@addPrint')->name('print.addreceipt');
+Route::get('/removeprintreceipt/{id}', 'ReceiptController@removePrint')->name('print.removereceipt');
+Route::get('/truncateprintreceipt', 'ReceiptController@truncatePrint')->name('print.truncatereceipt');
+Route::get('/printlistreceipt', 'ReceiptController@listPrint')->name('print.printlistreceipt');
+Route::get('/showprintlistreceipt', 'ReceiptController@showAllPrintlist')->name('print.showprintlistreceipt');
 Route::post('/printinvoice', 'InvoiceController@print')->name('print.invoice');

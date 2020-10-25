@@ -100,7 +100,7 @@
                         <td colspan="2" style="font-weight:bold">SATUAN</td>
                         <td style="font-weight:bold">BEBAN</td>
                         <td style="font-weight:bold">TARIF/KWH</td>
-                        <td style="font-weight:bold">BIAYA PEMAKAIAN/KWH</td>
+                        <td style="font-weight:bold">BIAYA LISTRIK</td>
                         <td style="font-weight:bold">TAGIHAN</td>
                         <td id="sub_total"></td>
                         <td style="font-weight:bold">TOTAL TAGIHAN</td>
@@ -128,7 +128,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td style="font-weight:bold">PEMAKAIAN/KWH</td>
+                            <td style="font-weight:bold"> PEMAKAIAN(KWH)</td>
                             <td id="electricity_meter_used"></td>
                             <td></td>
                             <td></td>

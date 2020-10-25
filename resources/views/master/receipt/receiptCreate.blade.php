@@ -152,7 +152,7 @@
               <td></td>
             </tr>
             <tr>
-              <td style="font-weight:bold">PEMAKAIAN/KWH</td>
+              <td style="font-weight:bold"> PEMAKAIAN(KWH)</td>
               <td id="electricity_meter_used"></td>
               <td></td>
               <td></td>

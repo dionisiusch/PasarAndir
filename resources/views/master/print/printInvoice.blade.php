@@ -42,9 +42,6 @@
                         <table class="table table-bordered" style="font-size: 10px;width:200px;height:400px">
                             <tbody id="modal-invoice">
                                 <tr>
-                                    <td colspan='4' style="background-color:#ffd2a6"></td>
-                                </tr>
-                                <tr>
                                     <td style="font-weight:bold">NAMA</td>
                                     <td colspan='3' id="name"></td>
                                 </tr>
@@ -79,7 +76,7 @@
                                     <td id="kwh_price"></td>
                                 </tr>
                                 <tr>
-                                    <td style="font-weight:bold">BIAYA PEMAKAIAN/KWH</td>
+                                    <td style="font-weight:bold">BIAYA LISTRIK</td>
                                     <td id="electricity_bill"></td>
                                 </tr>
                                 <tr>
@@ -88,10 +85,6 @@
                                 </tr>
                                 <tr>
                                     <td style="font-weight:bold">BIAYA ADMIN</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td style="font-weight:bold">BIAYA PERAWATAN</td>
                                     <td></td>
                                 </tr>
                                 <tr>

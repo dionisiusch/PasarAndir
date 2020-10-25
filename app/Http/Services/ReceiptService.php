@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Model\Receipt;
+use App\Model\ReceiptPrint;
 use App\Model\Stall;
 use DB;
 
@@ -91,5 +92,31 @@ class ReceiptService
         return Receipt::where('payment', 'like', '%' . $query . '%')
             ->orWhereIn('stall_id', $stallId)
             ->get();
+    }
+
+    public function addToPrint($data, $invoiceId)
+    {
+        DB::table('print_receipt')->insert([
+            'receipt_id'     => $data,
+            'invoice_id'     => $invoiceId
+        ]);
+    }
+
+    public function showAllPrintInvoices()
+    {
+        $invoices = ReceiptPrint::select('receipt_id', 'invoice_id')->distinct('receipt_id')->get();
+
+        return $invoices;
+    }
+
+    public function removePrint($id)
+    {
+        ReceiptPrint::where('receipt_id', $id)
+            ->delete();
+    }
+
+    public function truncatePrint()
+    {
+        ReceiptPrint::truncate();
     }
 }

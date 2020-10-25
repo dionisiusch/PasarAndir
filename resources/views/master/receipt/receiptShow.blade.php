@@ -8,6 +8,8 @@
       <div class="rs-select2--light rs-select2--md" style="display: contents">
         <input class="au-input au-input--xl" type="text" name="search" id="search" placeholder="Cari Data..." /><i
           style="font-size:150%" class="zmdi zmdi-search"></i>
+        <button style="float:right" type="button" class="au-btn au-btn-icon au-btn--blue au-btn--small printlist">
+          <i class="zmdi zmdi-print"></i>Print List</button>
       </div>
     </div>
 
@@ -102,7 +104,7 @@
               <td></td>
             </tr>
             <tr>
-              <td style="font-weight:bold">PEMAKAIAN/KWH</td>
+              <td style="font-weight:bold"> PEMAKAIAN(KWH)</td>
               <td id="electricity_meter_used"></td>
               <td></td>
               <td></td>
@@ -173,6 +175,10 @@ $.ajaxSetup({
   fetch_customer_data(query);
  });
 
+ $(document).on('click', '.printlist', function(){
+window.location.href = "/printlistreceipt";
+});
+
  $(document).on('click', '.invoice-row', function(){
   var id = $(this).attr('id');
    $.ajax({
@@ -204,6 +210,43 @@ $.ajaxSetup({
     }
 });
  });
+
+ $(document).on('click', '.check-print', function(ev){
+ev.stopPropagation();
+var id = $(this).attr('id');
+if(this.checked) {
+ev.stopPropagation();
+$.ajax({
+url:'/addtoprintreceipt/'+id,
+type: 'get',
+dataType:'json',
+data: {id:id},
+success: function(result) {
+console.log(id);
+},
+error: function(request,msg,error) {
+console.log(msg);
+console.log(error);
+}
+});
+}
+else{
+ev.stopPropagation();
+$.ajax({
+url:'/removeprintreceipt/'+id,
+type: 'get',
+dataType:'json',
+data: {id:id},
+success: function(result) {
+console.log(result);
+},
+error: function(request,msg,error) {
+console.log(msg);
+console.log(error);
+}
+});
+}
+});
 
  $(document).on('click', '.delete', function(){
   var id = $(this).attr('id');
