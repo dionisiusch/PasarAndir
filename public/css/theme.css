@@ -51,7 +51,7 @@ Notes:  decreasing heading by 0.4em with every subsequent heading level
  @media print {
     @page { size: landscape; }
     .col-lg-6{
-        max-width: 25%;
+       margin-right: 7%;
     }
  }
 

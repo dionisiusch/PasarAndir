@@ -128,35 +128,18 @@
     dataType:'json',
     data: {id:id},
     success: function(response) {
-// $('#name').html(response.pic_name);
-// $('#month_bill').html(response.month_bill);
-// $('#area').html(response.area_name);
-// $('#power_meter').html(response.electricity_power_meter);
-// $('#sub_total').html(rupiah(response.sub_total));
-// $('#area_price').html(rupiah(response.electricity_bill_beban));
-// $('#stall_bill').html(rupiah(response.stall_bill));
-// $('#electricity_bill').html(rupiah(response.electricity_bill));
-// $('#total').html(rupiah(response.grand_total));
-// $('#electricity_meter_before').html(response.electricity_meter_before);
-// $('#electricity_meter_after').html(response.electricity_meter_after);
-// $('#electricity_meter_used').html(response.electricity_meter_used);
-// $('#kwh_price').html(rupiah(response.kwh_price));
-// $('#grace_date').html(response.grace_date);
-// $('#invoice_id_print').val(response.id);
     
-    var html = "<div class='col-lg-6' style='max-width: 25%'><div class='au-card-inner'>";
+    var html = "<div class='col-lg-6' style='max-width: 26%'><div class='au-card-inner'>";
     
-    if(index!=1){
-    if(index%4-1==0){           
-      html += "<div class='print' style='margin-top:170px'>";
-     }else{
-          html += "<div class='print'>";
-     }
+    if(index>3){
+         
+      html += "<div class='print' style='margin-top:2px'>";
+
     }else{
         html += "<div class='print'>";
     }
     
-      html += "<table class='table table-bordered' style='font-size: 10px;width:200px;height:400px'>\
+      html += "<table class='table table-bordered' style='font-size: 14.7px;width:280px;height:400px'>\
                         <tbody id='modal-invoice'>\
                             <tr>\
                                 <td style='font-weight:bold'>NAMA</td>\
@@ -207,7 +190,7 @@
                                 <td id='total'>"+rupiah(response.grand_total)+"</td>\
                             </tr>\
                             <tr>\
-                                <td colspan='2' style='font-size: 9px'>*ini hanya penagihan, bukan bukti pembayaran </td>\
+                                <td colspan='2' style='font-size: 11px'>*ini hanya penagihan, bukan bukti pembayaran </td>\
                             </tr>\
                         </tbody>\
                     </table>\

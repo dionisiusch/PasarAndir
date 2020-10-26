@@ -66,11 +66,11 @@
     data: {id:id},
     success: function(response) {
     
-    var html = "<div class='col-lg-6' style='max-width: 25%'><div class='au-card-inner'>";
+    var html = "<div class='col-lg-6' style='max-width: 25.5%'><div class='au-card-inner'>";
     
-    if(index>4){
+    if(index>3){
                
-      html += "<div class='print' style='margin-top:200px'>";
+      html += "<div class='print' style='margin-top:17px'>";
      
     }else{
         html += "<div class='print'>";
@@ -99,7 +99,7 @@
     var pembayaran = detail['pembayaran'];
     var tgl_pembayaran = detail['tgl_pembayaran'];
 
-      html += "<table class='table table-bordered' style='font-size: 10px;width:200px;height:400px'>\
+      html += "<table class='table table-bordered' style='font-size: 14.7px;width:280px;height:400px'>\
                         <tbody id='modal-invoice'>\
                             <tr>\
                                 <td style='font-weight:bold'>NAMA</td>\
@@ -123,7 +123,7 @@
                             </tr>\
                             <tr>\
                                 <td colspan='4' style='background-color:#ffd2a6;text-align:center;font-weight:bold'> RINCIAN\
-                                    TAGIHAN DAN PEMBAYARAN</td>\
+                                    PEMBAYARAN</td>\
                             </tr>\
                             <tr>\
                                 <td style='font-weight:bold'>BEBAN</td>\
@@ -150,7 +150,7 @@
                                 <td id='total'>"+rupiah(pembayaran)+"</td>\
                             </tr>\
                             <tr>\
-                                <td colspan='2' style='font-size: 9px'>*ini bukti pembayaran </td>\
+                                <td colspan='2' style='font-size: 12px'>*ini bukti pembayaran </td>\
                             </tr>\
                         </tbody>\
                     </table>\
@@ -193,7 +193,7 @@ function printBody() {
 
     setTimeout(function(){
     window.print();
-    }, 3000);
+    }, 4000);
 
     $.ajax({
     url:'/truncateprintreceipt',
