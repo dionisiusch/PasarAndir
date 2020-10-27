@@ -17,6 +17,12 @@ class InvoiceService
         return $invoices;
     }
 
+    public function showAllInvoicesByMonth($month)
+    {
+        return Invoice::where('month_bill', $month)
+        ->get();
+    }
+
     public function showAllInvoiceIds()
     {
         $invoiceIds = Invoice::where('id', '>', 0)->pluck('id');

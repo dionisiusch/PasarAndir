@@ -114,11 +114,16 @@ class InvoiceController extends Controller
         $month = $request->month; //Example : "October 2020" or "All" (for all months)
         $totalUnpaid = 0;
         $totalPaid = 0;
+        $revenue = 0;
         if($month == "All"){
             $invoices = $this->invoiceService->totalUnpaidAllInvoices();
             foreach($invoices as $invoice){
                 $totalUnpaid = $totalUnpaid + $this->remainCreditInvoice($invoice->id);
                 $totalPaid = $totalPaid + $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($invoice->id);
+            }
+            $invsRev = $this->invoiceService->showAllInvoices();
+            foreach($invsRev as $inv){
+                $revenue = $revenue + $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($inv->id);
             }
         }else{
             $invoices = $this->invoiceService->totalUnpaidAllInvoicesByMonth($month);
@@ -126,13 +131,18 @@ class InvoiceController extends Controller
                 $totalUnpaid = $totalUnpaid + $this->remainCreditInvoice($invoice->id);
                 $totalPaid = $totalPaid + $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($invoice->id);
             }
+            $invsRev = $this->invoiceService->showAllInvoicesByMonth($month);
+            foreach($invsRev as $inv){
+                $revenue = $revenue + $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($inv->id);
+            }
         }
         
         $response = array(
             "total_unpaid"=>$totalUnpaid,
             "total_paid"=>$totalPaid,
+            "revenue"=>$revenue
         );
-
+        
         echo json_encode($response);
     }
 
