@@ -103,6 +103,7 @@ Route::group([
     ], function () {
         Route::get('/', 'InvoiceController@index')->name('master.invoice.index');
         Route::get('/dashboard', 'InvoiceController@invoiceDashboard')->name('master.invoice.dashboard');
+        Route::get('/unpaidlist', 'InvoiceController@getUnpaidInvoiceByMonth')->name('master.invoice.unpaid');
         Route::get('/id', 'InvoiceController@showIds')->name('master.invoice.showIds');
         Route::post('/', 'InvoiceController@store')->name('master.invoice.store');
         Route::get('/{id}', 'InvoiceController@show')->name('master.invoice.show');

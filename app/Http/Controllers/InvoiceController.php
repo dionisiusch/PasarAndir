@@ -89,7 +89,8 @@ class InvoiceController extends Controller
         return view('master.invoice.invoiceShow');
     }
 
-    public function getTotalPayment($id){
+    public function getTotalPayment($id)
+    {
         $invoice = $this->invoiceService->getInvoiceById($id);
         $stall = $this->stallService->getStallById($invoice->stall_id);
         $area = $this->areaService->getAreaById($stall->area_id);
@@ -110,39 +111,40 @@ class InvoiceController extends Controller
         return $totalPayment;
     }
 
-    public function invoiceDashboard(Request $request){
-        $month = $request->month; //Example : "October 2020" or "All" (for all months)
+    public function invoiceDashboard(Request $request)
+    {
+        $month = $request->get('month'); //Example : "October 2020" or "All" (for all months)
         $totalUnpaid = 0;
         $totalPaid = 0;
         $revenue = 0;
-        if($month == "All"){
+        if ($month == "All") {
             $invoices = $this->invoiceService->totalUnpaidAllInvoices();
-            foreach($invoices as $invoice){
+            foreach ($invoices as $invoice) {
                 $totalUnpaid = $totalUnpaid + $this->remainCreditInvoice($invoice->id);
                 $totalPaid = $totalPaid + $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($invoice->id);
             }
             $invsRev = $this->invoiceService->showAllInvoices();
-            foreach($invsRev as $inv){
+            foreach ($invsRev as $inv) {
                 $revenue = $revenue + $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($inv->id);
             }
-        }else{
+        } else {
             $invoices = $this->invoiceService->totalUnpaidAllInvoicesByMonth($month);
-            foreach($invoices as $invoice){
+            foreach ($invoices as $invoice) {
                 $totalUnpaid = $totalUnpaid + $this->remainCreditInvoice($invoice->id);
                 $totalPaid = $totalPaid + $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($invoice->id);
             }
             $invsRev = $this->invoiceService->showAllInvoicesByMonth($month);
-            foreach($invsRev as $inv){
+            foreach ($invsRev as $inv) {
                 $revenue = $revenue + $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($inv->id);
             }
         }
-        
+
         $response = array(
-            "total_unpaid"=>$totalUnpaid,
-            "total_paid"=>$totalPaid,
-            "revenue"=>$revenue
+            "total_unpaid" => $totalUnpaid,
+            "total_paid" => $totalPaid,
+            "revenue" => $revenue
         );
-        
+
         echo json_encode($response);
     }
 
@@ -537,6 +539,59 @@ class InvoiceController extends Controller
                         <td>' . $blok . '</td>
                         <td>' . $stall->name . '</td>
                         <td>' . parent::rupiah($total) . '</td>
+                        <td>' . $row->month_bill . '</td>
+                        <td>' . $status . '</td>
+					</tr>
+					<tr class="spacer"></tr> 
+        	        ';
+                }
+            } else {
+                $output = '
+				<tr class="tr-shadow">
+				    <td align="center" colspan="2">Data not found.</td>
+				</tr>
+				';
+            }
+
+            $data = array(
+                'table_data'  => $output,
+                'total_data'  => $total_row
+            );
+
+            return json_encode($data);
+        }
+    }
+
+    public function getUnpaidInvoiceByMonth(Request $request)
+    {
+        if ($request->ajax()) {
+            $output = '';
+            $query = $request->get('query');
+            if ($query == 'All') {
+                $data = $this->invoiceService->totalUnpaidAllInvoices();
+            } else {
+                $data = $this->invoiceService->totalUnpaidAllInvoicesByMonth($query);
+            }
+
+            $total_row = $data->count();
+            if ($total_row > 0) {
+                foreach ($data as $row) {
+                    $stall = $this->stallService->getStallById($row->stall_id);
+                    $user = $this->userService->getUserById($stall->user_id);
+                    $area = $this->areaService->getAreaById($stall->area_id);
+                    $floor = $this->floorService->getFloorById($area->floor_id);
+                    $blok = "[" . $floor->name . "] " . " Blok " . $area->name . " No. " . $area->no;
+                    $status = "";
+                    if ($row->status == "Lunas") {
+                        $status = "<span class='badge badge-success'>Lunas</span>";
+                    } else {
+                        $status = "<span class='badge badge-danger'>Belum Lunas</span>";
+                    }
+                    $output .= '
+                    <tr class="tr-shadow invoice-row" id="' . $row->id . '">
+                        <td>' . $user->pic_name . '</td>
+                        <td>' . $blok . '</td>
+                        <td>' . $stall->name . '</td>
                         <td>' . $row->month_bill . '</td>
                         <td>' . $status . '</td>
 					</tr>
