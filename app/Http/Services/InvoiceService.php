@@ -51,6 +51,18 @@ class InvoiceService
         return $invoices;
     }
 
+    public function totalUnpaidAllInvoices(){
+        return Invoice::where('status', 'Belum Lunas')
+            ->get();
+    }
+
+    public function totalUnpaidAllInvoicesByMonth($month)
+    {
+        return Invoice::where('status', 'Belum Lunas')
+            ->where('month_bill', $month)
+            ->get();
+    }
+
     public function getUnpaidInvoicesThatPassTheGraceDate()
     {
         return Invoice::where('status', 'Belum Lunas')

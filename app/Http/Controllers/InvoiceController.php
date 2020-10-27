@@ -89,6 +89,53 @@ class InvoiceController extends Controller
         return view('master.invoice.invoiceShow');
     }
 
+    public function getTotalPayment($id){
+        $invoice = $this->invoiceService->getInvoiceById($id);
+        $stall = $this->stallService->getStallById($invoice->stall_id);
+        $area = $this->areaService->getAreaById($stall->area_id);
+        $floor = $this->floorService->getFloorById($area->floor_id);
+        $user = $this->userService->getUserById($stall->user_id);
+        $stallElectricity = $this->stallElectricityService->getStallElectricityById($invoice->stall_electricity_id);
+        $stallWater = $this->stallWaterService->getStallWaterById($invoice->stall_water_id);
+        $electricity = $this->electricityService->getElectricityById($stall->electricity_id);
+        $powerMeter = $this->powerMeterService->getPowerMeterById($electricity->power_meter_id);
+        $billStall = bcmul(($stall->width * $stall->length), $area->price, 0);
+        $billElectricityKwh = $stallElectricity->kwh_price * ($stallElectricity->meter_after - $stallElectricity->meter_before);
+        $billElectricityKva = $powerMeter->power_meter * $stallElectricity->kva_price;
+        $billWater = ($stallWater->price * ($stallWater->meter_after - $stallWater->meter_before)) + $stallWater->fixed_price;
+        $stallElectricity_used = $stallElectricity->meter_after -  $stallElectricity->meter_before;
+        $area_name = "[" . $floor->name . "]" . " Blok " . $area->name . " No. " . $area->no;
+        $totalPayment = $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($id);
+
+        return $totalPayment;
+    }
+
+    public function invoiceDashboard(Request $request){
+        $month = $request->month; //Example : "October 2020" or "All" (for all months)
+        $totalUnpaid = 0;
+        $totalPaid = 0;
+        if($month == "All"){
+            $invoices = $this->invoiceService->totalUnpaidAllInvoices();
+            foreach($invoices as $invoice){
+                $totalUnpaid = $totalUnpaid + $this->remainCreditInvoice($invoice->id);
+                $totalPaid = $totalPaid + $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($invoice->id);
+            }
+        }else{
+            $invoices = $this->invoiceService->totalUnpaidAllInvoicesByMonth($month);
+            foreach($invoices as $invoice){
+                $totalUnpaid = $totalUnpaid + $this->remainCreditInvoice($invoice->id);
+                $totalPaid = $totalPaid + $this->invoiceReceiptService->sumTotalPaymentByInvoiceId($invoice->id);
+            }
+        }
+        
+        $response = array(
+            "total_unpaid"=>$totalUnpaid,
+            "total_paid"=>$totalPaid,
+        );
+
+        echo json_encode($response);
+    }
+
     public function showIds()
     {
         $invoiceIds = $this->invoiceService->showAllInvoiceIds();
